@@ -1,0 +1,15 @@
+.header {
+  background: #00D1B2;
+}
+
+.inner {
+  padding: 1rem 0 1.3rem;
+}
+
+.toolbarItem {
+  margin-right: 1.2rem;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
