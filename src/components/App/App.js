@@ -6,12 +6,10 @@ import style from './App.module.scss'
 export class App extends Component {
   render() {
     return (
-      <div className={style.wrapper}>
+      <div className={style.app}>
         <Header />
-        <div className='container'>
-          <div className={style.content}>
-            <NotesFeed />
-          </div>
+        <div className={`${style.content} container`}>
+          <NotesFeed />
         </div>
       </div>
     )

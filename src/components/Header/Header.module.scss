@@ -1,15 +1,61 @@
+$header-height: 4.5rem;
+
 .header {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.toolbar, .selecting {
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  .inner {
+    height: $header-height;
+  }
+}
+
+.toolbar {
   background: #00D1B2;
 }
 
-.inner {
-  padding: 1rem 0 1.3rem;
+.selecting {
+  background: #fff;
+  z-index: 1000;
+  top: -$header-height;
+  opacity: 0;
+  transition: top .2s ease-out,
+              opacity .2s ease-out;
+
+  .isSelecting & {
+    top: 0;
+    opacity: 1;
+  }
+
+  .cancelSelectingBtn {
+    padding-right: 1.2rem;
+  }
 }
 
-.toolbarItem {
-  margin-right: 1.2rem;
+.toolbarGroup {
+  padding-left: 2.4rem;
+}
 
-  &:last-child {
-    margin-right: 0;
-  }
+.toolbarItem:not(:last-child) {
+  padding-right: .6rem;
+}
+
+.userAvatar {
+  display: block;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
 }

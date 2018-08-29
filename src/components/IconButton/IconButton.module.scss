@@ -1,14 +1,8 @@
 .inner {
-  position: relative;
-  height: 1.2rem;
-  width: 1.2rem;
-
-  &:hover {
-    .tooltipInner {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  height: 1.6rem;
+  width: 1.6rem;
+  line-height: 100%;
+  text-align: center;
 }
 
 .button {
@@ -24,27 +18,4 @@
   &:hover {
     color: #000;
   }
-}
-
-.tooltipInner {
-  position: relative;
-  top: .4rem;
-  display: flex;
-  justify-content: center;
-  z-index: 999;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-.2rem);
-  transition: opacity .1s ease-out,
-              transform .1s ease-out;
-}
-
-.tooltip {
-  display: inline-block;
-  font-size: .8rem;
-  color: #fff;
-  background: #363636;
-  border-radius: 4px;
-  padding: .2rem .8rem .4rem;
-  white-space: nowrap;
 }

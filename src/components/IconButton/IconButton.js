@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import { Tooltip } from '..'
 import style from './IconButton.module.scss'
 
 
@@ -8,14 +9,15 @@ export class IconButton extends Component {
 
     return (
       <div className={style.inner}>
-        <button onClick={onClick} className={style.button}>
-          <i className={`fas fa-${icon}`}></i>
-        </button>
-        <div className={style.tooltipInner}>
-          <div className={style.tooltip}>
-            {tooltip}
-          </div>
-        </div>
+          {tooltip ?
+            <Tooltip text={tooltip}>
+              <button onClick={onClick} className={style.button}>
+                <i className={`fas fa-${icon}`}></i>
+              </button>
+            </Tooltip> :
+            <button onClick={onClick} className={style.button}>
+              <i className={`fas fa-${icon}`}></i>
+            </button>}
       </div>
     )
   }

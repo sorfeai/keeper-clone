@@ -1,3 +1,65 @@
 .note {
-  
+  position: relative;
+  transition: box-shadow .1s ease-out;
+
+  &:hover {
+    box-shadow: 0 1px 10px rgba(#000, 0.4) !important;
+
+    .menu {
+      opacity: 1;
+    }
+  }
+
+  &.isSelected {
+    box-shadow: 0 0 0 4px #00D1B2 !important;
+    transition: none;
+  }
+
+  .inner {
+    padding-bottom: 1.4rem;
+  }
+}
+
+.content {
+  pointer-events: none;
+}
+
+.menu {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity .2s ease-out;
+
+  .isSelected & {
+    opacity: 1;
+  }
+
+  $check-size: 24px;
+  .checkWrapper {
+    position: absolute;
+    left: -$check-size / 2;
+    top: -$check-size / 2;
+    z-index: 999;
+  }
+
+  .check {
+    font-size: $check-size / 2;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(#000, 0.2);
+    width: $check-size;
+    height: $check-size;
+    text-align: center;
+    line-height: $check-size;
+    border-radius: 50%;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+
+    .isSelected & {
+      color: #00D1B2;
+    }
+  }
 }
