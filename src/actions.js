@@ -3,8 +3,13 @@ import {
   CANCEL_SELECTING,
   SELECT_NOTE,
   DESELECT_NOTE,
-  DELETE_SELECTED_NOTES
-} from './constants/actionTypes'
+  DELETE_SELECTED_NOTES,
+  REMOVE_NOTIFICATION,
+  CANCEL_DELETION,
+  START_REFRESH,
+  PIN_NOTES,
+  UNPIN_NOTES
+} from './constants/types'
 
 
 export const toggleFeedView = () => ({
@@ -27,4 +32,28 @@ export const deselectNote = id => ({
 
 export const deleteSelectedNotes = () => ({
   type: DELETE_SELECTED_NOTES
+})
+
+export const removeNotification = id => ({
+  type: REMOVE_NOTIFICATION,
+  payload: { id }
+})
+
+export const cancelDeletion = id => ({
+  type: CANCEL_DELETION,
+  payload: { id }
+})
+
+export const startRefresh = () => ({
+  type: START_REFRESH
+})
+
+export const pinNotes = ids => ({
+  type: PIN_NOTES,
+  payload: { ids }
+})
+
+export const unpinNotes = ids => ({
+  type: UNPIN_NOTES,
+  payload: { ids }
 })

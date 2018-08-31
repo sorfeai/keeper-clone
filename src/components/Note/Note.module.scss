@@ -5,7 +5,7 @@
   &:hover {
     box-shadow: 0 1px 10px rgba(#000, 0.4) !important;
 
-    .menu {
+    .menuWrapper, .pinWrapper {
       opacity: 1;
     }
   }
@@ -24,8 +24,9 @@
   pointer-events: none;
 }
 
-.menu {
+.menuWrapper {
   position: absolute;
+  z-index: 100;
   width: 100%;
   left: 0;
   top: 0;
@@ -36,30 +37,51 @@
   .isSelected & {
     opacity: 1;
   }
+}
 
-  $check-size: 24px;
-  .checkWrapper {
-    position: absolute;
-    left: -$check-size / 2;
-    top: -$check-size / 2;
-    z-index: 999;
+$check-size: 24px;
+.checkWrapper {
+  position: absolute;
+  left: -$check-size / 2;
+  top: -$check-size / 2;
+  z-index: 999;
+}
+
+.check {
+  font-size: $check-size / 2;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(#000, 0.2);
+  width: $check-size;
+  height: $check-size;
+  text-align: center;
+  line-height: $check-size;
+  border-radius: 50%;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+
+  .isSelected & {
+    color: #00D1B2;
+  }
+}
+
+.pinWrapper {
+  position: absolute;
+  z-index: 110;
+  right: 10px;
+  top: 6px;
+  opacity: 0;
+  transition: opacity .1s ease-out;
+
+  .isSelected & {
+    opacity: 1;
   }
 
-  .check {
-    font-size: $check-size / 2;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(#000, 0.2);
-    width: $check-size;
-    height: $check-size;
-    text-align: center;
-    line-height: $check-size;
-    border-radius: 50%;
-    border: 0;
-    outline: 0;
-    cursor: pointer;
+  .isPinned & {
+    opacity: 1;
+  }
 
-    .isSelected & {
-      color: #00D1B2;
-    }
+  * {
+    font-size: .9rem;
   }
 }

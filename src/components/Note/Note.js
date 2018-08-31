@@ -1,27 +1,43 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import classNames from 'classnames'
-import { Tooltip } from '..'
+import { Tooltip, IconButton } from '..'
 import style from './Note.module.scss'
 
+import {
+  selectNote,
+  deselectNote,
+  pinNotes,
+  unpinNotes
+} from '../../actions'
 
-export class Note extends Component {
+
+let Note = class extends Component {
   render() {
     const {
-      title,
-      content,
-      id,
+      note,
       selecting,
       selected,
-      onSelect,
-      onDeselect
+      pinned,
+      selectNote,
+      deselectNote,
+      pinNotes,
+      unpinNotes
     } = this.props
+
+    const id = note.get('id')
+    const title = note.get('title')
+    const content = note.get('content')
 
     const className = classNames({
       [`${[style.note]} box`]: true,
-      [style.isSelected]: selected
+      [style.isSelected]: selected,
+      [style.isPinned]: pinned
     })
 
-    const onCheckClick = id => selected ? onDeselect(id) : onSelect(id)
+    const onCheckClick = id => selected ? deselectNote(id) : selectNote(id)
+
+    const onPinClick = id => pinned ? unpinNotes(id) : pinNotes(id)
 
     return (
       <div
@@ -29,7 +45,15 @@ export class Note extends Component {
         className={className}
       >
         <div className={style.inner}>
-          <div className={style.menu}>
+          <div className={style.pinWrapper}>
+            <IconButton
+              onClick={() => onPinClick(id)}
+              icon='thumbtack'
+              alt={pinned}
+              tooltip={pinned ? 'Unpin note' : 'Pin note'}
+            />
+          </div>
+          <div className={style.menuWrapper}>
             <div className={style.checkWrapper}>
               <Tooltip text={selected ? 'Deselect note' : 'Select note'}>
                 <button
@@ -50,3 +74,15 @@ export class Note extends Component {
     )
   }
 }
+
+
+const mapDispatchToProps = {
+  selectNote,
+  deselectNote,
+  pinNotes,
+  unpinNotes
+}
+
+Note = connect(() => ({}), mapDispatchToProps)(Note)
+
+export { Note }

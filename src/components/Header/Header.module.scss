@@ -7,6 +7,15 @@ $header-height: 4.5rem;
   width: 100%;
 }
 
+.container {
+  padding: 0 1.6rem;
+}
+
+.logo {
+  position: relative;
+  top: -.15rem;
+}
+
 .toolbar, .selecting {
   position: absolute;
   top: 0;
@@ -35,27 +44,14 @@ $header-height: 4.5rem;
   }
 
   .cancelSelectingBtn {
-    padding-right: 1.2rem;
+    padding-right: 1.4rem;
   }
 }
 
-.toolbarGroup {
+.btnGroup {
   padding-left: 2.4rem;
 }
 
-.toolbarItem:not(:last-child) {
-  padding-right: .6rem;
-}
-
-.userAvatar {
-  display: block;
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 100% auto;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  outline: 0;
-  border: 0;
-  cursor: pointer;
+.btnGroupItem:not(:last-child) {
+  padding-right: 1.4rem;
 }

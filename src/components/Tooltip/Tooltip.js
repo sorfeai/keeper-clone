@@ -21,11 +21,12 @@ export class Tooltip extends Component {
         >
           {children}
         </div>
-        <div className={style.tooltipInner}>
-          <div className={style.tooltip}>
-            {text}
-          </div>
-        </div>
+        {text &&
+          <div className={style.tooltipInner}>
+            <div className={style.tooltip}>
+              {text}
+            </div>
+          </div>}
       </div>
     )
   }

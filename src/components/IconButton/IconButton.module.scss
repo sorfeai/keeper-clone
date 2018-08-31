@@ -1,11 +1,10 @@
 .inner {
-  height: 1.6rem;
-  width: 1.6rem;
-  line-height: 100%;
+  line-height: 1;
   text-align: center;
 }
 
 .button {
+  line-height: 1;
   padding: 0;
   background: 0;
   border: 0;
@@ -17,5 +16,9 @@
 
   &:hover {
     color: #000;
+  }
+
+  .alt & {
+    color: #00D1B2;
   }
 }
