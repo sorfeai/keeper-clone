@@ -6,7 +6,7 @@ import style from './IconButton.module.scss'
 
 export class IconButton extends Component {
   render() {
-    const { tooltip, icon, onClick, alt } = this.props
+    const { tooltip, icon, onClick, alt, alignTooltipRight } = this.props
 
     const className = classNames({
       [style.inner]: true,
@@ -15,15 +15,18 @@ export class IconButton extends Component {
 
     return (
       <div className={className}>
-          {tooltip ?
-            <Tooltip text={tooltip}>
-              <button onClick={onClick} className={style.button}>
-                <i className={`fas fa-${icon}`}></i>
-              </button>
-            </Tooltip> :
+        {tooltip ?
+          <Tooltip
+            text={tooltip}
+            alignRight={alignTooltipRight}
+          >
             <button onClick={onClick} className={style.button}>
               <i className={`fas fa-${icon}`}></i>
-            </button>}
+            </button>
+          </Tooltip> :
+          <button onClick={onClick} className={style.button}>
+            <i className={`fas fa-${icon}`}></i>
+          </button>}
       </div>
     )
   }

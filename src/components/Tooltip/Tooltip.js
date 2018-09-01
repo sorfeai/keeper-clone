@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
 import style from './Tooltip.module.scss'
 
 
@@ -11,7 +12,12 @@ export class Tooltip extends Component {
   }
 
   render() {
-    const { children, text } = this.props
+    const { children, text, alignRight } = this.props
+
+    const innerClassname = classNames({
+      [style.tooltipInner]: true,
+      [style.isRight]: alignRight
+    })
 
     return (
       <div className={style.inner}>
@@ -22,7 +28,7 @@ export class Tooltip extends Component {
           {children}
         </div>
         {text &&
-          <div className={style.tooltipInner}>
+          <div className={innerClassname}>
             <div className={style.tooltip}>
               {text}
             </div>

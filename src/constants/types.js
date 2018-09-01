@@ -9,6 +9,10 @@ export const CANCEL_DELETION = ' CANCEL_DELETION'
 export const START_REFRESH = 'START_REFRESH'
 export const PIN_NOTES = 'PIN_NOTES'
 export const UNPIN_NOTES = 'UNPIN_NOTES'
+export const UPDATE_SEARCH_QUERY = 'UPDATE_SEARCH_QUERY'
+export const ENTER_SEARCH_MODE = 'ENTER_SEARCH_MODE'
+export const EXIT_SEARCH_MODE = 'EXIT_SEARCH_MODE'
+export const TOGGLE_MAIN_MENU = 'TOGGLE_MAIN_MENU'
 
 
 // deletionId types

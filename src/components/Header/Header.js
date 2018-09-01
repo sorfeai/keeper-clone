@@ -1,36 +1,38 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
-import { IconButton, Tooltip, RefreshNotes, UserMenu } from '..'
 import style from './Header.module.scss'
+
+import {
+  IconButton,
+  Tooltip,
+  RefreshNotes,
+  UserMenu,
+  Search
+} from '..'
 
 import {
   toggleFeedView,
   cancelSelecting,
   deleteSelectedNotes,
-  pinNotes
+  pinNotes,
+  toggleMainMenu
 } from '../../actions'
 
 
-let Header = ({
-  gridView,
-  toggleFeedView,
-  notesSelecting,
-  selectedNotes,
-  cancelSelecting,
-  deleteSelectedNotes,
-  pinNotes
-}) => {
-  const className = classNames({
-    [style.header]: true,
-    [style.isSelecting]: notesSelecting
-  })
+let Header = class extends Component {
+  renderSelecting() {
+    const {
+      cancelSelecting,
+      selectedNotes,
+      pinNotes,
+      deleteSelectedNotes
+    } = this.props
 
-  const selectedNotesCount = selectedNotes.size
+    const selectedNotesCount = selectedNotes.size
 
-  return (
-    <div className={className}>
+    return (
       <div className={style.selecting}>
         <div className={style.container}>
           <div className={`${style.inner} level`}>
@@ -80,37 +82,68 @@ let Header = ({
           </div>
         </div>
       </div>
-      <div className={style.toolbar}>
-        <div className={style.container}>
-          <div className={`${style.inner} level`}>
-            <div className='level-left'>
-              <div className='level-item'>
-                <a href="/">
-                  <div className={`${style.logo} subtitle is-4`}>
-                    <strong>Keeper</strong>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div className='level-right'>
-              <div className='level-item'>
-                <div className={`${style.btnGroup} level`}>
-                  <div className={`${style.btnGroupItem} level-item`}>
-                    <RefreshNotes />
-                  </div>
-                  <div className={`${style.btnGroupItem} level-item`}>
-                    <IconButton
-                      tooltip={`${gridView ? 'List view' : 'Grid view'}`}
-                      icon={`${gridView ? 'list' : 'th-large'}`}
-                      onClick={toggleFeedView}
-                    />
-                  </div>
+    )
+  }
+
+  render() {
+    const {
+      gridView,
+      toggleFeedView,
+      selecting,
+      toggleMainMenu,
+      mainMenuActive
+    } = this.props
+
+    const className = classNames({
+      [style.header]: true,
+      [style.isSelecting]: selecting
+    })
+
+    return (
+      <div className={className}>
+        {this.renderSelecting()}
+        <div className={style.toolbar}>
+          <div className={style.container}>
+            <div className={`${style.inner} level`}>
+              <div className={`${style.contentLeft} level-left`}>
+                <div className='level-item'>
+                  <div className={style.toggleMenuIcon}><IconButton
+                      icon={mainMenuActive ? 'times' : 'bars'}
+                      tooltip={mainMenuActive ? 'Hide menu' : 'Main menu'}
+                      onClick={toggleMainMenu}
+                    /></div>
+                </div>
+                <div className={`${style.logoWrapper} level-item`}>
+                  <a href="/">
+                    <div className={`${style.logo} subtitle is-4`}>
+                      <strong>Keeper</strong>
+                    </div>
+                  </a>
+                </div>
+                <div className={`${style.searchWrapper} level-item`}>
+                  <Search />
                 </div>
               </div>
-              <div className='level-item'>
-                <div className={`${style.btnGroup} ${style.userInfo} level`}>
-                  <div className={`${style.btnGroupItem} level-item`}>
-                    <UserMenu />
+              <div className='level-right'>
+                <div className='level-item'>
+                  <div className={`${style.btnGroup} level`}>
+                    <div className={`${style.btnGroupItem} level-item`}>
+                      <RefreshNotes />
+                    </div>
+                    <div className={`${style.btnGroupItem} level-item`}>
+                      <IconButton
+                        tooltip={`${gridView ? 'List view' : 'Grid view'}`}
+                        icon={`${gridView ? 'list' : 'th-large'}`}
+                        onClick={toggleFeedView}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className='level-item'>
+                  <div className={`${style.btnGroup} ${style.userInfo} level`}>
+                    <div className={`${style.btnGroupItem} level-item`}>
+                      <UserMenu />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -118,22 +151,24 @@ let Header = ({
           </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 
 const mapStateToProps = state => ({
   gridView: state.feedViewIsGrid,
-  notesSelecting: state.notesSelecting,
-  selectedNotes: state.selectedNotes
+  selecting: state.selecting,
+  selectedNotes: state.selectedNotes,
+  mainMenuActive: state.mainMenuActive
 })
 
 const mapDispatchToProps = {
   toggleFeedView,
   cancelSelecting,
   deleteSelectedNotes,
-  pinNotes
+  pinNotes,
+  toggleMainMenu
 }
 
 Header = connect(mapStateToProps, mapDispatchToProps)(Header)

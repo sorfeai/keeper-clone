@@ -8,7 +8,11 @@ import {
   CANCEL_DELETION,
   START_REFRESH,
   PIN_NOTES,
-  UNPIN_NOTES
+  UNPIN_NOTES,
+  UPDATE_SEARCH_QUERY,
+  ENTER_SEARCH_MODE,
+  EXIT_SEARCH_MODE,
+  TOGGLE_MAIN_MENU
 } from './constants/types'
 
 
@@ -56,4 +60,21 @@ export const pinNotes = ids => ({
 export const unpinNotes = ids => ({
   type: UNPIN_NOTES,
   payload: { ids }
+})
+
+export const updateSearchQuery = val => ({
+  type: UPDATE_SEARCH_QUERY,
+  payload: { val }
+})
+
+export const enterSearchMode = () => ({
+  type: ENTER_SEARCH_MODE
+})
+
+export const exitSearchMode = () => ({
+  type: EXIT_SEARCH_MODE
+})
+
+export const toggleMainMenu = () => ({
+  type: TOGGLE_MAIN_MENU
 })

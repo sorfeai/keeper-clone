@@ -16,7 +16,11 @@ import {
   START_REFRESH,
   REFRESH_IN_PROGRESS,
   PIN_NOTES,
-  UNPIN_NOTES
+  UNPIN_NOTES,
+  UPDATE_SEARCH_QUERY,
+  ENTER_SEARCH_MODE,
+  EXIT_SEARCH_MODE,
+  TOGGLE_MAIN_MENU
 } from '../constants/types'
 
 
@@ -25,27 +29,30 @@ const defaultState = {
     {
       id: uuid.create(),
       deleting: false,
-      title: "Todo List",
-      content: "One, two... and finally three!",
+      title: 'Todo List',
+      content: 'One, two... and finally three!',
       pinned: false
     },
     {
       id: uuid.create(),
       deleting: false,
-      title: "Todo List",
-      content: "One, two... and finally three!",
+      title: 'Todo List',
+      content: 'One, two... and finally three!',
       pinned: false
     },
     {
       id: uuid.create(),
       deleting: false,
-      title: "Todo List",
-      content: "One, two... and finally three!",
+      title: 'Todo List',
+      content: 'One, two... and finally three!',
       pinned: false
     }
   ]),
+  mainMenuActive: false,
   feedViewIsGrid: true,
-  notesSelecting: false,
+  selecting: false,
+  searching: false,
+  searchQuery: '',
   selectedNotes: List(),
   deletions: List(),
   notifications: List(),
@@ -74,7 +81,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         selectedNotes,
-        notesSelecting: state.notesSelecting || true
+        selecting: state.selecting || true
       }
     case DESELECT_NOTE:
       selectedNotes = state.selectedNotes.filter(
@@ -84,13 +91,13 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         selectedNotes,
-        notesSelecting: selectedNotes.size === 0 ? false :  state.notesSelecting
+        selecting: selectedNotes.size === 0 ? false :  state.selecting
       }
     case CANCEL_SELECTING:
       return {
         ...state,
         selectedNotes: List(),
-        notesSelecting: false
+        selecting: false
       }
     case DELETE_SELECTED_NOTES:
       const deletionIdId = uuid.create()
@@ -98,7 +105,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         selectedNotes: List(),
-        notesSelecting: false,
+        selecting: false,
         notesData: state.notesData.map(note => {
           if (state.selectedNotes.includes(note.get('id'))) {
             return note.set('deleting', true)
@@ -171,6 +178,26 @@ export default (state = defaultState, action) => {
             return note.set('pinned', false)
           } else return note
         })
+      }
+    case ENTER_SEARCH_MODE:
+      return {
+        ...state,
+        searching: true
+      }
+    case EXIT_SEARCH_MODE:
+      return {
+        ...state,
+        searching: false
+      }
+    case UPDATE_SEARCH_QUERY:
+      return {
+        ...state,
+        searchQuery: action.payload.val
+      }
+    case TOGGLE_MAIN_MENU:
+      return {
+        ...state,
+        mainMenuActive: !state.mainMenuActive
       }
     default:
       return state

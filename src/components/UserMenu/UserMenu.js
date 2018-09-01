@@ -42,7 +42,10 @@ let UserMenu = class extends Component {
 
     return (
       <div className={className}>
-        <Tooltip text={!open && 'Nikita Belousov'}>
+        <Tooltip
+          text={!open && 'Nikita Belousov'}
+          alignRight={true}
+        >
           <button
             onClick={this.toggle}
             className={style.menuButton}

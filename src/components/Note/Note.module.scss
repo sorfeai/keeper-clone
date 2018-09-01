@@ -68,8 +68,8 @@ $check-size: 24px;
 .pinWrapper {
   position: absolute;
   z-index: 110;
-  right: 10px;
-  top: 6px;
+  right: -3px;
+  top: -4px;
   opacity: 0;
   transition: opacity .1s ease-out;
 

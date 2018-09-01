@@ -19,6 +19,21 @@ let NotesFeed = class extends Component {
     gridView: true
   }
 
+  applySearchFilter(data) {
+    const { searchQuery } = this.props
+    
+    return data.filter(note =>
+      note
+        .get('title')
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      note
+        .get('content')
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    )
+  }
+
   renderGrid = (notes, pinnedNotes) => {
     const { selecting, selectedNotes } = this.props
 
@@ -95,26 +110,32 @@ let NotesFeed = class extends Component {
                 />
               </div>)}
           </div>}
-        <div className={style.otherNotesSection}>
-          {hasPinned &&
-            <div className='subtitle is-6'>
-              <div className='heading'>Other</div>
-            </div>}
-          {notes.map((note, i) =>
-            <div key={i} className={style.note}>
-              <Note
-                note={note}
-                selecting={selecting}
-                selected={selectedNotes.includes(note.get('id'))}
-              />
-            </div>)}
-        </div>
+        {hasOther &&
+          <div className={style.otherNotesSection}>
+            {hasPinned &&
+              <div className='subtitle is-6'>
+                <div className='heading'>Other</div>
+              </div>}
+            {notes.map((note, i) =>
+              <div key={i} className={style.note}>
+                <Note
+                  note={note}
+                  selecting={selecting}
+                  selected={selectedNotes.includes(note.get('id'))}
+                />
+              </div>)}
+          </div>}
       </div>
     )
   }
 
   render() {
-    const { notesData, gridView, selecting, selectedNotes } = this.props
+    const { gridView, selecting, selectedNotes, searchQuery } = this.props
+    let { notesData } = this.props
+
+    if (searchQuery) {
+      notesData = this.applySearchFilter(notesData)
+    }
 
     let notes = [],
         pinnedNotes = []
@@ -157,8 +178,9 @@ let NotesFeed = class extends Component {
 const mapStateToProps = state => ({
   notesData: state.notesData,
   gridView: state.feedViewIsGrid,
-  selecting: state.notesSelecting,
-  selectedNotes: state.selectedNotes
+  selecting: state.selecting,
+  selectedNotes: state.selectedNotes,
+  searchQuery: state.searchQuery
 })
 
 NotesFeed = connect(mapStateToProps)(NotesFeed)

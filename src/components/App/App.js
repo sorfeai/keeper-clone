@@ -1,20 +1,43 @@
 import React, { Component } from 'react'
-import { Header, NotesFeed, Notifications } from '..'
+import { connect } from 'react-redux'
+import classNames from 'classnames'
 import style from './App.module.scss'
 
+import {
+  Header,
+  NotesFeed,
+  Notifications,
+  MainMenu
+} from '..'
 
-export class App extends Component {
+
+let App =  class extends Component {
   render() {
+    const contentClassname = classNames({
+      [style.content]: true,
+      [style.mainMenuActive]: this.props.mainMenuActive
+    })
+
     return (
       <div className={style.app}>
         <div className={style.notificationsWrapper}>
           <Notifications />
         </div>
         <Header />
-        <div className={`${style.content} container`}>
+        <MainMenu />
+        <div className={`${contentClassname} container`}>
           <NotesFeed />
         </div>
       </div>
     )
   }
 }
+
+
+const mapStateToProps = state => ({
+  mainMenuActive: state.mainMenuActive
+})
+
+App = connect(mapStateToProps)(App)
+
+export { App }

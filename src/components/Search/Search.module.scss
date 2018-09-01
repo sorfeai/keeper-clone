@@ -1,0 +1,36 @@
+.wrapper {
+  position: relative;
+}
+
+$height: 3rem;
+.searchInput {
+  font-size: 1rem;
+  line-height: 3;
+  width: 100%;
+  height: $height;
+  border: 0;
+  outline: 0;
+  border-radius: 4px;
+  background: rgba(black, .06);
+  padding: 0 2rem 0 4rem;
+  display: block;
+  transition: background .1s ease-out;
+
+  &:focus {
+    background: white;
+  }
+
+  &::placeholder {
+    color: inherit;
+  }
+}
+
+.iconWrapper {
+  font-size: 1rem;
+  position: absolute;
+  height: $height;
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: .6rem;
+}

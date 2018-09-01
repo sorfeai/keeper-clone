@@ -1,0 +1,46 @@
+$menu-width: 16rem;
+
+.wrapper {
+  position: fixed;
+  top: 4rem;
+  height: 100%;
+  left: -$menu-width;
+  width: $menu-width;
+  z-index: 1200;
+  transition: left .2s ease-in-out;
+
+  &.isActive {
+    left: 0;
+  }
+}
+
+.menu {
+  height: 100%;
+  font-size: .9rem;
+}
+
+.menuSection:not(:last-child) {
+  padding: .4rem 0;
+  border-bottom: 1px solid rgba(black, .06);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: .9rem 1.4rem;
+  color: inherit;
+  background: transparent;
+
+  &:hover {
+    background: rgba(black, .06);
+  }
+
+  .iconWrapper {
+    margin-right: 2.2rem;
+    width: 1rem;
+
+    * {
+      font-size: .9rem;
+    }
+  }
+}
