@@ -19,9 +19,13 @@ let NotesFeed = class extends Component {
     gridView: true
   }
 
+  shouldComponentUpdate(nextProps) {
+    return !nextProps.editing
+  }
+
   applySearchFilter(data) {
     const { searchQuery } = this.props
-    
+
     return data.filter(note =>
       note
         .get('title')
@@ -34,49 +38,51 @@ let NotesFeed = class extends Component {
     )
   }
 
-  renderGrid = (notes, pinnedNotes) => {
-    const { selecting, selectedNotes } = this.props
+  renderGrid = (unpinned, pinned) => {
+    const { selecting, selectedNotes, editingNote } = this.props
 
-    const hasPinned = pinnedNotes && pinnedNotes[0]
-    const hasOther = notes && notes[0]
+    const hasPinned = pinned && pinned[0]
+    const hasUnpinned = unpinned && unpinned[0]
 
     return (
       <div>
         {hasPinned &&
-          <div className={style.pinnedNotesSection}>
+          <div className={style.pinnedSection}>
             <div className='subtitle is-6'>
               <div className='heading'>Pinned</div>
             </div>
             <div className={`${style.notes} columns`}>
-              {Object.keys(pinnedNotes).map((key, i) =>
+              {Object.keys(pinned).map((key, i) =>
                 <div key={i} className='column'>
-                  {pinnedNotes[key].map((note, i) => (
+                  {pinned[key].map((note, i) => (
                     <div key={i} className={`${style.note}`}>
                       <Note
                         note={note}
                         selecting={selecting}
                         selected={selectedNotes.includes(note.get('id'))}
+                        editing={editingNote === note.get('id')}
                         pinned={true}
                       />
                     </div>))}
                 </div>)}
             </div>
           </div>}
-        {hasOther &&
+        {hasUnpinned &&
           <div className={style.otherNotesSection}>
             {hasPinned &&
               <div className='subtitle is-6'>
                 <div className='heading'>Other</div>
               </div>}
             <div className={`${style.notes} columns`}>
-              {Object.keys(notes).map((key, i) =>
+              {Object.keys(unpinned).map((key, i) =>
                 <div key={i} className='column'>
-                  {notes[key].map((note, i) =>
+                  {unpinned[key].map((note, i) =>
                     <div key={i} className={style.note}>
                       <Note
                         note={note}
                         selecting={selecting}
                         selected={selectedNotes.includes(note.get('id'))}
+                        editing={editingNote === note.get('id')}
                       />
                     </div>
                   )}
@@ -87,11 +93,11 @@ let NotesFeed = class extends Component {
     )
   }
 
-  renderList = (notes, pinnedNotes) => {
-    const { selecting, selectedNotes } = this.props
+  renderList = (unpinned, pinned) => {
+    const { selecting, selectedNotes, editingNote } = this.props
 
-    const hasPinned = pinnedNotes && pinnedNotes[0]
-    const hasOther = notes && notes[0]
+    const hasUnpinned = unpinned && unpinned[0]
+    const hasPinned = pinned && pinned[0]
 
     return (
       <div className={style.list}>
@@ -100,28 +106,30 @@ let NotesFeed = class extends Component {
             <div className='subtitle is-6'>
               <div className='heading'>Pinned</div>
             </div>
-            {pinnedNotes.map((note, i) =>
+            {pinned.map((note, i) =>
               <div key={i} className={style.note}>
                 <Note
                   note={note}
                   selecting={selecting}
                   selected={selectedNotes.includes(note.get('id'))}
+                  editing={editingNote === note.get('id')}
                   pinned={true}
                 />
               </div>)}
           </div>}
-        {hasOther &&
+        {hasUnpinned &&
           <div className={style.otherNotesSection}>
             {hasPinned &&
               <div className='subtitle is-6'>
                 <div className='heading'>Other</div>
               </div>}
-            {notes.map((note, i) =>
+            {unpinned.map((note, i) =>
               <div key={i} className={style.note}>
                 <Note
                   note={note}
                   selecting={selecting}
                   selected={selectedNotes.includes(note.get('id'))}
+                  editing={editingNote === note.get('id')}
                 />
               </div>)}
           </div>}
@@ -130,23 +138,33 @@ let NotesFeed = class extends Component {
   }
 
   render() {
-    const { gridView, selecting, selectedNotes, searchQuery } = this.props
+    const {
+      gridView,
+      selecting,
+      selectedNotes,
+      searchQuery,
+      pinnedNotes,
+      notesInTrash
+    } = this.props
+
     let { notesData } = this.props
 
     if (searchQuery) {
       notesData = this.applySearchFilter(notesData)
     }
 
-    let notes = [],
-        pinnedNotes = []
+    let unpinned = [],
+        pinned = []
 
     notesData.forEach(note => {
-      if (note.get('deleting')) return
+      const id = note.get('id')
 
-      if (note.get('pinned')) {
-        pinnedNotes.push(note)
+      if (notesInTrash.includes(id)) return
+
+      if (pinnedNotes.includes(id)) {
+        pinned.push(note)
       }  else {
-        notes.push(note)
+        unpinned.push(note)
       }
     })
 
@@ -160,15 +178,15 @@ let NotesFeed = class extends Component {
           }
         }, {})
 
-      notes = divideByColumns(notes)
-      pinnedNotes = divideByColumns(pinnedNotes)
+      unpinned = divideByColumns(unpinned)
+      pinned = divideByColumns(pinned)
     }
 
     return (
       <div className={style.notesFeed}>
         {gridView
-          ? this.renderGrid(notes, pinnedNotes, selecting)
-          : this.renderList(notes, pinnedNotes, selecting)}
+          ? this.renderGrid(unpinned, pinned, selecting)
+          : this.renderList(unpinned, pinned, selecting)}
       </div>
     )
   }
@@ -176,11 +194,14 @@ let NotesFeed = class extends Component {
 
 
 const mapStateToProps = state => ({
-  notesData: state.notesData,
-  gridView: state.feedViewIsGrid,
-  selecting: state.selecting,
-  selectedNotes: state.selectedNotes,
-  searchQuery: state.searchQuery
+  notesData: state.common.notesData,
+  gridView: state.common.feedViewIsGrid,
+  searchQuery: state.common.searchQuery,
+  selecting: state.select.selecting,
+  selectedNotes: state.select.selectedNotes,
+  pinnedNotes: state.pin.notesById,
+  editing: state.edit.editing,
+  notesInTrash: state.trash.notesById
 })
 
 NotesFeed = connect(mapStateToProps)(NotesFeed)

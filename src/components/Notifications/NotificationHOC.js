@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { removeNotification } from '../../actions'
+import { hideNotification } from '../../actions'
 
 
 const NotificationHOC = Comp => {
   let Notification = class extends Component {
     componentDidMount() {
-      const { id, expires, removeNotification } = this.props
+      const { id, expires, hideNotification } = this.props
 
       this.removeTimeout = setTimeout(() => {
-        removeNotification(id)
+        hideNotification(id)
       }, expires)
     }
 
@@ -34,7 +34,7 @@ const NotificationHOC = Comp => {
     }
   }
 
-  return connect(() => ({}), { removeNotification })(Notification)
+  return connect(() => ({}), { hideNotification })(Notification)
 }
 
 

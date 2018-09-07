@@ -1,18 +1,23 @@
 import {
   TOGGLE_FEED_VIEW,
-  CANCEL_SELECTING,
+  CLEAR_SELECTION,
   SELECT_NOTE,
   DESELECT_NOTE,
-  DELETE_SELECTED_NOTES,
-  REMOVE_NOTIFICATION,
-  CANCEL_DELETION,
+  MOVE_NOTES_TO_TRASH,
+  SHOW_NOTIFICATION,
+  HIDE_NOTIFICATION,
+  RESTORE_NOTES_FROM_TRASH,
   START_REFRESH,
   PIN_NOTES,
   UNPIN_NOTES,
   UPDATE_SEARCH_QUERY,
   ENTER_SEARCH_MODE,
   EXIT_SEARCH_MODE,
-  TOGGLE_MAIN_MENU
+  TOGGLE_MAIN_MENU,
+  EDIT_NOTE,
+  START_EDITING_NOTE,
+  UPDATE_NOTE,
+  END_EDITING_NOTE
 } from './constants/types'
 
 
@@ -20,8 +25,8 @@ export const toggleFeedView = () => ({
   type: TOGGLE_FEED_VIEW
 })
 
-export const cancelSelecting = () => ({
-  type: CANCEL_SELECTING
+export const clearSelection = () => ({
+  type: CLEAR_SELECTION
 })
 
 export const selectNote = id => ({
@@ -34,17 +39,27 @@ export const deselectNote = id => ({
   payload: { id }
 })
 
-export const deleteSelectedNotes = () => ({
-  type: DELETE_SELECTED_NOTES
+export const moveNotesToTrash = ids => ({
+  type: MOVE_NOTES_TO_TRASH,
+  payload: { ids }
 })
 
-export const removeNotification = id => ({
-  type: REMOVE_NOTIFICATION,
-  payload: { id }
+export const restoreNotesFromTrash = ids => ({
+  type: RESTORE_NOTES_FROM_TRASH,
+  payload: { ids }
 })
 
-export const cancelDeletion = id => ({
-  type: CANCEL_DELETION,
+export const clearTrash = () => ({
+  type: CLEAR_TRASH
+})
+
+export const showNotification = (type, message, action) => ({
+  type: SHOW_NOTIFICATION,
+  payload: { type, message, action }
+})
+
+export const hideNotification = id => ({
+  type: HIDE_NOTIFICATION,
   payload: { id }
 })
 
@@ -77,4 +92,23 @@ export const exitSearchMode = () => ({
 
 export const toggleMainMenu = () => ({
   type: TOGGLE_MAIN_MENU
+})
+
+export const editNote = id => ({
+  type: EDIT_NOTE,
+  payload: { id }
+})
+
+export const startEditingNote = (id, title, content)  => ({
+  type: START_EDITING_NOTE,
+  payload: { id, title, content }
+})
+
+export const endEditingNote = () => ({
+  type: END_EDITING_NOTE
+})
+
+export const updateNote = (id, changes) => ({
+  type: UPDATE_NOTE,
+  payload: { id, changes }
 })

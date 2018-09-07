@@ -14,8 +14,8 @@ import {
 
 import {
   toggleFeedView,
-  cancelSelecting,
-  deleteSelectedNotes,
+  clearSelection,
+  moveNotesToTrash,
   pinNotes,
   toggleMainMenu
 } from '../../actions'
@@ -24,10 +24,10 @@ import {
 let Header = class extends Component {
   renderSelecting() {
     const {
-      cancelSelecting,
+      clearSelection,
       selectedNotes,
       pinNotes,
-      deleteSelectedNotes
+      moveNotesToTrash
     } = this.props
 
     const selectedNotesCount = selectedNotes.size
@@ -37,9 +37,9 @@ let Header = class extends Component {
         <div className={style.container}>
           <div className={`${style.inner} level`}>
             <div className='level-left'>
-              <div className={`${style.cancelSelectingBtn} level-item`}>
+              <div className={`${style.clearSelectionBtn} level-item`}>
                 <IconButton
-                  onClick={cancelSelecting}
+                  onClick={clearSelection}
                   tooltip='Cancel selection'
                   icon='arrow-left'
                 />
@@ -63,7 +63,7 @@ let Header = class extends Component {
                     <IconButton
                       onClick={() => {
                         pinNotes(selectedNotes)
-                        cancelSelecting()
+                        clearSelection()
                       }}
                       tooltip='Pin selected'
                       icon='thumbtack'
@@ -71,7 +71,10 @@ let Header = class extends Component {
                   </div>
                   <div className={`${style.btnGroupItem} level-item`}>
                     <IconButton
-                      onClick={deleteSelectedNotes}
+                      onClick={() => {
+                        moveNotesToTrash(selectedNotes)
+                        clearSelection()
+                      }}
                       tooltip='Delete selected'
                       icon='trash'
                     />
@@ -107,11 +110,13 @@ let Header = class extends Component {
             <div className={`${style.inner} level`}>
               <div className={`${style.contentLeft} level-left`}>
                 <div className='level-item'>
-                  <div className={style.toggleMenuIcon}><IconButton
+                  <div className={style.toggleMenuIcon}>
+                    <IconButton
                       icon={mainMenuActive ? 'times' : 'bars'}
                       tooltip={mainMenuActive ? 'Hide menu' : 'Main menu'}
                       onClick={toggleMainMenu}
-                    /></div>
+                    />
+                  </div>
                 </div>
                 <div className={`${style.logoWrapper} level-item`}>
                   <a href="/">
@@ -157,16 +162,16 @@ let Header = class extends Component {
 
 
 const mapStateToProps = state => ({
-  gridView: state.feedViewIsGrid,
-  selecting: state.selecting,
-  selectedNotes: state.selectedNotes,
-  mainMenuActive: state.mainMenuActive
+  gridView: state.common.feedViewIsGrid,
+  mainMenuActive: state.common.mainMenuActive,
+  selecting: state.select.selecting,
+  selectedNotes: state.select.selectedNotes
 })
 
 const mapDispatchToProps = {
   toggleFeedView,
-  cancelSelecting,
-  deleteSelectedNotes,
+  clearSelection,
+  moveNotesToTrash,
   pinNotes,
   toggleMainMenu
 }

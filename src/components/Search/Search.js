@@ -37,8 +37,8 @@ let Search = class extends Component {
 
 
 const mapStateToProps = state => ({
-  searching: state.searching,
-  searchQuery: state.searchQuery
+  searching: state.common.searching,
+  searchQuery: state.common.searchQuery
 })
 
 const mapDispatchToprops = {

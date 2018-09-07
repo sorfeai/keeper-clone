@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import style from './Notifications.module.scss'
 import { NotificationTemplate } from './NotificationTemplate'
-import { removeNotification, cancelDeletion } from '../../actions'
+import { hideNotification, restoreNotesFromTrash } from '../../actions'
 import { NOTIFICATION_LIFE_TIME } from '../../constants/settings'
 
 import {
@@ -40,8 +40,8 @@ const NotificationDanger = props =>
 
 let Notifications = ({
   notifications,
-  removeNotification,
-  cancelDeletion
+  hideNotification,
+  restoreNotesFromTrash
 }) => {
   const componentsByTypes = {
     [NOTIFICATION_SUCCESS]: NotificationSuccess,
@@ -53,28 +53,22 @@ let Notifications = ({
   return (
     <div className={style.wrapper}>
       {notifications.map((ntf, i) => {
-        let onCancel
-        if (ntf.get('deletionId')) {
-          onCancel = () => {
-            cancelDeletion(ntf.get('deletionId'))
-            removeNotification(ntf.get('id'))
-          }
-        }
+        const id = ntf.get('id')
+        const type = ntf.get('type')
+        const message = ntf.get('message')
+        const action = ntf.get('action')
 
-        const onClose = () => removeNotification(ntf.get('id'))
+        const CompName = componentsByTypes[type]
 
         return (
-          React.createElement(
-            componentsByTypes[ntf.get('type')],
-            {
-              key: i,
-              id: ntf.get('id'),
-              message: ntf.get('message'),
-              onClose,
-              onCancel,
-              expires: NOTIFICATION_LIFE_TIME
-            }
-          )
+          <CompName
+            key={i}
+            id={id}
+            message={message}
+            onClose={() => hideNotification(id)}
+            action={action}
+            expires={NOTIFICATION_LIFE_TIME}
+          />
         )
       })}
     </div>
@@ -83,10 +77,10 @@ let Notifications = ({
 
 
 const mapStateToProps = state => ({
-  notifications: state.notifications
+  notifications: state.notifications.notifications
 })
 
-const mapDispatchToProps = { removeNotification, cancelDeletion }
+const mapDispatchToProps = { hideNotification, restoreNotesFromTrash }
 
 Notifications = connect(mapStateToProps, mapDispatchToProps)(Notifications)
 

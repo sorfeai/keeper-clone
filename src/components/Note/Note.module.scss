@@ -1,41 +1,51 @@
+.wrapper {
+
+  &.isEditing {
+    background: rgba(white, .6);
+    position: fixed;
+    z-index: 1500;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .note {
   position: relative;
   transition: box-shadow .1s ease-out;
 
   &:hover {
-    box-shadow: 0 1px 10px rgba(#000, 0.4) !important;
+    box-shadow: 0 1px 10px rgba(#000, 0.4);
 
-    .menuWrapper, .pinWrapper {
+    .checkWrapper, .pinWrapper {
       opacity: 1;
     }
   }
 
   &.isSelected {
-    box-shadow: 0 0 0 4px #00D1B2 !important;
+    box-shadow: 0 0 0 4px #00D1B2;
     transition: none;
   }
 
+  .isEditing & {
+    width: 36rem;
+    box-shadow: 0 2px 15px rgba(#000, 0.2)
+  }
+
   .inner {
-    padding-bottom: 1.4rem;
+    padding-bottom: 45px;
   }
 }
 
 .content {
   pointer-events: none;
-}
 
-.menuWrapper {
-  position: absolute;
-  z-index: 100;
-  width: 100%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  opacity: 0;
-  transition: opacity .2s ease-out;
-
-  .isSelected & {
-    opacity: 1;
+  .isEditing & {
+    pointer-events: auto;
   }
 }
 
@@ -44,7 +54,13 @@ $check-size: 24px;
   position: absolute;
   left: -$check-size / 2;
   top: -$check-size / 2;
-  z-index: 999;
+  z-index: 120;
+  opacity: 0;
+  transition: opacity .2s ease-out;
+
+  .isSelected & {
+    opacity: 1;
+  }
 }
 
 .check {
@@ -84,4 +100,38 @@ $check-size: 24px;
   * {
     font-size: .9rem;
   }
+}
+
+.titleWrapper {
+  margin-top: -.4rem;
+  margin-bottom: .6rem;
+}
+
+.editTitle, .editContent {
+
+  input[type=text], textarea {
+    width: 100%;
+    font-size: inherit;
+    border: 0;
+    outline: 0;
+  }
+
+  input[type=text] {
+    font-weight: bold;
+    padding-right: 1.4rem;
+  }
+
+  textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 50px;
+  }
+}
+
+$padding: 20px;
+.toolbar {
+  position: absolute;
+  bottom: $padding;
+  right: $padding;
+  left: $padding;
 }

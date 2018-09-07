@@ -35,7 +35,7 @@ let App =  class extends Component {
 
 
 const mapStateToProps = state => ({
-  mainMenuActive: state.mainMenuActive
+  mainMenuActive: state.common.mainMenuActive
 })
 
 App = connect(mapStateToProps)(App)

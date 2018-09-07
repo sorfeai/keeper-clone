@@ -1,26 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { removeNotification } from '../../actions'
+import { hideNotification } from '../../actions'
 import style from './Notifications.module.scss'
 import { CSSTransition } from 'react-transition-group'
 import { NotificationHOC } from './NotificationHOC'
 
 
-let NotificationTemplate = ({ message, onClose, onCancel, style }) =>
+let NotificationTemplate = ({ message, onClose, action, style }) =>
   <CSSTransition
     in={true}
     appear={true}
     timeout={500}
     classNames={'asd'}
-
-    // classNames={{
-    //   appear: style.fadeEnter,
-    //   appearActive: style.fadeEnterActive,
-    //   enter: style.fadeEnter,
-    //   enterDone: style.fadeEnterActive,
-    //   exit: style.fadeExit,
-    //   exitDone: style.fadeExitActive
-    // }}
   >
     <div className={`notification is-${style}`}>
       <button
@@ -33,10 +24,10 @@ let NotificationTemplate = ({ message, onClose, onCancel, style }) =>
             {message}
           </div>
         </div>
-        {onCancel &&
+        {action &&
           <div className={style.cancel}>
             <button
-              onClick={onCancel}
+              onClick={action}
               className='button is-primary is-inverted is-outlined'
             >
               Cancel

@@ -28,7 +28,7 @@ let RefreshNotes = class extends Component {
 
 
 const mapStateToProps = state => ({
-  refreshStatus: state.refreshStatus
+  refreshStatus: state.common.refreshStatus
 })
 
 const mapDispatchToProps = { startRefresh }

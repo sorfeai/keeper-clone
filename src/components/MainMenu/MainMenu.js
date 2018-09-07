@@ -74,9 +74,10 @@ let MainMenu = ({ isActive }) => {
   return (
     <div className={className}>
       <div className={style.menu}>
-        {itemsData.map(section =>
-          <div className={style.menuSection}>
-            {section.map(item => <Item {...item} />)}
+        {itemsData.map((section, i) =>
+          <div key={i} className={style.menuSection}>
+            {section.map((item, i) =>
+              <Item key={i} {...item} />)}
           </div>)}
       </div>
     </div>
@@ -85,7 +86,7 @@ let MainMenu = ({ isActive }) => {
 
 
 const mapStateToProps = state => ({
-  isActive: state.mainMenuActive
+  isActive: state.common.mainMenuActive
 })
 
 MainMenu = connect(mapStateToProps)(MainMenu)

@@ -105,11 +105,11 @@ let UserMenu = class extends Component {
 
 
 const mapStateToProps = state => ({
-  username: state.user.get('username'),
-  firstName: state.user.get('firstName'),
-  lastName: state.user.get('lastName'),
-  email: state.user.get('email'),
-  avatar: state.user.get('avatar')
+  username: state.common.user.get('username'),
+  firstName: state.common.user.get('firstName'),
+  lastName: state.common.user.get('lastName'),
+  email: state.common.user.get('email'),
+  avatar: state.common.user.get('avatar')
 })
 
 UserMenu = connect(mapStateToProps)(UserMenu)
