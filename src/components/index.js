@@ -1,4 +1,5 @@
 export { App } from './App'
+export { withPage } from './withPage'
 export { Header } from './Header'
 export { MainMenu } from './MainMenu'
 export { NotesFeed } from './NotesFeed'

@@ -1,4 +1,5 @@
 import {
+  SET_PAGE,
   TOGGLE_FEED_VIEW,
   CLEAR_SELECTION,
   SELECT_NOTE,
@@ -23,6 +24,11 @@ import {
   END_EDITING_NOTE
 } from './constants/types'
 
+
+export const setPage = page => ({
+  type: SET_PAGE,
+  payload: { page }
+})
 
 export const toggleFeedView = () => ({
   type: TOGGLE_FEED_VIEW

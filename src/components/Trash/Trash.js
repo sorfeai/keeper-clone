@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import style from './Trash.module.scss'
-import { Note } from '..'
+import { withPage, Note } from '..'
 import { clearTrash } from '../../actions'
+import { PAGE_TRASH } from '../../constants/types'
 
 
 let Trash = class extends Component {
@@ -59,6 +60,7 @@ let Trash = class extends Component {
                     <div key={i} className={`${style.note}`}>
                       <Note
                         note={note}
+                        trash={true}
                         selecting={selecting}
                         selected={selectedNotes.includes(note.get('id'))}
                         editing={editingNote === note.get('id')}
@@ -81,6 +83,7 @@ let Trash = class extends Component {
                     <div key={i} className={style.note}>
                       <Note
                         note={note}
+                        trash={true}
                         selecting={selecting}
                         selected={selectedNotes.includes(note.get('id'))}
                         editing={editingNote === note.get('id')}
@@ -111,6 +114,7 @@ let Trash = class extends Component {
               <div key={i} className={style.note}>
                 <Note
                   note={note}
+                  trash={true}
                   selecting={selecting}
                   selected={selectedNotes.includes(note.get('id'))}
                   editing={editingNote === note.get('id')}
@@ -128,6 +132,7 @@ let Trash = class extends Component {
               <div key={i} className={style.note}>
                 <Note
                   note={note}
+                  trash={true}
                   selecting={selecting}
                   selected={selectedNotes.includes(note.get('id'))}
                   editing={editingNote === note.get('id')}
@@ -237,5 +242,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = { clearTrash }
 
 Trash = connect(mapStateToProps, mapDispatchToProps)(Trash)
+Trash = withPage(PAGE_TRASH)(Trash)
 
 export { Trash }

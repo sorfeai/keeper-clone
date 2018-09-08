@@ -123,6 +123,7 @@ let Note = class extends Component {
   render() {
     const {
       note,
+      trash,
       selecting,
       selected,
       selectNote,
@@ -158,14 +159,15 @@ let Note = class extends Component {
           className={noteClass}
         >
             <div className={style.inner}>
-            <div className={style.pinWrapper}>
-              <IconButton
-                onClick={e => this.onPin(e, id)}
-                icon='thumbtack'
-                alt={pinned}
-                tooltip={pinned ? 'Unpin note' : 'Pin note'}
-              />
-            </div>
+            {!trash &&
+              <div className={style.pinWrapper}>
+                <IconButton
+                  onClick={e => this.onPin(e, id)}
+                  icon='thumbtack'
+                  alt={pinned}
+                  tooltip={pinned ? 'Unpin note' : 'Pin note'}
+                />
+              </div>}
             {!editing &&
               <div className={style.checkWrapper}>
                 <Tooltip text={selected ? 'Deselect note' : 'Select note'}>

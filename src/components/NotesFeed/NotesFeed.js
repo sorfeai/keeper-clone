@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import style from './NotesFeed.module.scss'
-import { Note } from '..'
+import { withPage, Note } from '..'
+import { PAGE_HOME } from '../../constants/types'
 
 
 let NotesFeed = class extends Component {
@@ -205,5 +206,6 @@ const mapStateToProps = state => ({
 })
 
 NotesFeed = connect(mapStateToProps)(NotesFeed)
+NotesFeed = withPage(PAGE_HOME)(NotesFeed)
 
 export { NotesFeed }

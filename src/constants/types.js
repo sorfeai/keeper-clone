@@ -1,4 +1,5 @@
 // action types
+export const SET_PAGE = 'SET_PAGE'
 export const TOGGLE_FEED_VIEW = 'TOGGLE_FEED_VIEW'
 export const CLEAR_SELECTION = 'CLEAR_SELECTION'
 export const SELECT_NOTE = 'SELECT_NOTE'
@@ -32,6 +33,11 @@ export const NOTIFICATION_SUCCESS = 'NOTIFICATION_SUCCESS'
 export const NOTIFICATION_INFO = 'NOTIFICATION_INFO'
 export const NOTIFICATION_WARNING = 'NOTIFICATION_WARNING'
 export const NOTIFICATION_DANGER = 'NOTIFICATION_DANGER'
+
+
+// pages
+export const PAGE_HOME = 'PAGE_HOME'
+export const PAGE_TRASH = 'PAGE_TRASH'
 
 
 // refresh statuses

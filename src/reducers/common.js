@@ -3,6 +3,8 @@ import { fromJS, List, Map } from 'immutable'
 import { notesDeletedMessage, notesRestoredMessage } from '../messages'
 
 import {
+  PAGE_HOME,
+  SET_PAGE,
   TOGGLE_FEED_VIEW,
   START_REFRESH,
   REFRESH_IN_PROGRESS,
@@ -36,6 +38,7 @@ const defaultState = {
       content: 'One, two... and finally three!'
     }
   ]),
+  currentPage: PAGE_HOME,
   mainMenuActive: false,
   feedViewIsGrid: true,
   searching: false,
@@ -54,6 +57,11 @@ export default (state = defaultState, action) => {
   let selectedNotes, id, changes
 
   switch (action.type) {
+    case SET_PAGE:
+      return {
+        ...state,
+        currentPage: action.payload.page
+      }
     case TOGGLE_FEED_VIEW:
       return {
         ...state,
