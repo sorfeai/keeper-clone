@@ -2,7 +2,7 @@ import { put, fork, takeLatest, select } from 'redux-saga/effects'
 
 import { store } from '..'
 import { getNotesInTrash } from '../selectors'
-import { movedToTrashMessage, trashClearedMessage } from '../messages'
+import { notesMovedToTrashMessage, notesDeletedMessage } from '../messages'
 
 import {
   MOVE_NOTES_TO_TRASH,
@@ -17,36 +17,42 @@ import {
 } from '../actions'
 
 
-function* notifyMoveToTrash(action) {
+// moved to trash
+
+function* notifyMovedToTrash(action) {
+  const { ids } = action.payload
+  const notesCount = ids.size ? ids.size : ids.length
+
   yield put(showNotification(
     NOTIFICATION_INFO,
-    movedToTrashMessage.format({
-      notesCount: action.payload.ids.size
-    }),
+    notesMovedToTrashMessage.format({ notesCount }),
     () => store.dispatch(
       restoreNotesFromTrash(action.payload.ids)
     )
   ))
 }
 
-function* notifyClearTrash() {
-  const notesInTrash = yield select(getNotesInTrash)
+function* watchMoveNotesToTrash() {
+  yield takeLatest(MOVE_NOTES_TO_TRASH, notifyMovedToTrash)
+}
+
+
+// deleted forever
+
+function* notifyNotesDeleted(action) {
+  const { ids } = action.payload
+  const notesCount = ids.size ? ids.size : ids.length
 
   yield put(showNotification(
     NOTIFICATION_INFO,
-    trashClearedMessage.format({
-      notesCount: notesInTrash.size
-    })
+    notesDeletedMessage.format({ notesCount })
   ))
 }
 
-function* watchMoveNotesToTrash() {
-  yield takeLatest(MOVE_NOTES_TO_TRASH, notifyMoveToTrash)
+function* watchDeleteNotes() {
+  yield takeLatest(DELETE_NOTES, notifyNotesDeleted)
 }
 
-function* watchDeleteNotes() {
-  yield takeLatest(DELETE_NOTES, notifyClearTrash)
-}
 
 export default [
   fork(watchMoveNotesToTrash),

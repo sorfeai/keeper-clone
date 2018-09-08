@@ -4,6 +4,8 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 import style from './Header.module.scss'
 
+import { PAGE_TRASH } from '../../constants/types'
+
 import {
   IconButton,
   Tooltip,
@@ -16,6 +18,7 @@ import {
   toggleFeedView,
   clearSelection,
   moveNotesToTrash,
+  deleteNotes,
   pinNotes,
   toggleMainMenu
 } from '../../actions'
@@ -24,13 +27,54 @@ import {
 let Header = class extends Component {
   renderSelecting() {
     const {
-      clearSelection,
+      currentPage,
       selectedNotes,
       pinNotes,
-      moveNotesToTrash
+      clearSelection,
+      moveNotesToTrash,
+      deleteNotes
     } = this.props
 
     const selectedNotesCount = selectedNotes.size
+    const isTrash = currentPage === PAGE_TRASH
+
+    const toolbar = () =>
+      <div className={`${style.btnGroup} level`}>
+        <div className={`${style.btnGroupItem} level-item`}>
+          <IconButton
+            onClick={() => {
+              pinNotes(selectedNotes)
+              clearSelection()
+            }}
+            tooltip='Pin selected'
+            icon='thumbtack'
+          />
+        </div>
+        <div className={`${style.btnGroupItem} level-item`}>
+          <IconButton
+            onClick={() => {
+              moveNotesToTrash(selectedNotes)
+              clearSelection()
+            }}
+            tooltip='Move to trash'
+            icon='trash'
+          />
+        </div>
+      </div>
+
+    const toolbarTrash = () =>
+    <div className={`${style.btnGroup} level`}>
+      <div className={`${style.btnGroupItem} level-item`}>
+        <IconButton
+          onClick={() => {
+            deleteNotes(selectedNotes)
+            clearSelection()
+          }}
+          tooltip='Delete forever'
+          icon='ban'
+        />
+      </div>
+    </div>
 
     return (
       <div className={style.selecting}>
@@ -58,28 +102,7 @@ let Header = class extends Component {
             </div>
             <div className='level-right'>
               <div className='level-item'>
-                <div className={`${style.btnGroup} level`}>
-                  <div className={`${style.btnGroupItem} level-item`}>
-                    <IconButton
-                      onClick={() => {
-                        pinNotes(selectedNotes)
-                        clearSelection()
-                      }}
-                      tooltip='Pin selected'
-                      icon='thumbtack'
-                    />
-                  </div>
-                  <div className={`${style.btnGroupItem} level-item`}>
-                    <IconButton
-                      onClick={() => {
-                        moveNotesToTrash(selectedNotes)
-                        clearSelection()
-                      }}
-                      tooltip='Delete selected'
-                      icon='trash'
-                    />
-                  </div>
-                </div>
+                {isTrash ? toolbarTrash() : toolbar()}
               </div>
             </div>
           </div>
@@ -162,6 +185,7 @@ let Header = class extends Component {
 
 
 const mapStateToProps = state => ({
+  currentPage: state.common.currentPage,
   gridView: state.common.feedViewIsGrid,
   mainMenuActive: state.common.mainMenuActive,
   selecting: state.select.selecting,
@@ -172,6 +196,7 @@ const mapDispatchToProps = {
   toggleFeedView,
   clearSelection,
   moveNotesToTrash,
+  deleteNotes,
   pinNotes,
   toggleMainMenu
 }

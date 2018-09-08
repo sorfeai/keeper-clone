@@ -60,27 +60,30 @@ const itemsData = [
 ]
 
 
-const Item = ({ title, icon, to }) =>
-  <NavLink to={to || ''} className={style.menuItem}>
-    <span className={style.iconWrapper}>
-      <i className={`fas fa-${icon}`} />
-    </span>
-    {title}
-  </NavLink>
-
-let MainMenu = ({ isActive }) => {
+let MainMenu = ({ isActive, notesInTrashCount }) => {
   const className = classNames({
     [style.wrapper]: true,
     [style.isActive]: isActive
   })
+
+  console.log(notesInTrashCount)
 
   return (
     <div className={className}>
       <div className={style.menu}>
         {itemsData.map((section, i) =>
           <div key={i} className={style.menuSection}>
-            {section.map((item, i) =>
-              <Item key={i} {...item} />)}
+            {section.map(({ title, icon, to }, i) =>
+              <NavLink
+                key={i}
+                to={to || ''}
+                className={style.menuItem}
+              >
+                <span className={style.iconWrapper}>
+                  <i className={`fas fa-${icon}`} />
+                </span>
+                {title + (to === '/trash' ? ` (${notesInTrashCount})` : '')}
+              </NavLink>)}
           </div>)}
       </div>
     </div>
@@ -89,7 +92,8 @@ let MainMenu = ({ isActive }) => {
 
 
 const mapStateToProps = state => ({
-  isActive: state.common.mainMenuActive
+  isActive: state.common.mainMenuActive,
+  notesInTrashCount: state.trash.notesById.size
 })
 
 MainMenu = connect(mapStateToProps)(MainMenu)

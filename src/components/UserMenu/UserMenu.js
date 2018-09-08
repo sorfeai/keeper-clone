@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 import style from './UserMenu.module.scss'
-import { Tooltip } from '..'
+import { Tooltip, OuterClick } from '..'
 
 
 let UserMenu = class extends Component {
@@ -53,51 +53,53 @@ let UserMenu = class extends Component {
           />
         </Tooltip>
         {open &&
-          <div className={style.popupWrapper}>
-            <div className='box'>
-              <article className='media'>
-                <figure className='media-left'>
-                  <p className='image is-64x64'>
-                    <span
-                      className={style.avatar}
-                      style={{ backgroundImage: `url(${userAvatar})` }}
-                    />
-                  </p>
-                </figure>
-                <div className='media-content'>
-                  <div className='content'>
-                    <strong>{`${firstName} ${lastName}`}</strong>
-                    {' '}
-                    <small>{`${username}`}</small>
-                    <div className='subtitle is-6'>
-                      {email}
-                    </div>
-                    <a href='#'>Profile settings</a>
-                  </div>
-                </div>
-              </article>
-              <article className={`${style.popupFooter} media`}>
-                <div className='media-content'>
-                  <div className='level'>
-                    <div className='level-left'>
-                      <div className='level-item'>
-                        <button className='button is-light'>
-                          Change Account
-                        </button>
+          <OuterClick onClick={this.toggle}>
+            <div className={style.popupWrapper}>
+              <div className='box'>
+                <article className='media'>
+                  <figure className='media-left'>
+                    <p className='image is-64x64'>
+                      <span
+                        className={style.avatar}
+                        style={{ backgroundImage: `url(${userAvatar})` }}
+                      />
+                    </p>
+                  </figure>
+                  <div className='media-content'>
+                    <div className='content'>
+                      <strong>{`${firstName} ${lastName}`}</strong>
+                      {' '}
+                      <small>{`${username}`}</small>
+                      <div className='subtitle is-6'>
+                        {email}
                       </div>
-                    </div>
-                    <div className='level-right'>
-                      <div className='level-item'>
-                        <button className='button is-light'>
-                          Logout
-                        </button>
-                      </div>
+                      <a href='#'>Profile settings</a>
                     </div>
                   </div>
-                </div>
-              </article>
+                </article>
+                <article className={`${style.popupFooter} media`}>
+                  <div className='media-content'>
+                    <div className='level'>
+                      <div className='level-left'>
+                        <div className='level-item'>
+                          <button className='button is-light'>
+                            Change Account
+                          </button>
+                        </div>
+                      </div>
+                      <div className='level-right'>
+                        <div className='level-item'>
+                          <button className='button is-light'>
+                            Logout
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
             </div>
-          </div>}
+          </OuterClick>}
       </div>
     )
   }

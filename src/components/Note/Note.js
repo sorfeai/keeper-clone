@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
-import { Tooltip, IconButton } from '..'
+import { OuterClick, Tooltip, IconButton } from '..'
 import style from './Note.module.scss'
 
 import {
@@ -11,14 +11,18 @@ import {
   selectNote,
   deselectNote,
   pinNotes,
-  unpinNotes
+  unpinNotes,
+  moveNotesToTrash,
+  restoreNotesFromTrash,
+  deleteNotes
 } from '../../actions'
 
 
 let Note = class extends Component {
   state = {
     title: '',
-    content: ''
+    content: '',
+    otherMenuActive: false
   }
 
   componentWillUpdate(nextProps) {
@@ -80,6 +84,31 @@ let Note = class extends Component {
       : this.props.selectNote(id)
   }
 
+  addTag = () => {
+    // comming soon
+  }
+
+  moveToTrash = () => {
+    const { note, moveNotesToTrash } = this.props
+
+    moveNotesToTrash([note.get('id')])
+    this.hideOtherMenu()
+  }
+
+  restore = () => {
+    const { note, restoreNotesFromTrash } = this.props
+
+    restoreNotesFromTrash([note.get('id')])
+    this.hideOtherMenu()
+  }
+
+  deleteForever = () => {
+    const { note, deleteNotes } = this.props
+
+    deleteNotes([note.get('id')])
+    this.hideOtherMenu()
+  }
+
   onEdit = id => {
     const { note, editing, editNote } = this.props
 
@@ -120,6 +149,60 @@ let Note = class extends Component {
     endEditingNote()
   }
 
+  showOtherMenu = () => {
+    this.setState(prev => ({
+      ...prev,
+      otherMenuActive: true
+    }))
+  }
+
+  hideOtherMenu = () => {
+    this.setState(prev => ({
+      ...prev,
+      otherMenuActive: false
+    }))
+  }
+
+  renderOtherMenu() {
+    if (!this.state.otherMenuActive) return
+
+    return (
+      <OuterClick onClick={this.hideOtherMenu}>
+        <div className={`${style.otherMenu} box`}>
+          {!this.props.trash
+            ? <Fragment>
+                <div
+                  className={style.otherMenuItem}
+                  onClick={this.addTag}
+                >
+                  Add tag
+                </div>
+                <div
+                  className={style.otherMenuItem}
+                  onClick={this.moveToTrash}
+                >
+                  Move to trash
+                </div>
+              </Fragment>
+            : <Fragment>
+                <div
+                  className={style.otherMenuItem}
+                  onClick={this.restore}
+                >
+                  Restore
+                </div>
+                <div
+                  className={style.otherMenuItem}
+                  onClick={this.deleteForever}
+                >
+                  Delete forever
+                </div>
+              </Fragment>}
+        </div>
+      </OuterClick>
+    )
+  }
+
   render() {
     const {
       note,
@@ -154,6 +237,9 @@ let Note = class extends Component {
 
     return (
       <div className={wrapperClass}>
+        <div className={style.otherMenuWrapper}>
+          {this.renderOtherMenu()}
+        </div>
         <div
           onClick={e => this.onNoteClick(e, id)}
           className={noteClass}
@@ -206,24 +292,34 @@ let Note = class extends Component {
                       </p>
                     </div>}
             </div>
-            <div className={style.toolbar}>
+            <div
+              className={style.toolbar}
+              onClick={e => e.stopPropagation()}
+            >
               <div className='level'>
                 <div className='level-left'>
                   <div className='level-item'>
 
                   </div>
                 </div>
-                {editing &&
-                  <div className='level-right'>
-                    <div className='level-item'>
-                      <button
-                        className='button is-light'
-                        onClick={this.onSubmit}
-                      >
-                        {this.isEdited() ? 'Save changes' : 'Cancel'}
-                      </button>
+                <div className='level-right'>
+                  <div className='level-item'>
+                    <div className={style.otherButtonWrapper}>
+                      {editing
+                        ? <button
+                            className='button is-light'
+                            onClick={this.onSubmit}
+                          >
+                            {this.isEdited() ? 'Save changes' : 'Cancel'}
+                          </button>
+                        : <IconButton
+                            onClick={this.showOtherMenu}
+                            icon='ellipsis-v'
+                            tooltip='Other actions'
+                          />}
                     </div>
-                  </div>}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -246,7 +342,10 @@ const mapDispatchToProps = {
   unpinNotes,
   editNote,
   updateNote,
-  endEditingNote
+  endEditingNote,
+  moveNotesToTrash,
+  restoreNotesFromTrash,
+  deleteNotes
 }
 
 Note = connect(mapStateToProps, mapDispatchToProps)(Note)

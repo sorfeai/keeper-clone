@@ -1,4 +1,5 @@
 .wrapper {
+  position: relative;
 
   &.isEditing {
     background: rgba(white, .6);
@@ -128,10 +129,47 @@ $check-size: 24px;
   }
 }
 
-$padding: 20px;
+$padPreview: 5px;
+$padFull: 20px;
 .toolbar {
   position: absolute;
-  bottom: $padding;
-  right: $padding;
-  left: $padding;
+  bottom: $padPreview;
+  right: $padPreview;
+  left: $padPreview;
+
+  .isEditing & {
+    bottom: $padFull;
+    right: $padFull;
+    left: $padFull;
+  }
+}
+
+.otherButtonWrapper {
+  position: relative;
+}
+
+.otherMenuWrapper {
+  position: absolute;
+  z-index: 100;
+  top: 100%;
+  left: 100%;
+  margin-top: 10px;
+  margin-left: -40px;
+}
+
+.otherMenu {
+  padding: .3rem 0 !important;
+}
+
+.otherMenuItem {
+  width: 160px;
+  font-size: .9rem;
+  padding: .6rem .9rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background .1s ease-out;
+
+  &:hover {
+    background: rgba(black, .08);
+  }
 }
