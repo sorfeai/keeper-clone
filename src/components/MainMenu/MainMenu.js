@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import style from './MainMenu.module.scss'
@@ -9,7 +10,8 @@ const itemsData = [
   [
     {
       title: 'Notes',
-      icon: 'sticky-note'
+      icon: 'sticky-note',
+      to: '/home'
     },
     {
       title: 'Reminders',
@@ -29,7 +31,8 @@ const itemsData = [
     },
     {
       title: 'Trash',
-      icon: 'trash'
+      icon: 'trash',
+      to: '/trash'
     }
   ],
   [
@@ -57,13 +60,13 @@ const itemsData = [
 ]
 
 
-const Item = ({title, icon}) =>
-  <a className={style.menuItem}>
+const Item = ({ title, icon, to }) =>
+  <NavLink to={to || ''} className={style.menuItem}>
     <span className={style.iconWrapper}>
       <i className={`fas fa-${icon}`} />
     </span>
     {title}
-  </a>
+  </NavLink>
 
 let MainMenu = ({ isActive }) => {
   const className = classNames({

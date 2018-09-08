@@ -1,0 +1,29 @@
+.note {
+  margin-bottom: 2rem;
+}
+
+.pinnedNotesSection {
+  margin-bottom: 1.8rem;
+}
+
+.messageWrapper {
+  margin-bottom: 4.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+
+  * {
+    margin-bottom: 0 !important;
+  }
+
+  button {
+    position: relative;
+    top: 3px;
+    margin-left: 1.4rem;
+  }
+}

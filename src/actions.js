@@ -4,9 +4,12 @@ import {
   SELECT_NOTE,
   DESELECT_NOTE,
   MOVE_NOTES_TO_TRASH,
+  RESTORE_NOTES_FROM_TRASH,
+  CLEAR_TRASH,
+  DELETE_NOTES,
+  EMPTY_TRASH,
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
-  RESTORE_NOTES_FROM_TRASH,
   START_REFRESH,
   PIN_NOTES,
   UNPIN_NOTES,
@@ -51,6 +54,15 @@ export const restoreNotesFromTrash = ids => ({
 
 export const clearTrash = () => ({
   type: CLEAR_TRASH
+})
+
+export const emptyTrash = () => ({
+  type: EMPTY_TRASH
+})
+
+export const deleteNotes = ids => ({
+  type: DELETE_NOTES,
+  payload: { ids }
 })
 
 export const showNotification = (type, message, action) => ({

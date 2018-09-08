@@ -3,7 +3,7 @@ import { List } from 'immutable'
 import {
   MOVE_NOTES_TO_TRASH,
   RESTORE_NOTES_FROM_TRASH,
-  CLEAR_TRASH
+  EMPTY_TRASH
 } from '../constants/types'
 
 
@@ -25,7 +25,7 @@ export default (state = defaultState, action) => {
           action.payload.ids.includes(id)
         )
       }
-    case CLEAR_TRASH:
+    case EMPTY_TRASH:
       return {
         ...state,
         notesById: state.notesById.clear()

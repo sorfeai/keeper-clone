@@ -10,7 +10,8 @@ import {
   ENTER_SEARCH_MODE,
   EXIT_SEARCH_MODE,
   TOGGLE_MAIN_MENU,
-  UPDATE_NOTE
+  UPDATE_NOTE,
+  DELETE_NOTES
 } from '../constants/types'
 
 
@@ -94,6 +95,13 @@ export default (state = defaultState, action) => {
             return note.merge(changes)
           } else return note
         })
+      }
+    case DELETE_NOTES:
+      return {
+        ...state,
+        notesData: state.notesData.filterNot(
+          note => action.payload.ids.includes(note.get('id'))
+        )
       }
     default:
       return state
