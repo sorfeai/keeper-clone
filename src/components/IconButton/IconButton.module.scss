@@ -1,6 +1,7 @@
 .inner {
   line-height: 1;
   text-align: center;
+  display: inline-block;
 }
 
 .button {
@@ -23,5 +24,14 @@
 
   .alt & {
     color: #00D1B2;
+  }
+
+  .disabled & {
+    opacity: .4;
+    cursor: default;
+
+    &:hover {
+      color: inherit;
+    }
   }
 }

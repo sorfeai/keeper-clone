@@ -2,8 +2,10 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
+
 import style from './MainMenu.module.scss'
 import { IconButton } from '..'
+import { showTagsModal } from '../../actions'
 
 
 const itemsData = [
@@ -20,7 +22,7 @@ const itemsData = [
   ],
   [
     {
-      title: 'Add tag',
+      title: 'New tag',
       icon: 'plus'
     }
   ],
@@ -55,18 +57,16 @@ const itemsData = [
     {
       title: 'Hotkeys',
       icon: 'keyboard'
-    },
+    }
   ]
 ]
 
 
-let MainMenu = ({ isActive, notesInTrashCount }) => {
+let MainMenu = ({ isActive, notesInTrashCount, showTagsModal }) => {
   const className = classNames({
     [style.wrapper]: true,
     [style.isActive]: isActive
   })
-
-  console.log(notesInTrashCount)
 
   return (
     <div className={className}>
@@ -76,7 +76,8 @@ let MainMenu = ({ isActive, notesInTrashCount }) => {
             {section.map(({ title, icon, to }, i) =>
               <NavLink
                 key={i}
-                to={to || ''}
+                to={to || '#'}
+                onClick={title === 'New tag' ? showTagsModal : undefined}
                 className={style.menuItem}
               >
                 <span className={style.iconWrapper}>
@@ -96,6 +97,8 @@ const mapStateToProps = state => ({
   notesInTrashCount: state.trash.notesById.size
 })
 
-MainMenu = connect(mapStateToProps)(MainMenu)
+const mapDispatchToProps = { showTagsModal }
+
+MainMenu = connect(mapStateToProps, mapDispatchToProps)(MainMenu)
 
 export { MainMenu }

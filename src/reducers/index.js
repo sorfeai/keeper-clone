@@ -6,6 +6,7 @@ import pinReducer from './pin'
 import editReducer from './edit'
 import trashReducer from './trash'
 import notificationsReducer from './notifications'
+import tagsReducer from './tags'
 
 
 export default combineReducers({
@@ -14,5 +15,6 @@ export default combineReducers({
   pin: pinReducer,
   edit: editReducer,
   trash: trashReducer,
-  notifications: notificationsReducer
+  notifications: notificationsReducer,
+  tags: tagsReducer
 })

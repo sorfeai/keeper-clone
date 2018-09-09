@@ -4,7 +4,7 @@ import {
   UPDATE_NOTE,
   START_EDITING_NOTE,
   END_EDITING_NOTE
- } from '../constants/types'
+} from '../constants/types'
 
 
 const defaultState = {

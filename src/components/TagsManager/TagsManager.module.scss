@@ -1,0 +1,11 @@
+.titleInputWrapper {
+  display: flex;
+}
+
+.tagsWrapper {
+  margin-top: 1rem;
+}
+
+.tagItem:not(:last-child) {
+  margin-bottom: .6rem !important;
+}

@@ -21,7 +21,11 @@ import {
   EDIT_NOTE,
   START_EDITING_NOTE,
   UPDATE_NOTE,
-  END_EDITING_NOTE
+  END_EDITING_NOTE,
+  CREATE_TAG,
+  DELETE_TAG,
+  SHOW_TAGS_MODAL,
+  HIDE_TAGS_MODAL
 } from './constants/types'
 
 
@@ -129,4 +133,22 @@ export const endEditingNote = () => ({
 export const updateNote = (id, changes) => ({
   type: UPDATE_NOTE,
   payload: { id, changes }
+})
+
+export const showTagsModal = title => ({
+  type: SHOW_TAGS_MODAL
+})
+
+export const hideTagsModal = title => ({
+  type: HIDE_TAGS_MODAL
+})
+
+export const createTag = title => ({
+  type: CREATE_TAG,
+  payload: { title }
+})
+
+export const deleteTags = ids => ({
+  type: DELETE_TAG,
+  payload: { ids }
 })

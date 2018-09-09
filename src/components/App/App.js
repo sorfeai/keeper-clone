@@ -9,7 +9,8 @@ import {
   NotesFeed,
   Trash,
   Notifications,
-  MainMenu
+  MainMenu,
+  TagsManager
 } from '..'
 
 
@@ -23,11 +24,15 @@ let App =  class extends Component {
     return (
       <BrowserRouter>
         <div className={style.app}>
+          <TagsManager />
+
           <div className={style.notificationsWrapper}>
             <Notifications />
           </div>
+
           <Header />
           <MainMenu />
+
           <div className={`${contentClassname} container`}>
             <Route exact path='/' render={() => <Redirect to='/home' />} />
             <Route exact path='/home' component={NotesFeed} />

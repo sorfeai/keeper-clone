@@ -22,6 +22,10 @@ export const EDIT_NOTE = 'EDIT_NOTE'
 export const START_EDITING_NOTE = 'START_EDITING_NOTE'
 export const END_EDITING_NOTE = 'END_EDITING_NOTE'
 export const UPDATE_NOTE = 'UPDATE_NOTE'
+export const SHOW_TAGS_MODAL = 'SHOW_TAGS_MODAL'
+export const HIDE_TAGS_MODAL = 'HIDE_TAGS_MODAL'
+export const CREATE_TAG = 'CREATE_TAG'
+export const DELETE_TAG = 'DELETE_TAG'
 
 
 // deletionId types
