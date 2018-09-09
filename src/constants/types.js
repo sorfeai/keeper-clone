@@ -26,6 +26,7 @@ export const SHOW_TAGS_MODAL = 'SHOW_TAGS_MODAL'
 export const HIDE_TAGS_MODAL = 'HIDE_TAGS_MODAL'
 export const CREATE_TAG = 'CREATE_TAG'
 export const DELETE_TAG = 'DELETE_TAG'
+export const SAVE_EDITED_TAG = 'SAVE_EDITED_TAG'
 
 
 // deletionId types

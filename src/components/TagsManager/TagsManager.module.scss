@@ -9,3 +9,12 @@
 .tagItem:not(:last-child) {
   margin-bottom: .6rem !important;
 }
+
+.editInput {
+  width: 150px;
+  border: 0;
+  border-bottom: 1px solid black;
+  outline: 0;
+  font-size: inherit;
+  color: inherit;
+}

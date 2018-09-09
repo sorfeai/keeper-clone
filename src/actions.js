@@ -25,7 +25,8 @@ import {
   CREATE_TAG,
   DELETE_TAG,
   SHOW_TAGS_MODAL,
-  HIDE_TAGS_MODAL
+  HIDE_TAGS_MODAL,
+  SAVE_EDITED_TAG
 } from './constants/types'
 
 
@@ -151,4 +152,9 @@ export const createTag = title => ({
 export const deleteTags = ids => ({
   type: DELETE_TAG,
   payload: { ids }
+})
+
+export const saveEditedTag = (id, data) => ({
+  type: SAVE_EDITED_TAG,
+  payload: { id, data }
 })

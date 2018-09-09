@@ -5,7 +5,8 @@ import {
   SHOW_TAGS_MODAL,
   HIDE_TAGS_MODAL,
   CREATE_TAG,
-  DELETE_TAG
+  DELETE_TAG,
+  SAVE_EDITED_TAG
 } from '../constants/types'
 
 
@@ -40,6 +41,15 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         isModalShown: false
+      }
+    case SAVE_EDITED_TAG:
+      return {
+        ...state,
+        tags: state.tags.map(tag => {
+          if (tag.get('id') === action.payload.id) {
+            return tag.merge(action.payload.data)
+          } else return tag
+        })
       }
     default:
       return state
