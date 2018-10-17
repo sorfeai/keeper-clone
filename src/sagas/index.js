@@ -1,14 +1,16 @@
-import { all } from 'redux-saga/effects'
+import { all } from 'redux-saga/effects';
+import editSagas from './edit';
+import notificationsSagas from './notifications';
+import trashSagas from './trash';
 
-import editSagas from './edit'
-import notificationsSagas from './notifications'
-import trashSagas from './trash'
 
-
-export default function* sagas() {
+const sagas = function* () {
   yield all([
     ...editSagas,
     ...notificationsSagas,
-    ...trashSagas
-  ])
-}
+    ...trashSagas,
+  ]);
+};
+
+
+export default sagas;

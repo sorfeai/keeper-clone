@@ -1,0 +1,1 @@
+export { PageHOC } from './PageHOC';

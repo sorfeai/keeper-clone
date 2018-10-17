@@ -1,1 +1,1 @@
-export { RefreshNotes } from './RefreshNotes'
+export { RefreshNotes } from './RefreshNotes';

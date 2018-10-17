@@ -1,1 +1,0 @@
-export { withPage } from './withPage'

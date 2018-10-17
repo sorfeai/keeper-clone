@@ -15,16 +15,20 @@
   }
 }
 
+.overlayWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .note {
   position: relative;
   transition: box-shadow .1s ease-out;
 
   &:hover {
     box-shadow: 0 1px 10px rgba(#000, 0.4);
-
-    .checkWrapper, .pinWrapper {
-      opacity: 1;
-    }
   }
 
   &.isSelected {
@@ -47,59 +51,6 @@
 
   .isEditing & {
     pointer-events: auto;
-  }
-}
-
-$check-size: 24px;
-.checkWrapper {
-  position: absolute;
-  left: -$check-size / 2;
-  top: -$check-size / 2;
-  z-index: 120;
-  opacity: 0;
-  transition: opacity .2s ease-out;
-
-  .isSelected & {
-    opacity: 1;
-  }
-}
-
-.check {
-  font-size: $check-size / 2;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(#000, 0.2);
-  width: $check-size;
-  height: $check-size;
-  text-align: center;
-  line-height: $check-size;
-  border-radius: 50%;
-  border: 0;
-  outline: 0;
-  cursor: pointer;
-
-  .isSelected & {
-    color: #00D1B2;
-  }
-}
-
-.pinWrapper {
-  position: absolute;
-  z-index: 110;
-  right: -3px;
-  top: -4px;
-  opacity: 0;
-  transition: opacity .1s ease-out;
-
-  .isSelected & {
-    opacity: 1;
-  }
-
-  .isPinned & {
-    opacity: 1;
-  }
-
-  * {
-    font-size: .9rem;
   }
 }
 
@@ -126,50 +77,5 @@ $check-size: 24px;
     resize: none;
     overflow: hidden;
     min-height: 50px;
-  }
-}
-
-$padPreview: 5px;
-$padFull: 20px;
-.toolbar {
-  position: absolute;
-  bottom: $padPreview;
-  right: $padPreview;
-  left: $padPreview;
-
-  .isEditing & {
-    bottom: $padFull;
-    right: $padFull;
-    left: $padFull;
-  }
-}
-
-.otherButtonWrapper {
-  position: relative;
-}
-
-.otherMenuWrapper {
-  position: absolute;
-  z-index: 100;
-  top: 100%;
-  left: 100%;
-  margin-top: 10px;
-  margin-left: -40px;
-}
-
-.otherMenu {
-  padding: .3rem 0 !important;
-}
-
-.otherMenuItem {
-  width: 160px;
-  font-size: .9rem;
-  padding: .6rem .9rem;
-  background: transparent;
-  cursor: pointer;
-  transition: background .1s ease-out;
-
-  &:hover {
-    background: rgba(black, .08);
   }
 }

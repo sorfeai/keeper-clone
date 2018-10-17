@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toolbarItem {
+  position: relative;
+  font-size: .9rem !important;
+}
+
+.popupWrapper {
+  position: absolute;
+  z-index: 2000;
+  min-width: 160px;
+}
+
+.popup {
+  padding: 10px 10px 14px !important;
+}
+
+.tagsCheckList {
+  display: flex;
+  flex-direction: column;
+  margin-top: .65rem;
+}
+
+.tagCheckItem {
+
+  &:not(:last-child) {
+    margin-bottom: .4rem;
+  }
+
+  input[type=checkbox] {
+    position: relative;
+    top: .2rem;
+    margin-right: .4rem;
+  }
+}

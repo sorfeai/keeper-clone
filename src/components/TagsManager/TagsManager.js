@@ -1,110 +1,116 @@
-import React, { Component } from 'react'
-import trim from 'lodash/trim'
-import { connect } from 'react-redux'
-
-import style from './TagsManager.module.scss'
-import { Modal, OuterClick, IconButton } from '..'
+import React, { Component } from 'react';
+import trim from 'lodash/trim';
+import { connect } from 'react-redux';
 
 import {
   createTag,
   deleteTags,
   hideTagsModal,
-  saveEditedTag
-} from '../../actions'
+  saveEditedTag,
+} from '../../actions';
+
+import style from './TagsManager.module.scss';
+import { Modal, OuterClick, IconButton } from '..';
 
 
 let TagsManager = class extends Component {
   state = {
     createForm: {
-      title: ''
+      title: '',
     },
     editForm: {
       id: null,
-      title: ''
-    }
+      title: '',
+    },
   }
 
   onEdit = (id, title) => {
-    this.setState(prev => ({
+    this.setState((prev) => ({
       ...prev,
-      editForm: { id, title }
-    }))
+      editForm: { id, title },
+    }));
   }
 
-  onEditChange = e => {
-    const { name, value } = e.target
-    this.setState(prev => ({
+  onEditChange = (ev) => {
+    const { name, value } = ev.target;
+
+    this.setState((prev) => ({
       ...prev,
       editForm: {
         ...prev.editForm,
-        [name]: value
-      }
-    }))
+        [name]: value,
+      },
+    }));
   }
 
-  saveEdited = id => {
-    this.props.saveEditedTag(id, this.state.editForm)
-    this.stopEditing()
-  }
+  onCreateInputChange = (ev) => {
+    const { name, value } = ev.target;
 
-  stopEditing = () => {
-    this.setState(prev => ({
-      ...prev,
-      editForm: {
-        id: null,
-        title: ''
-      }
-    }))
-  }
-
-  onCreateInputChange = e => {
-    const { name, value } = e.target
-    this.setState(prev => ({
+    this.setState((prev) => ({
       ...prev,
       createForm: {
-        [name]: value
-      }
-    }))
+        [name]: value,
+      },
+    }));
   }
 
   onSubmit = () => {
-    const { title } = this.state.createForm
+    const { createTag } = this.props;
+    const { createForm: { title } } = this.state;
 
-    this.props.createTag(trim(title))
-
-    this.setState(prev => ({
+    createTag(trim(title));
+    this.setState((prev) => ({
       ...prev,
-      createForm: { title: '' }
-    }))
+      createForm: { title: '' },
+    }));
   }
 
   onModalClose = () => {
-    this.saveEdited()
-    this.props.hideTagsModal()
+    const { hideTagsModal } = this.props;
+    this.saveEdited();
+    hideTagsModal();
   }
 
-  render() {
+  stopEditing = () => {
+    this.setState((prev) => ({
+      ...prev,
+      editForm: {
+        id: null,
+        title: '',
+      },
+    }));
+  }
+
+  saveEdited = (id) => {
+    const { saveEditedTag } = this.props;
+    const { editForm } = this.state;
+    saveEditedTag(id, editForm);
+    this.stopEditing();
+  }
+
+  render () {
     const {
       tags,
       isModalShown,
       hideTagsModal,
       createTag,
-      deleteTags
-    } = this.props
+      deleteTags,
+    } = this.props;
 
-    const { createForm, editForm } = this.state
+    const { createForm, editForm } = this.state;
+    if (!isModalShown) return null;
 
-    if (!isModalShown) return null
-
-    const renderSubmit = () =>
+    const renderSubmit = () => (
       <button
+        type="button"
         onClick={hideTagsModal}
         className='button is-light'
       >
-        Done
+        {'Done'}
       </button>
+    );
 
-    const renderTag = (id, title) =>
+    const renderTag = (id, title) => (
       <div key={id} className={`${style.tagItem} level`}>
         <div className='level-left'>
           <div className={`${style.tagTitle} level-item`}>
@@ -114,6 +120,7 @@ let TagsManager = class extends Component {
         <div className='level-right'>
           <div className={`${style.tagAction} level-item`}>
             <IconButton
+              small
               onClick={() => this.onEdit(id, title)}
               icon='edit'
               tooltip='Edit tag'
@@ -121,6 +128,7 @@ let TagsManager = class extends Component {
           </div>
           <div className={`${style.tagAction} level-item`}>
             <IconButton
+              small
               onClick={() => deleteTags([id])}
               icon='trash'
               tooltip='Delete tag'
@@ -128,8 +136,9 @@ let TagsManager = class extends Component {
           </div>
         </div>
       </div>
+    );
 
-    const renderTagEditing = (id, title) =>
+    const renderTagEditing = (id, title) => (
       <div key={id} className={`${style.tagItem} level`}>
         <div className='level-left'>
           <div className={`${style.tagTitle} level-item`}>
@@ -139,7 +148,7 @@ let TagsManager = class extends Component {
               value={editForm.title}
               onChange={this.onEditChange}
               className={style.editInput}
-              ref={node => node && node.focus()}
+              ref={(node) => node && node.focus()}
             />
           </div>
         </div>
@@ -160,6 +169,7 @@ let TagsManager = class extends Component {
           </div>
         </div>
       </div>
+    );
 
     return (
       <Modal
@@ -183,35 +193,39 @@ let TagsManager = class extends Component {
             disabled={!trim(createForm.title)}
           />
         </div>
-        {tags &&
+        {tags && (
           <div className={style.tagsWrapper}>
-            {tags.map((tag, i) => {
-              const id = tag.get('id')
-              const title = tag.get('title')
-
+            {tags.map((tag) => {
+              const id = tag.get('id');
+              const title = tag.get('title');
               return id !== editForm.id
                 ? renderTag(id, title)
-                : renderTagEditing(id, title)
+                : renderTagEditing(id, title);
             })}
-          </div>}
+          </div>
+        )}
       </Modal>
-    )
+    );
   }
-}
+};
 
 
-const mapStateToProps = state => ({
-  tags: state.tags.tags,
-  isModalShown: state.tags.isModalShown
-})
+/**
+* connect to state
+*/
+const mapStateToProps = (state) => ({
+  tags: state.tags.get('byId').toList(),
+  isModalShown: state.tags.get('isModalShown'),
+});
 
 const mapDispatchToprops = {
   createTag,
   deleteTags,
   hideTagsModal,
-  saveEditedTag
-}
+  saveEditedTag,
+};
 
-TagsManager = connect(mapStateToProps, mapDispatchToprops)(TagsManager)
+TagsManager = connect(mapStateToProps, mapDispatchToprops)(TagsManager);
 
-export { TagsManager }
+
+export { TagsManager };

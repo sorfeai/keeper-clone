@@ -1,35 +1,44 @@
-import { List } from 'immutable'
-import { SELECT_NOTE, DESELECT_NOTE, CLEAR_SELECTION } from '../constants/types'
+import { fromJS } from 'immutable';
+
+import {
+  SELECT_NOTE,
+  DESELECT_NOTE,
+  CLEAR_SELECTION,
+} from '../constants/types';
 
 
-const defaultState = {
+/**
+* default state
+*/
+const defaultState = fromJS({
   selecting: false,
-  selectedNotes: List()
-}
+  selectedNotes: [],
+});
 
-export default (state = defaultState, action) => {
+
+/**
+* reducer
+*/
+const selectReducer = (state = defaultState, action) => {
   switch (action.type) {
     case SELECT_NOTE:
-      return {
-        ...state,
-        selecting: state.selecting || true,
-        selectedNotes: state.selectedNotes.push(action.payload.id)
-      }
-    case DESELECT_NOTE:
-      return {
-        ...state,
-        selecting: state.selectedNotes.size > 1,
-        selectedNotes: state.selectedNotes.delete(
-          state.selectedNotes.indexOf(action.payload.id)
-        )
-      }
-    case CLEAR_SELECTION:
-      return {
-        ...state,
-        selecting: false,
-        selectedNotes: state.selectedNotes.clear()
-      }
-    default:
       return state
+        .update('selecting', (selecting) => selecting || true)
+        .update('selectedNotes', (notes) => notes.push(action.payload.id));
+    case DESELECT_NOTE:
+      return state
+        .set('selecting', state.get('selectedNotes').size > 1)
+        .update('selectedNotes', (notes) => notes.delete(
+          notes.indexOf(action.payload.id)
+        ));
+    case CLEAR_SELECTION:
+      return state
+        .set('selecting', false)
+        .update('selectedNotes', (notes) => notes.clear());
+    default:
+      return state;
   }
-}
+};
+
+
+export default selectReducer;

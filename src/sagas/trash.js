@@ -1,21 +1,29 @@
-import { put, fork, takeLatest, select } from 'redux-saga/effects'
+import { put, fork, takeLatest, select } from 'redux-saga/effects';
+import { emptyTrash, deleteNotes } from '../actions';
+import { getNotesInTrash } from '../selectors';
+import { CLEAR_TRASH } from '../constants/types';
 
-import { emptyTrash, deleteNotes } from '../actions'
-import { getNotesInTrash } from '../selectors'
-import { CLEAR_TRASH } from '../constants/types'
+
+/**
+* clear thrash
+*/
+const delNotes = function* () {
+  const notesInTrash = yield select(getNotesInTrash);
+
+  yield put(deleteNotes(notesInTrash));
+  yield put(emptyTrash());
+};
+
+const watchClearTrash = function* () {
+  yield takeLatest(CLEAR_TRASH, delNotes);
+};
 
 
-function* delNotes() {
-  const notesInTrash = yield select(getNotesInTrash)
+/**
+* export forked
+*/
+const forked = [
+  fork(watchClearTrash),
+];
 
-  yield put(deleteNotes(notesInTrash))
-  yield put(emptyTrash())
-}
-
-function* watchClearTrash() {
-  yield takeLatest(CLEAR_TRASH, delNotes)
-}
-
-export default [
-  fork(watchClearTrash)
-]
+export default forked;

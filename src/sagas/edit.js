@@ -1,24 +1,31 @@
-import { put, fork, select, takeLatest } from 'redux-saga/effects'
+import { put, fork, select, takeLatest } from 'redux-saga/effects';
+import { updateNote, endEditingNote } from '../actions';
+import { SAVE_EDITED_NOTE } from '../constants/types';
 
-import { getNoteById } from '../selectors'
-import { startEditingNote } from '../actions'
-import { EDIT_NOTE } from '../constants/types'
+import {
+  getEditNoteId,
+  getEditNoteFormTitle,
+  getEditNoteFormContent,
+} from '../selectors';
 
 
-function* editNote(action) {
-  const note = yield select(getNoteById, action.payload.id)
+const saveNote = function* () {
+  const id = yield select(getEditNoteId);
+  const title = yield select(getEditNoteFormTitle);
+  const content = yield select(getEditNoteFormContent);
 
-  yield put(startEditingNote(
-    note.get('id'),
-    note.get('title'),
-    note.get('content')
-  ))
-}
+  yield put(updateNote(id, { title, content }));
+  yield put(endEditingNote());
+};
 
-function* watchEditNote() {
-  yield takeLatest(EDIT_NOTE, editNote)
-}
 
-export default [
-  fork(watchEditNote)
-]
+const watchSave = function* () {
+  yield takeLatest(SAVE_EDITED_NOTE, saveNote);
+};
+
+
+const forked = [
+  fork(watchSave),
+];
+
+export default forked;

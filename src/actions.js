@@ -4,6 +4,7 @@ import {
   CLEAR_SELECTION,
   SELECT_NOTE,
   DESELECT_NOTE,
+  TAG_NOTE,
   MOVE_NOTES_TO_TRASH,
   RESTORE_NOTES_FROM_TRASH,
   CLEAR_TRASH,
@@ -21,140 +22,150 @@ import {
   EDIT_NOTE,
   START_EDITING_NOTE,
   UPDATE_NOTE,
+  SAVE_EDITED_NOTE,
   END_EDITING_NOTE,
   CREATE_TAG,
   DELETE_TAG,
   SHOW_TAGS_MODAL,
   HIDE_TAGS_MODAL,
-  SAVE_EDITED_TAG
-} from './constants/types'
+  SAVE_EDITED_TAG,
+} from './constants/types';
 
 
-export const setPage = page => ({
+export const setPage = (page) => ({
   type: SET_PAGE,
-  payload: { page }
-})
+  payload: { page },
+});
 
 export const toggleFeedView = () => ({
-  type: TOGGLE_FEED_VIEW
-})
+  type: TOGGLE_FEED_VIEW,
+});
 
 export const clearSelection = () => ({
-  type: CLEAR_SELECTION
-})
+  type: CLEAR_SELECTION,
+});
 
-export const selectNote = id => ({
+export const selectNote = (id) => ({
   type: SELECT_NOTE,
-  payload: { id }
-})
+  payload: { id },
+});
 
-export const deselectNote = id => ({
+export const deselectNote = (id) => ({
   type: DESELECT_NOTE,
-  payload: { id }
-})
+  payload: { id },
+});
 
-export const moveNotesToTrash = ids => ({
+export const tagNote = (noteId, tagId) => ({
+  type: TAG_NOTE,
+  payload: { noteId, tagId },
+});
+
+export const moveNotesToTrash = (ids) => ({
   type: MOVE_NOTES_TO_TRASH,
-  payload: { ids }
-})
+  payload: { ids },
+});
 
-export const restoreNotesFromTrash = ids => ({
+export const restoreNotesFromTrash = (ids) => ({
   type: RESTORE_NOTES_FROM_TRASH,
-  payload: { ids }
-})
+  payload: { ids },
+});
 
 export const clearTrash = () => ({
-  type: CLEAR_TRASH
-})
+  type: CLEAR_TRASH,
+});
 
 export const emptyTrash = () => ({
-  type: EMPTY_TRASH
-})
+  type: EMPTY_TRASH,
+});
 
-export const deleteNotes = ids => ({
+export const deleteNotes = (ids) => ({
   type: DELETE_NOTES,
-  payload: { ids }
-})
+  payload: { ids },
+});
 
 export const showNotification = (type, message, action) => ({
   type: SHOW_NOTIFICATION,
-  payload: { type, message, action }
-})
+  payload: { type, message, action },
+});
 
-export const hideNotification = id => ({
+export const hideNotification = (id) => ({
   type: HIDE_NOTIFICATION,
-  payload: { id }
-})
+  payload: { id },
+});
 
 export const startRefresh = () => ({
-  type: START_REFRESH
-})
+  type: START_REFRESH,
+});
 
-export const pinNotes = ids => ({
+export const pinNotes = (ids) => ({
   type: PIN_NOTES,
-  payload: { ids }
-})
+  payload: { ids },
+});
 
-export const unpinNotes = ids => ({
+export const unpinNotes = (ids) => ({
   type: UNPIN_NOTES,
-  payload: { ids }
-})
+  payload: { ids },
+});
 
-export const updateSearchQuery = val => ({
+export const updateSearchQuery = (val) => ({
   type: UPDATE_SEARCH_QUERY,
-  payload: { val }
-})
+  payload: { val },
+});
 
 export const enterSearchMode = () => ({
-  type: ENTER_SEARCH_MODE
-})
+  type: ENTER_SEARCH_MODE,
+});
 
 export const exitSearchMode = () => ({
-  type: EXIT_SEARCH_MODE
-})
+  type: EXIT_SEARCH_MODE,
+});
 
 export const toggleMainMenu = () => ({
-  type: TOGGLE_MAIN_MENU
-})
+  type: TOGGLE_MAIN_MENU,
+});
 
-export const editNote = id => ({
+export const editNote = (id) => ({
   type: EDIT_NOTE,
-  payload: { id }
-})
+  payload: { id },
+});
 
 export const startEditingNote = (id, title, content)  => ({
   type: START_EDITING_NOTE,
-  payload: { id, title, content }
-})
+  payload: { id, title, content },
+});
 
 export const endEditingNote = () => ({
-  type: END_EDITING_NOTE
-})
+  type: END_EDITING_NOTE,
+});
 
 export const updateNote = (id, changes) => ({
   type: UPDATE_NOTE,
-  payload: { id, changes }
-})
+  payload: { id, changes },
+});
 
-export const showTagsModal = title => ({
-  type: SHOW_TAGS_MODAL
-})
+export const saveEditedNote = () => ({
+  type: SAVE_EDITED_NOTE,
+});
 
-export const hideTagsModal = title => ({
-  type: HIDE_TAGS_MODAL
-})
+export const showTagsModal = (title) => ({
+  type: SHOW_TAGS_MODAL,
+});
 
-export const createTag = title => ({
+export const hideTagsModal = (title) => ({
+  type: HIDE_TAGS_MODAL,
+});
+
+export const createTag = (title) => ({
   type: CREATE_TAG,
-  payload: { title }
-})
+  payload: { title },
+});
 
-export const deleteTags = ids => ({
+export const deleteTags = (ids) => ({
   type: DELETE_TAG,
-  payload: { ids }
-})
+  payload: { ids },
+});
 
 export const saveEditedTag = (id, data) => ({
   type: SAVE_EDITED_TAG,
-  payload: { id, data }
-})
+  payload: { id, data },
+});

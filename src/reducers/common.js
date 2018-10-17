@@ -1,6 +1,5 @@
-import uuid from 'small-uuid'
-import { fromJS, List, Map } from 'immutable'
-import { notesDeletedMessage, notesRestoredMessage } from '../messages'
+import uuid from 'small-uuid';
+import { fromJS, List, Map } from 'immutable';
 
 import {
   PAGE_HOME,
@@ -13,105 +12,53 @@ import {
   EXIT_SEARCH_MODE,
   TOGGLE_MAIN_MENU,
   UPDATE_NOTE,
-  DELETE_NOTES
-} from '../constants/types'
+  DELETE_NOTES,
+} from '../constants/types';
 
 
-const defaultState = {
-  notesData: fromJS([
-    {
-      id: uuid.create(),
-      deleting: false,
-      title: 'Todo List',
-      content: 'One, two... and finally three!'
-    },
-    {
-      id: uuid.create(),
-      deleting: false,
-      title: 'Todo List',
-      content: 'One, two... and finally three!'
-    },
-    {
-      id: uuid.create(),
-      deleting: false,
-      title: 'Todo List',
-      content: 'One, two... and finally three!'
-    }
-  ]),
+/**
+* default state
+*/
+const defaultState = fromJS({
   currentPage: PAGE_HOME,
   mainMenuActive: false,
   feedViewIsGrid: true,
   searching: false,
   searchQuery: '',
   refreshStatus: null,
-  user: Map({
+  user: {
     username: '@aisorfe',
     firstName: 'Nikita',
     lastName: 'Belousov',
     email: 'seriouscat1001@gmail.com',
-    avatar: 'user-avatar.jpg'
-  })
-}
+    avatar: 'user-avatar.jpg',
+  },
+});
 
-export default (state = defaultState, action) => {
-  let selectedNotes, id, changes
 
+/**
+* reducer
+*/
+const commonReducer = (state = defaultState, action) => {
   switch (action.type) {
     case SET_PAGE:
-      return {
-        ...state,
-        currentPage: action.payload.page
-      }
+      return state.set('currentPage', action.payload.page);
     case TOGGLE_FEED_VIEW:
-      return {
-        ...state,
-        feedViewIsGrid: !state.feedViewIsGrid
-      }
+      return state.update('feedViewIsGrid', (grid) => !grid);
     case START_REFRESH:
-      return {
-        ...state,
-        refreshStatus: REFRESH_IN_PROGRESS
-      }
+      return state.set('refreshStatus', REFRESH_IN_PROGRESS);
     case ENTER_SEARCH_MODE:
-      return {
-        ...state,
-        searching: true
-      }
+      return state.set('searching', true);
     case EXIT_SEARCH_MODE:
-      return {
-        ...state,
-        searching: false
-      }
+      return state.set('searching', false);
     case UPDATE_SEARCH_QUERY:
-      return {
-        ...state,
-        searchQuery: action.payload.val
-      }
+      return state.set('searchQuery', action.payload.val);
     case TOGGLE_MAIN_MENU:
-      return {
-        ...state,
-        mainMenuActive: !state.mainMenuActive
-      }
-    case UPDATE_NOTE:
-      id = action.payload.id
-      changes = action.payload.changes
-
-      return {
-        ...state,
-        notesData: state.notesData.map(note => {
-          if (note.get('id') === id) {
-            return note.merge(changes)
-          } else return note
-        })
-      }
-    case DELETE_NOTES:
-      return {
-        ...state,
-        notesData: state.notesData.filterNot(
-          note => action.payload.ids.includes(note.get('id'))
-        )
-      }
+      return state.update('mainMenuActive', (active) => !active);
     default:
-      return state
+      return state;
   }
-}
+};
+
+
+export default commonReducer;

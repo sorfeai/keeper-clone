@@ -1,54 +1,69 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
-import classNames from 'classnames'
-import style from './App.module.scss'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 import {
   Header,
-  NotesFeed,
-  Trash,
-  Notifications,
   MainMenu,
-  TagsManager
-} from '..'
+  NotesFeed,
+  NotificationsManager,
+  TagsManager,
+  Trash,
+} from '..';
+
+import style from './App.module.scss';
 
 
-let App =  class extends Component {
-  render() {
-    const contentClassname = classNames({
-      [style.content]: true,
-      [style.mainMenuActive]: this.props.mainMenuActive
-    })
+let App = ({ isMainMenuActive }) => {
+  const contentCls = classNames({
+    [style.content]: true,
+    [style.isMainMenuActive]: isMainMenuActive,
+  });
 
-    return (
-      <BrowserRouter>
-        <div className={style.app}>
-          <TagsManager />
+  const redirectHome = () => <Redirect to='/home' />;
 
-          <div className={style.notificationsWrapper}>
-            <Notifications />
-          </div>
-
-          <Header />
-          <MainMenu />
-
-          <div className={`${contentClassname} container`}>
-            <Route exact path='/' render={() => <Redirect to='/home' />} />
-            <Route exact path='/home' component={NotesFeed} />
-            <Route exact path='/trash' component={Trash} />
-          </div>
+  return (
+    <BrowserRouter>
+      <div className={style.app}>
+        <TagsManager />
+        <div className={style.notifications}>
+          <NotificationsManager />
         </div>
-      </BrowserRouter>
-    )
-  }
-}
+        <Header />
+        <MainMenu />
+        <div className={`${contentCls} container`}>
+          <Route exact path='/' render={redirectHome} />
+          <Route exact path='/home' component={NotesFeed} />
+          <Route exact path='/trash' component={Trash} />
+        </div>
+      </div>
+    </BrowserRouter>
+  );
+};
 
 
-const mapStateToProps = state => ({
-  mainMenuActive: state.common.mainMenuActive
-})
+/**
+* prop types
+*/
+App.propTypes = {
+  isMainMenuActive: PropTypes.bool,
+};
 
-App = connect(mapStateToProps)(App)
+App.defaultProps = {
+  isMainMenuActive: false,
+};
 
-export { App }
+
+/**
+* connect to store
+*/
+const mapStateToProps = (state) => ({
+  isMainMenuActive: state.common.isMainMenuActive,
+});
+
+App = connect(mapStateToProps)(App);
+
+
+export { App };

@@ -1,1 +1,1 @@
-export { OuterClick } from './OuterClick'
+export { OuterClick } from './OuterClick';

@@ -1,1 +1,1 @@
-export { Trash } from './Trash'
+export { Trash } from './Trash';

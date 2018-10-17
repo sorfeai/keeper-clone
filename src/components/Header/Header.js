@@ -1,83 +1,87 @@
-import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
-import { connect } from 'react-redux'
-import style from './Header.module.scss'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
+import { connect } from 'react-redux';
 
-import { PAGE_TRASH } from '../../constants/types'
-
-import {
-  IconButton,
-  Tooltip,
-  RefreshNotes,
-  UserMenu,
-  Search
-} from '..'
+import { PAGE_TRASH } from '../../constants/types';
+import { IconButton, RefreshNotes, Search, UserMenu } from '..';
 
 import {
-  toggleFeedView,
   clearSelection,
-  moveNotesToTrash,
   deleteNotes,
+  moveNotesToTrash,
   pinNotes,
-  toggleMainMenu
-} from '../../actions'
+  toggleFeedView,
+  toggleMainMenu,
+} from '../../actions';
+
+import style from './Header.module.scss';
 
 
 let Header = class extends Component {
-  renderSelecting() {
+  renderSelecting () {
     const {
       currentPage,
       selectedNotes,
       pinNotes,
       clearSelection,
       moveNotesToTrash,
-      deleteNotes
-    } = this.props
+      deleteNotes,
+    } = this.props;
 
-    const selectedNotesCount = selectedNotes.size
-    const isTrash = currentPage === PAGE_TRASH
+    const selectedNotesCount = selectedNotes.size;
+    const isTrash = currentPage === PAGE_TRASH;
 
-    const toolbar = () =>
+    const handlePin = () => {
+      pinNotes(selectedNotes);
+      clearSelection();
+    };
+
+    const handleMoveToTrash = () => {
+      moveNotesToTrash(selectedNotes);
+      clearSelection();
+    };
+
+    const handleDeleteForever = () => {
+      deleteNotes(selectedNotes);
+      clearSelection();
+    };
+
+    const toolbar = () => (
       <div className={`${style.btnGroup} level`}>
         <div className={`${style.btnGroupItem} level-item`}>
           <IconButton
-            onClick={() => {
-              pinNotes(selectedNotes)
-              clearSelection()
-            }}
+            onClick={handlePin}
             tooltip='Pin selected'
             icon='thumbtack'
           />
         </div>
         <div className={`${style.btnGroupItem} level-item`}>
           <IconButton
-            onClick={() => {
-              moveNotesToTrash(selectedNotes)
-              clearSelection()
-            }}
+            onClick={handleMoveToTrash}
             tooltip='Move to trash'
             icon='trash'
           />
         </div>
       </div>
+    );
 
-    const toolbarTrash = () =>
-    <div className={`${style.btnGroup} level`}>
-      <div className={`${style.btnGroupItem} level-item`}>
-        <IconButton
-          onClick={() => {
-            deleteNotes(selectedNotes)
-            clearSelection()
-          }}
-          tooltip='Delete forever'
-          icon='ban'
-        />
+    const toolbarTrash = () => (
+      <div className={`${style.btnGroup} level`}>
+        <div className={`${style.btnGroupItem} level-item`}>
+          <IconButton
+            onClick={handleDeleteForever}
+            tooltip='Delete forever'
+            icon='ban'
+          />
+        </div>
       </div>
-    </div>
+    );
 
     return (
-      <div className={style.selecting}>
+      <div className={style.isSelecting}>
         <div className={style.container}>
           <div className={`${style.inner} level`}>
             <div className='level-left'>
@@ -108,22 +112,22 @@ let Header = class extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  render() {
+  render () {
     const {
-      gridView,
       toggleFeedView,
-      selecting,
       toggleMainMenu,
-      mainMenuActive
-    } = this.props
+      isGrid,
+      isSelecting,
+      isMainMenuActive,
+    } = this.props;
 
     const className = classNames({
       [style.header]: true,
-      [style.isSelecting]: selecting
-    })
+      [style.isSelecting]: isSelecting,
+    });
 
     return (
       <div className={className}>
@@ -135,8 +139,8 @@ let Header = class extends Component {
                 <div className='level-item'>
                   <div className={style.toggleMenuIcon}>
                     <IconButton
-                      icon={mainMenuActive ? 'times' : 'bars'}
-                      tooltip={mainMenuActive ? 'Hide menu' : 'Main menu'}
+                      icon={isMainMenuActive ? 'times' : 'bars'}
+                      tooltip={isMainMenuActive ? 'Hide menu' : 'Main menu'}
                       onClick={toggleMainMenu}
                     />
                   </div>
@@ -144,7 +148,7 @@ let Header = class extends Component {
                 <div className={`${style.logoWrapper} level-item`}>
                   <a href="/">
                     <div className={`${style.logo} subtitle is-4`}>
-                      <strong>Keeper</strong>
+                      <strong>{'Keeper'}</strong>
                     </div>
                   </a>
                 </div>
@@ -160,8 +164,8 @@ let Header = class extends Component {
                     </div>
                     <div className={`${style.btnGroupItem} level-item`}>
                       <IconButton
-                        tooltip={`${gridView ? 'List view' : 'Grid view'}`}
-                        icon={`${gridView ? 'list' : 'th-large'}`}
+                        tooltip={`${isGrid ? 'List view' : 'Grid view'}`}
+                        icon={`${isGrid ? 'list' : 'th-large'}`}
                         onClick={toggleFeedView}
                       />
                     </div>
@@ -179,28 +183,56 @@ let Header = class extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
-}
+};
 
 
-const mapStateToProps = state => ({
-  currentPage: state.common.currentPage,
-  gridView: state.common.feedViewIsGrid,
-  mainMenuActive: state.common.mainMenuActive,
-  selecting: state.select.selecting,
-  selectedNotes: state.select.selectedNotes
-})
+/**
+* prop types/defaults
+*/
+Header.propTypes = {
+  currentPage: PropTypes.string.isRequired,
+  selectedNotes: ImmutablePropTypes.listOf(
+    PropTypes.string
+  ).isRequired,
+  clearSelection: PropTypes.func.isRequired,
+  deleteNotes: PropTypes.func.isRequired,
+  moveNotesToTrash: PropTypes.func.isRequired,
+  toggleFeedView: PropTypes.func.isRequired,
+  toggleMainMenu: PropTypes.func.isRequired,
+  pinNotes: PropTypes.func.isRequired,
+  isGrid: PropTypes.bool,
+  isMainMenuActive: PropTypes.bool,
+  isSelecting: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  isGrid: true,
+};
+
+
+/**
+* connect to store
+*/
+const mapStateToProps = (state) => ({
+  currentPage: state.common.get('currentPage'),
+  selectedNotes: state.select.get('selectedNotes'),
+  isGrid: state.common.get('feedViewIsGrid'),
+  isMainMenuActive: state.common.get('mainMenuActive'),
+  isSelecting: state.select.get('selecting'),
+});
 
 const mapDispatchToProps = {
-  toggleFeedView,
   clearSelection,
-  moveNotesToTrash,
   deleteNotes,
+  moveNotesToTrash,
   pinNotes,
-  toggleMainMenu
-}
+  toggleFeedView,
+  toggleMainMenu,
+};
 
-Header = connect(mapStateToProps, mapDispatchToProps)(Header)
+Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 
-export { Header }
+
+export { Header };

@@ -1,35 +1,28 @@
-import { Map } from 'immutable'
+import { Map } from 'immutable';
 
 import {
-  UPDATE_NOTE,
   START_EDITING_NOTE,
-  END_EDITING_NOTE
-} from '../constants/types'
+  END_EDITING_NOTE,
+} from '../constants/types';
 
 
-const defaultState = {
-  editing: false
-}
+const defaultState = Map({
+  editing: false,
+  id: null,
+});
 
-export default (state = defaultState, action) => {
+
+const editReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case START_EDITING_NOTE:
-      const { id, title, content } = action.payload
-
-      return {
-        ...state,
-        editing: true,
-        id,
-        title,
-        content
-      }
+    case START_EDITING_NOTE: {
+      return state.merge({ id: action.payload.id, editing: true });
+    }
     case END_EDITING_NOTE:
-      return {
-        ...state,
-        editing: false,
-        id: null
-      }
+      return state.merge({ editing: false, id: null });
     default:
-      return state
+      return state;
   }
-}
+};
+
+
+export default editReducer;

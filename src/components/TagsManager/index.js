@@ -1,1 +1,1 @@
-export { TagsManager } from './TagsManager'
+export { TagsManager } from './TagsManager';

@@ -1,59 +1,59 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import classNames from 'classnames'
-import style from './UserMenu.module.scss'
-import { Tooltip, OuterClick } from '..'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
+import style from './UserMenu.module.scss';
+import { Tooltip, OuterClick } from '..';
 
 
 let UserMenu = class extends Component {
   state = {
-    open: false
+    open: false,
   }
 
-  toggle = () => {
-    this.setState(prev => ({
+  handleClose = () => {
+    this.setState((prev) => ({
       ...prev,
-      open: !prev.open
-    }))
+      open: !prev.open,
+    }));
   }
 
-  render() {
-    const {
-      username,
-      firstName,
-      lastName,
-      email,
-      avatar
-    } = this.props
+  render () {
+    const { user } = this.props;
+    const username = user.get('username');
+    const firstName = user.get('firstName');
+    const lastName = user.get('lastName');
+    const email = user.get('email');
+    const avatar = user.get('avatar');
 
-    let userAvatar
+    let userAvatar;
     try {
-      userAvatar = require(`../../assets/images/${avatar}`)
-    } catch (e) {
-      userAvatar = null
+      userAvatar = require(`../../assets/images/${avatar}`);
+    } catch (err) {
+      userAvatar = null;
     }
 
-    const { open } = this.state
+    const { open } = this.state;
 
     const className = classNames({
       [style.wrapper]: true,
-      [style.isOpen]: open
-    })
+      [style.isOpen]: open,
+    });
 
     return (
       <div className={className}>
         <Tooltip
           text={!open && 'Nikita Belousov'}
-          alignRight={true}
+          alignRight
         >
           <button
-            onClick={this.toggle}
+            type="submit"
+            onClick={this.handleClose}
             className={style.menuButton}
             style={{ backgroundImage: `url(${userAvatar})` }}
           />
         </Tooltip>
-        {open &&
-          <OuterClick onClick={this.toggle}>
+        {open && (
+          <OuterClick onClick={this.handleClose}>
             <div className={style.popupWrapper}>
               <div className='box'>
                 <article className='media'>
@@ -73,7 +73,7 @@ let UserMenu = class extends Component {
                       <div className='subtitle is-6'>
                         {email}
                       </div>
-                      <a href='#'>Profile settings</a>
+                      <button type="submit">{'Profile settings'}</button>
                     </div>
                   </div>
                 </article>
@@ -82,15 +82,15 @@ let UserMenu = class extends Component {
                     <div className='level'>
                       <div className='level-left'>
                         <div className='level-item'>
-                          <button className='button is-light'>
-                            Change Account
+                          <button type="submit" className='button is-light'>
+                            {'Change Account'}
                           </button>
                         </div>
                       </div>
                       <div className='level-right'>
                         <div className='level-item'>
-                          <button className='button is-light'>
-                            Logout
+                          <button type="submit" className='button is-light'>
+                            {'Logout'}
                           </button>
                         </div>
                       </div>
@@ -99,21 +99,18 @@ let UserMenu = class extends Component {
                 </article>
               </div>
             </div>
-          </OuterClick>}
+          </OuterClick>
+        )}
       </div>
-    )
+    );
   }
-}
+};
 
 
-const mapStateToProps = state => ({
-  username: state.common.user.get('username'),
-  firstName: state.common.user.get('firstName'),
-  lastName: state.common.user.get('lastName'),
-  email: state.common.user.get('email'),
-  avatar: state.common.user.get('avatar')
-})
+const mapStateToProps = (state) => ({
+  user: state.common.get('user'),
+});
 
-UserMenu = connect(mapStateToProps)(UserMenu)
+UserMenu = connect(mapStateToProps)(UserMenu);
 
-export { UserMenu }
+export { UserMenu };

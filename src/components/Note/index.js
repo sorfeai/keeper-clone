@@ -1,1 +1,2 @@
-export { Note } from './Note'
+export { NoteView } from './NoteView';
+export { NoteCont as Note } from './NoteCont';

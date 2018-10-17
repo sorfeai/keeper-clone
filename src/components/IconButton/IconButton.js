@@ -1,49 +1,74 @@
-import React, { Component, Fragment } from 'react'
-import classNames from 'classnames'
-import { Tooltip } from '..'
-import style from './IconButton.module.scss'
+import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { Tooltip } from '..';
+import style from './IconButton.module.scss';
 
 
-export class IconButton extends Component {
-  render() {
-    const {
-      tooltip,
-      icon,
-      onClick,
-      disabled,
-      alt,
-      alignTooltipRight
-    } = this.props
+const IconButton = ({
+  onClick,
+  icon,
+  tooltip,
+  disabled,
+  alt,
+  alignTooltipRight,
+  small,
+}) => {
+  const className = classNames({
+    [style.inner]: true,
+    [style.alt]: alt,
+    [style.disabled]: disabled,
+    [style.small]: small,
+  });
 
-    const className = classNames({
-      [style.inner]: true,
-      [style.alt]: alt,
-      [style.disabled]: disabled
-    })
+  const handleClick = disabled ? undefined : onClick;
 
-    const handleClick = disabled ? undefined : onClick
+  const regular = () => (
+    <button
+      type="button"
+      onClick={handleClick}
+      className={style.button}
+    >
+      <i className={`fas fa-${icon}`} />
+    </button>
+  );
 
-    return (
-      <div className={className}>
-        {(tooltip && !disabled)
-          ? <Tooltip
-              text={tooltip}
-              alignRight={alignTooltipRight}
-            >
-              <button
-                onClick={handleClick}
-                className={style.button}
-              >
-                <i className={`fas fa-${icon}`}></i>
-              </button>
-            </Tooltip>
-          : <button
-              onClick={handleClick}
-              className={style.button}
-            >
-              <i className={`fas fa-${icon}`}></i>
-            </button>}
-      </div>
-    )
-  }
-}
+  const withTooltip = () => (
+    <Tooltip
+      text={tooltip}
+      alignRight={alignTooltipRight}
+    >
+      <button
+        type="button"
+        onClick={handleClick}
+        className={style.button}
+      >
+        <i className={`fas fa-${icon}`} />
+      </button>
+    </Tooltip>
+  );
+
+  return (
+    <div className={className}>
+      {(!tooltip || disabled) ? regular() : withTooltip()}
+    </div>
+  );
+};
+
+
+/**
+* prop types/defaults
+*/
+
+IconButton.propTypes = {
+  onClick: PropTypes.func,
+  tooltip: PropTypes.string,
+  disabled: PropTypes.bool,
+  icon: PropTypes.string.isRequired,
+  alt: PropTypes.bool,
+  alignTooltipRight: PropTypes.bool,
+  small: PropTypes.bool,
+};
+
+
+export { IconButton };

@@ -1,11 +1,14 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import classNames from 'classnames'
-import { connect } from 'react-redux'
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { NavLink } from 'react-router-dom';
+import uuid from 'small-uuid';
+import classNames from 'classnames';
+import { connect } from 'react-redux';
 
-import style from './MainMenu.module.scss'
-import { IconButton } from '..'
-import { showTagsModal } from '../../actions'
+import { IconButton } from '..';
+import { showTagsModal } from '../../actions';
+import style from './MainMenu.module.scss';
 
 
 const itemsData = [
@@ -13,92 +16,148 @@ const itemsData = [
     {
       title: 'Notes',
       icon: 'sticky-note',
-      to: '/home'
+      to: '/home',
     },
     {
       title: 'Reminders',
-      icon: 'bell'
-    }
+      icon: 'bell',
+    },
   ],
   [
     {
       title: 'New tag',
-      icon: 'plus'
-    }
+      icon: 'plus',
+    },
   ],
   [
     {
       title: 'Archive',
-      icon: 'archive'
+      icon: 'archive',
     },
     {
       title: 'Trash',
       icon: 'trash',
-      to: '/trash'
-    }
+      to: '/trash',
+    },
   ],
   [
     {
       title: 'Settings',
-      icon: 'sliders-h'
+      icon: 'sliders-h',
     },
     {
       title: 'Leave feedback',
-      icon: 'comment-alt'
+      icon: 'comment-alt',
     },
     {
       title: 'Help',
-      icon: 'question'
+      icon: 'question',
     },
     {
       title: 'Download app',
-      icon: 'mobile'
+      icon: 'mobile',
     },
     {
       title: 'Hotkeys',
-      icon: 'keyboard'
-    }
-  ]
-]
+      icon: 'keyboard',
+    },
+  ],
+];
 
 
-let MainMenu = ({ isActive, notesInTrashCount, showTagsModal }) => {
-  const className = classNames({
+let MainMenu = ({
+  isActive,
+  notesInTrashCount,
+  showTagsModal,
+  tags: tagsList,
+}) => {
+  const wrapperCls = classNames({
     [style.wrapper]: true,
-    [style.isActive]: isActive
-  })
+    [style.isActive]: isActive,
+  });
+
+  const tags = ({ title, icon, to }) =>
+    <Fragment key={title}>
+      {tagsList.map((tag) =>
+        <NavLink
+          key={tag.get('title')}
+          to='#'
+          className={style.menuItem}
+        >
+          <span className={style.iconWrapper}>
+            <i className='fas fa-tag' />
+          </span>
+          {tag.get('title')}
+        </NavLink>)}
+      <NavLink
+        to='#'
+        onClick={showTagsModal}
+        className={style.menuItem}
+      >
+        <span className={style.iconWrapper}>
+          <i className={`fas fa-${icon}`} />
+        </span>
+        {title}
+      </NavLink>
+    </Fragment>;
+
+  const dummy = ({ title, icon, to }) =>
+    <NavLink
+      key={title}
+      to={to || '#'}
+      className={style.menuItem}
+    >
+      <span className={style.iconWrapper}>
+        <i className={`fas fa-${icon}`} />
+      </span>
+      {title + (to === '/trash' ? ` (${notesInTrashCount})` : '')}
+    </NavLink>;
 
   return (
-    <div className={className}>
+    <div className={wrapperCls}>
       <div className={style.menu}>
-        {itemsData.map((section, i) =>
-          <div key={i} className={style.menuSection}>
-            {section.map(({ title, icon, to }, i) =>
-              <NavLink
-                key={i}
-                to={to || '#'}
-                onClick={title === 'New tag' ? showTagsModal : undefined}
-                className={style.menuItem}
-              >
-                <span className={style.iconWrapper}>
-                  <i className={`fas fa-${icon}`} />
-                </span>
-                {title + (to === '/trash' ? ` (${notesInTrashCount})` : '')}
-              </NavLink>)}
+        {itemsData.map((section) =>
+          <div key={uuid.create()} className={style.menuSection}>
+            {section.map((item) => (
+              item.title === 'New tag' ? tags(item) : dummy(item)
+            ))}
           </div>)}
       </div>
     </div>
-  )
-}
+  );
+};
 
 
-const mapStateToProps = state => ({
-  isActive: state.common.mainMenuActive,
-  notesInTrashCount: state.trash.notesById.size
-})
+/**
+* prop types/defaults
+*/
 
-const mapDispatchToProps = { showTagsModal }
+MainMenu.propTypes = {
+  isActive: PropTypes.bool,
+  notesInTrashCount: PropTypes.number.isRequired,
+  showTagsModal: PropTypes.func.isRequired,
+  tags: ImmutablePropTypes.listOf(
+    ImmutablePropTypes.contains({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ),
+};
 
-MainMenu = connect(mapStateToProps, mapDispatchToProps)(MainMenu)
 
-export { MainMenu }
+/**
+* connect to store
+*/
+
+const mapStateToProps = (state) => ({
+  isActive: state.common.get('mainMenuActive'),
+  tags: state.tags.get('byId').toList(),
+  notesInTrashCount: state.trash.get('notesById').size,
+});
+
+const mapDispatchToProps = { showTagsModal };
+
+MainMenu = connect(mapStateToProps, mapDispatchToProps)(MainMenu);
+
+
+export { MainMenu };

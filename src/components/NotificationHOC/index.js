@@ -1,0 +1,1 @@
+export { NotificationHOC } from './NotificationHOC';

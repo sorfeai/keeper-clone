@@ -1,1 +1,1 @@
-export { SpinnerLoading } from './SpinnerLoading'
+export { SpinnerLoading } from './SpinnerLoading';
