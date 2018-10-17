@@ -4,6 +4,7 @@
 export const SET_PAGE = 'SET_PAGE';
 export const TOGGLE_FEED_VIEW = 'TOGGLE_FEED_VIEW';
 export const CLEAR_SELECTION = 'CLEAR_SELECTION';
+export const TOGGLE_SELECT_NOTE = 'TOGGLE_SELECT_NOTE';
 export const SELECT_NOTE = 'SELECT_NOTE';
 export const DESELECT_NOTE = 'DESELECT_NOTE';
 export const TAG_NOTE = 'TAG_NOTE';

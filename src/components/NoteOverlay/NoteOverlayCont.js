@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { NoteOverlayView } from '.';
 
 import {
-  deleteNotes,
-  deselectNote,
+  toggleSelectNote,
   endEditingNote,
   moveNotesToTrash,
   pinNotes,
@@ -22,8 +21,8 @@ import {
 
 let NoteOverlayCont = class extends Component {
   handleSelect = () => {
-    const { id, isSelected, deselectNote, selectNote } = this.props;
-    isSelected ? deselectNote(id) : selectNote(id);
+    const { id, toggleSelectNote } = this.props;
+    toggleSelectNote(id);
   }
 
   handlePin = (ev) => {
@@ -98,8 +97,7 @@ NoteOverlayCont.propTypes = {
   selecting: PropTypes.bool,
 
   // actions
-  deleteNotes: PropTypes.func.isRequired,
-  deselectNote: PropTypes.func.isRequired,
+  toggleSelectNote: PropTypes.func.isRequired,
   endEditingNote: PropTypes.func.isRequired,
   moveNotesToTrash: PropTypes.func.isRequired,
   pinNotes: PropTypes.func.isRequired,
@@ -126,8 +124,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  deleteNotes,
-  deselectNote,
+  toggleSelectNote,
   endEditingNote,
   moveNotesToTrash,
   pinNotes,

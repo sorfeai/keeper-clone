@@ -6,8 +6,7 @@ import { NoteView } from '.';
 import {
   startEditingNote,
   saveEditedNote,
-  selectNote,
-  deselectNote,
+  toggleSelectNote,
 } from '../../actions';
 
 
@@ -18,8 +17,8 @@ let NoteCont = class extends Component {
   }
 
   handleSelect () {
-    const { id, isSelected, deselectNote, selectNote } = this.props;
-    isSelected ? deselectNote(id) : selectNote(id);
+    const { id, toggleSelectNote } = this.props;
+    toggleSelectNote(id);
   }
 
   handleSave = () => {
@@ -67,8 +66,7 @@ NoteCont.propTypes = {
   // actions
   startEditingNote: PropTypes.func.isRequired,
   saveEditedNote: PropTypes.func.isRequired,
-  selectNote: PropTypes.func.isRequired,
-  deselectNote: PropTypes.func.isRequired,
+  toggleSelectNote: PropTypes.func.isRequired,
 
   // flow
   id: PropTypes.string.isRequired,
@@ -88,8 +86,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   startEditingNote,
   saveEditedNote,
-  selectNote,
-  deselectNote,
+  toggleSelectNote,
 };
 
 NoteCont = connect(mapStateToProps, mapDispatchToProps)(NoteCont);

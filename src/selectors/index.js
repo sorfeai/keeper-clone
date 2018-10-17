@@ -1,4 +1,6 @@
-export { getNoteById } from './notes';
+export {
+  getNoteById,
+} from './notes';
 
 export {
   getEditNoteId,
@@ -6,4 +8,10 @@ export {
   getEditNoteFormContent,
 } from './editNote';
 
-export { getNotesInTrash } from './trash';
+export {
+  getNotesInTrash,
+} from './trash';
+
+export {
+  getSelectedIds,
+} from './select';
