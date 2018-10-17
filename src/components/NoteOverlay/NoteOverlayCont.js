@@ -14,8 +14,7 @@ import {
   selectNote,
   startEditingNote,
   tagNote,
-  unpinNotes,
-  updateNote,
+  togglePinNotes,
 } from '../../actions';
 
 
@@ -25,20 +24,14 @@ let NoteOverlayCont = class extends Component {
     toggleSelectNote(id);
   }
 
-  handlePin = (ev) => {
-    const { id, isPinned, isEditing, pinNotes, unpinNotes } = this.props;
-
-    ev.stopPropagation();
-    if (isEditing) {
-      ev.nativeEvent.stopImmediatePropagation();
-    }
-    isPinned ? unpinNotes([id]) : pinNotes([id]);
+  handlePin = () => {
+    const { id, togglePinNotes } = this.props;
+    togglePinNotes([id]);
   }
 
   handleSave = () => {
     const { saveEditedNote } = this.props;
     saveEditedNote();
-    // this.props.endEditingNote()
   }
 
   handleMoveToTrash = () => {
@@ -106,8 +99,7 @@ NoteOverlayCont.propTypes = {
   selectNote: PropTypes.func.isRequired,
   startEditingNote: PropTypes.func.isRequired,
   tagNote: PropTypes.func.isRequired,
-  unpinNotes: PropTypes.func.isRequired,
-  updateNote: PropTypes.func.isRequired,
+  togglePinNotes: PropTypes.func.isRequired,
 
   // flow
   id: PropTypes.string.isRequired,
@@ -133,8 +125,7 @@ const mapDispatchToProps = {
   selectNote,
   startEditingNote,
   tagNote,
-  unpinNotes,
-  updateNote,
+  togglePinNotes,
 };
 
 NoteOverlayCont = connect(mapStateToProps, mapDispatchToProps)(NoteOverlayCont);

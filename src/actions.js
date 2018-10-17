@@ -14,6 +14,7 @@ import {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
   START_REFRESH,
+  TOGGLE_PIN_NOTES,
   PIN_NOTES,
   UNPIN_NOTES,
   UPDATE_SEARCH_QUERY,
@@ -101,6 +102,11 @@ export const hideNotification = (id) => ({
 
 export const startRefresh = () => ({
   type: START_REFRESH,
+});
+
+export const togglePinNotes = (ids) => ({
+  type: TOGGLE_PIN_NOTES,
+  payload: { ids },
 });
 
 export const pinNotes = (ids) => ({

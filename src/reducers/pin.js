@@ -6,15 +6,8 @@ import {
 } from '../constants/types';
 
 
-/**
-* default state
-*/
 const defaultState = fromJS({ ids: [] });
 
-
-/**
-* reducer
-*/
 const pinReducer = (state = defaultState, action) => {
   switch (action.type) {
     case PIN_NOTES:

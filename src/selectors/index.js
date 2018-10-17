@@ -13,5 +13,9 @@ export {
 } from './trash';
 
 export {
+  getPinnedIds,
+} from './pin';
+
+export {
   getSelectedIds,
 } from './select';
