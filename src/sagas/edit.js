@@ -6,6 +6,7 @@ import {
   getEditNoteId,
   getEditNoteFormTitle,
   getEditNoteFormContent,
+  getEditNoteFormErrors,
 } from '../selectors';
 
 
@@ -13,8 +14,12 @@ const saveNote = function* () {
   const id = yield select(getEditNoteId);
   const title = yield select(getEditNoteFormTitle);
   const content = yield select(getEditNoteFormContent);
+  const errors = yield select(getEditNoteFormErrors);
 
-  yield put(updateNote(id, { title, content }));
+  if (!errors) {
+    yield put(updateNote(id, { title, content }));
+  }
+
   yield put(endEditingNote());
 };
 

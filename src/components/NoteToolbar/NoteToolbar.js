@@ -6,7 +6,7 @@ import style from './NoteToolbar.module.scss';
 import { IconButton, OuterClick } from '..';
 
 
-class NoteToolbar extends Component {
+let NoteToolbar = class extends Component {
   state = {
     applyTagsPopup: false,
     applyTagsForm: { tags: [] },
@@ -55,6 +55,7 @@ class NoteToolbar extends Component {
       onRestore,
       onDeleteForever,
       tags,
+      editNoteForm,
     } = this.props;
 
     const { editTitle, editContent } = this.props;
@@ -99,6 +100,7 @@ class NoteToolbar extends Component {
       <button
         type="button"
         onClick={onSave}
+        disabled={editNoteForm && editNoteForm.syncErrors}
         className="button is-light"
       >
         {'Save'}
@@ -123,7 +125,14 @@ class NoteToolbar extends Component {
       </div>
     );
   }
-}
+};
+
+
+const mapStateToProps = (state) => ({
+  editNoteForm: state.form.editNote,
+});
+
+NoteToolbar = connect(mapStateToProps)(NoteToolbar);
 
 
 export { NoteToolbar };

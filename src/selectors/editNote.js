@@ -6,3 +6,6 @@ export const getEditNoteFormTitle = (state) =>
 
 export const getEditNoteFormContent = (state) =>
   state.form.editNote.values.content;
+
+export const getEditNoteFormErrors = (state) =>
+  state.form.editNote.syncErrors;

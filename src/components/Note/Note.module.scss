@@ -47,6 +47,8 @@
 }
 
 .content {
+  position: relative;
+  z-index: 1000;
   pointer-events: none;
 
   .isEditing & {
@@ -54,28 +56,17 @@
   }
 }
 
+$titleMargin: -.4rem 0 .6rem;
 .titleWrapper {
-  margin-top: -.4rem;
-  margin-bottom: .6rem;
+  margin: $titleMargin;
 }
 
-.editTitle, .editContent {
+.titleInputWrapper {
+  margin: $titleMargin;
+}
 
+.editForm {
   input[type=text], textarea {
-    width: 100%;
-    font-size: inherit;
-    border: 0;
-    outline: 0;
-  }
-
-  input[type=text] {
-    font-weight: bold;
-    padding-right: 1.4rem;
-  }
-
-  textarea {
-    resize: none;
-    overflow: hidden;
-    min-height: 50px;
+    background: 0;
   }
 }

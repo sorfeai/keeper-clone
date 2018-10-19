@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { focus, initialize } from 'redux-form';
 import { NoteView } from '.';
 
 import {
@@ -11,14 +12,24 @@ import {
 
 
 let NoteCont = class extends Component {
-  handleAreaClick = () => {
-    const { selecting } = this.props;
-    selecting ? this.handleSelect() : this.edit();
+  handleEditRef = (node) => {
+    if (!this.node) {
+      this.editNode = node;
+    }
   }
 
-  handleSelect () {
-    const { id, toggleSelectNote } = this.props;
-    toggleSelectNote(id);
+  handleContentInputRef = (node) => {
+    if (!this.node) {
+      this.contentInputNode = node;
+    }
+  }
+
+  handleAreaClick = () => {
+    const { selecting, isEditing } = this.props;
+
+    if (!isEditing) {
+      selecting ? this.select() : this.edit();
+    }
   }
 
   handleSave = () => {
@@ -26,9 +37,48 @@ let NoteCont = class extends Component {
     saveEditedNote();
   }
 
+  handleContentInputChange = () => {
+    const mhReached = this.isMaxHeightReached();
+
+    if (mhReached && !this.wasMaxHeightReached) {
+      const taHeight = this.contentInputNode.offsetHeight;
+      const taElem = this.contentInputNode.childNodes[0];
+      taElem.style.maxHeight = `${taHeight}px`;
+      this.wasMaxHeightReached = true;
+    }
+  }
+
+  isMaxHeightReached () {
+    const { top } = this.editNode.getBoundingClientRect();
+    return top <= 35;
+  }
+
+  select () {
+    const { id, toggleSelectNote } = this.props;
+    toggleSelectNote(id);
+  }
+
   edit () {
-    const { id, title, content, startEditingNote } = this.props;
+    const {
+      id,
+      title,
+      content,
+      startEditingNote,
+      initialize,
+      focus,
+    } = this.props;
+
     startEditingNote(id, title, content);
+
+    // wait to let redux-form register the fields
+    setTimeout(() => {
+      initialize('editNote', { title, content });
+      focus('editNote', 'title');
+    });
+  }
+
+  editFormValidate ({ title }) {
+    return title ? {} : 'Error';
   }
 
   render () {
@@ -51,8 +101,12 @@ let NoteCont = class extends Component {
         isEditing={isEditing}
         isSelected={isSelected}
         isPinned={isPinned}
+        onEditRef={this.handleEditRef}
+        onContentInputRef={this.handleContentInputRef}
         onAreaClick={this.handleAreaClick}
+        onContentInputChange={this.handleContentInputChange}
         onSave={this.handleSave}
+        editFormValidate={this.editFormValidate}
       />
     );
   }
@@ -64,11 +118,11 @@ NoteCont.propTypes = {
   selecting: PropTypes.bool,
 
   // actions
+  focus: PropTypes.func.isRequired,
   startEditingNote: PropTypes.func.isRequired,
   saveEditedNote: PropTypes.func.isRequired,
   toggleSelectNote: PropTypes.func.isRequired,
 
-  // flow
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
@@ -84,6 +138,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
+  initialize,
+  focus,
   startEditingNote,
   saveEditedNote,
   toggleSelectNote,

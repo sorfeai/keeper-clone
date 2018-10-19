@@ -6,6 +6,7 @@ export {
   getEditNoteId,
   getEditNoteFormTitle,
   getEditNoteFormContent,
+  getEditNoteFormErrors,
 } from './editNote';
 
 export {

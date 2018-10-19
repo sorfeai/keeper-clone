@@ -1,5 +1,9 @@
-.note {
+.noteWrapper {
   margin-bottom: 2rem;
+
+  &.isEditing {
+    margin-bottom: 0;
+  }
 }
 
 .pinnedNotesSection {

@@ -1,9 +1,16 @@
 import React, { Fragment } from 'react';
+import { reduxForm, Field } from 'redux-form';
+import { Box } from 'react-bulma-components/full';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Box } from 'react-bulma-components/full';
 
-import { OuterClick, NoteOverlay } from '..';
+import {
+  OuterClick,
+  NoteOverlay,
+  TextInput,
+  Textarea,
+} from '..';
+
 import style from './Note.module.scss';
 
 
@@ -15,8 +22,12 @@ const NoteView = ({
   isEditing,
   isSelected,
   isPinned,
+  onEditRef,
+  onContentInputRef,
   onSave,
+  onContentInputChange,
   onAreaClick,
+  editFormValidate,
 }) => {
   const wrapperCls = classNames({
     [style.wrapper]: true,
@@ -38,29 +49,53 @@ const NoteView = ({
     </Fragment>
   );
 
-  const edit = (
-    <form>
-      {/* some redux-form here... */}
+  let EditForm = () => (
+    <form className={style.editForm}>
+      <div className={style.titleInputWrapper}>
+        <Field
+          component={TextInput}
+          type="text"
+          name="title"
+          isSeamless
+          isFullwidth
+          isBoldText
+        />
+      </div>
+      <div ref={onContentInputRef}>
+        <Field
+          component={Textarea}
+          name="content"
+          onChangeCustom={onContentInputChange}
+          isSeamless
+          isFullwidth
+          isAutosized
+        />
+      </div>
     </form>
   );
 
+  EditForm = reduxForm({
+    form: 'editNote',
+    validate: editFormValidate,
+  })(EditForm);
+
   const note = (
-    <Box className={noteCls}>
-      <div className={style.inner}>
-        <div className={style.overlayWrapper}>
-          <NoteOverlay
-            id={id}
-            isInTrash={isInTrash}
-            isPinned={isPinned}
-            isSelected={isSelected}
-            isEditing={isEditing}
-          />
+      <Box className={noteCls}>
+        <div className={style.inner}>
+          <div className={style.overlayWrapper}>
+            <NoteOverlay
+              id={id}
+              isInTrash={isInTrash}
+              isPinned={isPinned}
+              isSelected={isSelected}
+              isEditing={isEditing}
+            />
+          </div>
+          <div className={style.content}>
+            {isEditing ? <EditForm /> : preview}
+          </div>
         </div>
-        <div className={style.content}>
-          {isEditing ? edit : preview}
-        </div>
-      </div>
-    </Box>
+      </Box>
   );
 
   return (
@@ -70,7 +105,9 @@ const NoteView = ({
     >
       {isEditing ? (
         <OuterClick onClick={onSave}>
-          {note}
+          <div ref={onEditRef}>
+            {note}
+          </div>
         </OuterClick>
       ) : note}
     </div>
