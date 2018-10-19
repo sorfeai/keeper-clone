@@ -1,0 +1,18 @@
+.textarea {
+  font-size: inherit;
+  outline: 0;
+  display: block;
+}
+
+.isFullwidth {
+  width: 100%;
+}
+
+.isSeamless {
+  border: 0;
+}
+
+.isAutosized {
+  overflow: hidden;
+  resize: none;
+}
