@@ -2,6 +2,7 @@ import {
   SET_PAGE,
   TOGGLE_FEED_VIEW,
   CLEAR_SELECTION,
+  TOGGLE_SELECT_MODE,
   TOGGLE_SELECT_NOTE,
   SELECT_NOTE,
   DESELECT_NOTE,
@@ -45,6 +46,10 @@ export const toggleFeedView = () => ({
 
 export const clearSelection = () => ({
   type: CLEAR_SELECTION,
+});
+
+export const toggleSelectMode = () => ({
+  type: TOGGLE_SELECT_MODE,
 });
 
 export const toggleSelectNote = (id) => ({

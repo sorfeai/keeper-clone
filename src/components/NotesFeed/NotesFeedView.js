@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Heading, Columns } from 'react-bulma-components/full';
 
@@ -23,16 +24,25 @@ const NotesFeedView = ({
     const content = note.get('content');
     const deleting = note.get('deleting');
 
+    const isPinned = pinnedIds.includes(id);
+    const isSelected = selectedIds.includes(id);
+    const isEditing = editingId === id;
+
+    const cls = classNames({
+      [style.noteWrapper]: true,
+      [style.isEditing]: isEditing,
+    });
+
     return (
-      <div key={id} className={style.note}>
+      <div key={id} className={cls}>
         <Note
           id={id}
           title={title}
           content={content}
           isInTrash={deleting}
-          isPinned={pinnedIds.includes(id)}
-          isSelected={selectedIds.includes(id)}
-          isEditing={editingId === id}
+          isPinned={isPinned}
+          isSelected={isSelected}
+          isEditing={isEditing}
         />
       </div>
     );

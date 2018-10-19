@@ -1,26 +1,23 @@
 import { fromJS } from 'immutable';
 
 import {
+  TOGGLE_SELECT_MODE,
   SELECT_NOTE,
   DESELECT_NOTE,
   CLEAR_SELECTION,
 } from '../constants/types';
 
 
-/**
-* default state
-*/
 const defaultState = fromJS({
   selecting: false,
   selectedNotes: [],
 });
 
 
-/**
-* reducer
-*/
 const selectReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case TOGGLE_SELECT_MODE:
+      return state.update('selecting', (selecting) => !selecting);
     case SELECT_NOTE:
       return state
         .update('selecting', (selecting) => selecting || true)

@@ -3,6 +3,7 @@ import { getSelectedIds } from '../selectors';
 import { TOGGLE_SELECT_NOTE } from '../constants/types';
 
 import  {
+  toggleSelectMode,
   selectNote,
   deselectNote,
 } from '../actions';
@@ -14,8 +15,15 @@ const toggleSelect = function* (action) {
   const isSelected = selectedIds.includes(id);
 
   if (isSelected) {
+    if (selectedIds.size === 1) {
+      // means no selected notes left
+      yield put(toggleSelectMode());
+    }
     yield put(deselectNote(id));
   } else {
+    if (selectedIds.size === 0) {
+      yield put(toggleSelectMode());
+    }
     yield put(selectNote(id));
   }
 };
