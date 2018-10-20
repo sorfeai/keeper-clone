@@ -27,15 +27,15 @@ const Textarea = class extends Component {
       meta,
       input,
       onChangeCustom,
+      appearance,
       isFullwidth,
-      isSeamless,
       isAutosized,
     } = this.props;
 
     const cls = classNames({
       [style.textarea]: true,
       [style.isFullwidth]: isFullwidth,
-      [style.isSeamless]: isSeamless,
+      [style.isSeamless]: appearance === 'seamless',
       [style.isAutosized]: isAutosized,
     });
 

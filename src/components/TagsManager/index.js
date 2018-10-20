@@ -1,1 +1,2 @@
-export { TagsManager } from './TagsManager';
+export { TagsManagerCont as TagsManager  } from './TagsManagerCont';
+export { TagsManagerView } from './TagsManagerView';

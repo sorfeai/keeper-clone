@@ -27,11 +27,15 @@ import {
   UPDATE_NOTE,
   SAVE_EDITED_NOTE,
   END_EDITING_NOTE,
+  SUBMIT_CREATE_TAG,
+  SUBMIT_EDIT_TAG,
   CREATE_TAG,
   DELETE_TAG,
   SHOW_TAGS_MODAL,
   HIDE_TAGS_MODAL,
-  SAVE_EDITED_TAG,
+  START_EDITING_TAG,
+  END_EDITING_TAG,
+  UPDATE_TAG,
 } from './constants/types';
 
 
@@ -172,9 +176,24 @@ export const hideTagsModal = (title) => ({
   type: HIDE_TAGS_MODAL,
 });
 
+export const submitCreateTag = (title) => ({
+  type: SUBMIT_CREATE_TAG,
+  payload: { title },
+});
+
+export const submitEditTag = (title) => ({
+  type: SUBMIT_EDIT_TAG,
+  payload: { title },
+});
+
 export const createTag = (title) => ({
   type: CREATE_TAG,
   payload: { title },
+});
+
+export const updateTag = (id, title) => ({
+  type: UPDATE_TAG,
+  payload: { id, title },
 });
 
 export const deleteTags = (ids) => ({
@@ -182,7 +201,11 @@ export const deleteTags = (ids) => ({
   payload: { ids },
 });
 
-export const saveEditedTag = (id, data) => ({
-  type: SAVE_EDITED_TAG,
-  payload: { id, data },
+export const startEditingTag = (id) => ({
+  type: START_EDITING_TAG,
+  payload: { id },
+});
+
+export const endEditingTag = () => ({
+  type: END_EDITING_TAG,
 });

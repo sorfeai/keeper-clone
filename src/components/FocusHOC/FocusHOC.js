@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 
+// FIXME: don't need HOC, rewrite as container
 const FocusHOC = (Wrapped) => (
   class extends Component {
     componentDidUpdate ({ meta: { active: prevActive } }) {

@@ -44,23 +44,13 @@ let App = ({ isMainMenuActive }) => {
 };
 
 
-/**
-* prop types
-*/
 App.propTypes = {
   isMainMenuActive: PropTypes.bool,
 };
 
-App.defaultProps = {
-  isMainMenuActive: false,
-};
 
-
-/**
-* connect to store
-*/
 const mapStateToProps = (state) => ({
-  isMainMenuActive: state.common.isMainMenuActive,
+  isMainMenuActive: state.common.get('mainMenuActive'),
 });
 
 App = connect(mapStateToProps)(App);

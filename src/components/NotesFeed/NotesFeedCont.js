@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import { PAGE_HOME } from '../../constants/types';
-import { NotificationHOC, PageHOC } from '..';
+import { PageHOC } from '..';
 import { NotesFeedView } from '.';
 
 

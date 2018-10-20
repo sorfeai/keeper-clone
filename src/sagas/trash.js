@@ -4,9 +4,6 @@ import { getNotesInTrash } from '../selectors';
 import { CLEAR_TRASH } from '../constants/types';
 
 
-/**
-* clear thrash
-*/
 const delNotes = function* () {
   const notesInTrash = yield select(getNotesInTrash);
 
@@ -19,9 +16,6 @@ const watchClearTrash = function* () {
 };
 
 
-/**
-* export forked
-*/
 const forked = [
   fork(watchClearTrash),
 ];

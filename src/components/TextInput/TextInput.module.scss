@@ -1,4 +1,5 @@
 .textInput {
+  width: 100%;
   font-size: inherit;
   outline: 0;
   display: block;
@@ -14,6 +15,12 @@
 
 .isRound {
   border-radius: 50%;
+}
+
+.isLine {
+  border: 0;
+  border-bottom: 1px solid black;
+  outline: 0;
 }
 
 .isBoldText {

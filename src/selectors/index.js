@@ -20,3 +20,10 @@ export {
 export {
   getSelectedIds,
 } from './select';
+
+export {
+  getTagById,
+  getCreateTagValue,
+  getEditTagValue,
+  getEditingTagId,
+} from './tags';

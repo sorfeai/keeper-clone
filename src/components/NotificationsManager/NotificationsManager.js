@@ -12,11 +12,7 @@ import {
   NOTIFICATION_DANGER,
 } from '../../constants/types';
 
-import {
-  Notification,
-  AnimateMount,
-} from '..';
-
+import { Notification } from '..';
 import style from './NotificationsManager.module.scss';
 
 
@@ -49,10 +45,7 @@ const NotificationDanger = (props) => (
 );
 
 
-let NotificationsManager = ({
-  notifications,
-  hideNotification,
-}) => {
+let NotificationsManager = ({ notifications }) => {
   const componentsByTypes = {
     [NOTIFICATION_SUCCESS]: NotificationSuccess,
     [NOTIFICATION_INFO]: NotificationInfo,

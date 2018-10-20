@@ -97,6 +97,7 @@ let NoteToolbar = class extends Component {
     ];
 
     const itemsEditing = [
+      // FIXME: `onClick` event doesn't trigger when input is focused. Wtf?
       <button
         type="button"
         onClick={onSave}

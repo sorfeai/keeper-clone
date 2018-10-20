@@ -6,13 +6,12 @@ import {
   HIDE_TAGS_MODAL,
   CREATE_TAG,
   DELETE_TAG,
-  SAVE_EDITED_TAG,
+  UPDATE_TAG,
+  START_EDITING_TAG,
+  END_EDITING_TAG,
 } from '../constants/types';
 
 
-/**
-* default state
-*/
 const defaultState = fromJS({
   byId: {
     '01': {
@@ -26,52 +25,60 @@ const defaultState = fromJS({
   },
   allIds: ['01', '02'],
   isModalShown: false,
+  editingId: null,
 });
 
 
-/**
-* reducer
-*/
 const tagsReducer = (state = defaultState, action) => {
   switch (action.type) {
     case CREATE_TAG: {
       const id = uuid.create();
+      const { title } = action.payload;
+
       return state
-        .updateIn(
+        .update(
           'byId',
-          (byId) => byId.set(
-            id,
-            { id, title: action.payload.title }
-          )
+          (byId) => byId.set(id, fromJS({ id, title }))
         )
-        .updateIn(
+        .update(
           'allIds',
           (allIds) => allIds.push(id)
         );
     }
-    case DELETE_TAG:
+    case UPDATE_TAG: {
+      const { id, title } = action.payload;
+
       return state
         .updateIn(
+          ['byId', id],
+          (tag) => tag.set('title', title)
+        );
+    }
+    case DELETE_TAG: {
+      const { ids: payloadIds } = action.payload;
+
+      return state
+        .update(
           'byId',
           (tags) => tags.filterNot((tag) =>
-            action.payload.ids.includes(tag.get('id'))
+            payloadIds.includes(tag.get('id'))
           )
         )
-        .updateIn(
+        .update(
           'allIds',
-          (ids) => ids.filterNot(
-            (id) => action.payload.ids.includes(id)
+          (ids) => ids.filterNot((id) =>
+            payloadIds.includes(id)
           )
         );
+      }
     case SHOW_TAGS_MODAL:
       return state.set('isModalShown', true);
     case HIDE_TAGS_MODAL:
       return state.set('isModalShown', false);
-    case SAVE_EDITED_TAG:
-      return state.updateIn(
-        ['byId', action.payload.id],
-        (tag) => tag.merge(action.payload.data)
-      );
+    case START_EDITING_TAG:
+      return state.set('editingId', action.payload.id);
+    case END_EDITING_TAG:
+      return state.set('editingId', null);
     default:
       return state;
   }

@@ -11,17 +11,17 @@ let TextInput = ({
   defaultValue,
   input,
   onRef,
+  appearance,
   isFullwidth,
-  isSeamless,
-  isRound,
   isBoldText,
   ...restProps
 }) => {
   const cls = classNames({
     [style.textInput]: true,
+    'input is-rounded': appearance === 'rounded',
+    [style.isSeamless]: appearance === 'seamless',
+    [style.isLine]: appearance === 'line',
     [style.isFullwidth]: isFullwidth,
-    [style.isSeamless]: isSeamless,
-    [style.isRound]: isRound,
     [style.isBoldText]: isBoldText,
   });
 

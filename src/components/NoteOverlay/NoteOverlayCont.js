@@ -83,7 +83,7 @@ let NoteOverlayCont = class extends Component {
 
 NoteOverlayCont.propTypes = {
   // state
-  tags: ImmutablePropTypes.list.isRequired,
+  tags: ImmutablePropTypes.map.isRequired,
   selecting: PropTypes.bool,
 
   // actions

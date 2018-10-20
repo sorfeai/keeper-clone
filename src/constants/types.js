@@ -1,5 +1,5 @@
 /**
-* action types
+* Action types
 */
 export const SET_PAGE = 'SET_PAGE';
 export const TOGGLE_FEED_VIEW = 'TOGGLE_FEED_VIEW';
@@ -31,19 +31,23 @@ export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const SAVE_EDITED_NOTE = 'SAVE_EDITED_NOTE';
 export const SHOW_TAGS_MODAL = 'SHOW_TAGS_MODAL';
 export const HIDE_TAGS_MODAL = 'HIDE_TAGS_MODAL';
+export const SUBMIT_CREATE_TAG = 'SUBMIT_CREATE_TAG';
+export const SUBMIT_EDIT_TAG = 'SUBMIT_EDIT_TAG';
 export const CREATE_TAG = 'CREATE_TAG';
 export const DELETE_TAG = 'DELETE_TAG';
-export const SAVE_EDITED_TAG = 'SAVE_EDITED_TAG';
+export const START_EDITING_TAG = 'START_EDITING_TAG';
+export const END_EDITING_TAG = 'END_EDITING_TAG';
+export const UPDATE_TAG = 'UPDATE_TAG';
 
 
 /**
-* deletionId types
+* Deletion types
 */
 export const DELETION_DELETE = 'DELETION_DELETE';
 
 
 /**
-* notification types
+* Notification types
 */
 export const NOTIFICATION_SUCCESS = 'NOTIFICATION_SUCCESS';
 export const NOTIFICATION_INFO = 'NOTIFICATION_INFO';
@@ -52,14 +56,14 @@ export const NOTIFICATION_DANGER = 'NOTIFICATION_DANGER';
 
 
 /**
-* pages
+* Pages
 */
 export const PAGE_HOME = 'PAGE_HOME';
 export const PAGE_TRASH = 'PAGE_TRASH';
 
 
 /**
-* refresh statuses
+* Refresh statuses
 */
 export const REFRESH_IN_PROGRESS = 'REFRESH_IN_PROGRESS';
 export const REFRESH_ERROR = 'REFRESH_ERROR';

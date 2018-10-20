@@ -56,7 +56,7 @@ const NoteView = ({
           component={TextInput}
           type="text"
           name="title"
-          isSeamless
+          appearance="seamless"
           isFullwidth
           isBoldText
         />
@@ -66,7 +66,7 @@ const NoteView = ({
           component={Textarea}
           name="content"
           onChangeCustom={onContentInputChange}
-          isSeamless
+          appearance="seamless"
           isFullwidth
           isAutosized
         />

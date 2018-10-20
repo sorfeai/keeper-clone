@@ -104,7 +104,7 @@ NoteOverlayView.propTypes = {
   onPin: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  onAddTags: PropTypes.func.isRequired,
+  // onAddTags: PropTypes.func.isRequired,
   onMoveToTrash: PropTypes.func.isRequired,
   onRestore: PropTypes.func.isRequired,
   onDeleteForever: PropTypes.func.isRequired,

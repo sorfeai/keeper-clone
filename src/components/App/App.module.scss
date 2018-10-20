@@ -4,7 +4,7 @@
   padding-top: 8rem;
   transition: left .2s ease-out;
 
-  &.mainMenuActive {
+  &.isMainMenuActive {
     left: 8rem;
   }
 }
