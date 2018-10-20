@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NotificationHOC } from '..';
-import style from './Notifications.module.scss';
+import style from './Notification.module.scss';
 
 
-let Notification = ({
+const NotificationView = ({
   message,
   onClose,
   action,
@@ -12,7 +11,7 @@ let Notification = ({
 }) => (
   <div className={`notification is-${color}`}>
     <button
-      type="submit"
+      type="button"
       onClick={onClose}
       className="delete"
     />
@@ -25,7 +24,7 @@ let Notification = ({
       {action && (
         <div className={style.cancel}>
           <button
-            type="submit"
+            type="button"
             onClick={action}
             className="button is-primary is-inverted is-outlined"
           >
@@ -38,9 +37,6 @@ let Notification = ({
 );
 
 
-/**
-* prop types
-*/
 Notification.propTypes = {
   message: PropTypes.string.isRequired,
   action: PropTypes.func,
@@ -59,6 +55,4 @@ Notification.defaultProps = {
 };
 
 
-Notification = NotificationHOC(Notification);
-
-export { Notification };
+export { NotificationView };

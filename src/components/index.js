@@ -1,5 +1,4 @@
 export { AnimateMount } from './AnimateMount';
-export { NotificationHOC } from './NotificationHOC';
 export { PageHOC } from './PageHOC';
 export { App } from './App';
 export { EditNote } from './EditNote';

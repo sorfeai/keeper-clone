@@ -9,6 +9,13 @@ const AnimateMount = class extends Component {
     animate: null,
   }
 
+  componentDidMount () {
+    const { isMounted } = this.props;
+    if (isMounted) {
+      this.handleMount();
+    }
+  }
+
   componentDidUpdate ({ isMounted: prevIsMounted }) {
     const { isMounted, classNames: { unmount } } = this.props;
 

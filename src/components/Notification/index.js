@@ -1,1 +1,2 @@
-export { Notification } from './Notification';
+export { NotificationCont as Notification } from './NotificationCont';
+export { NotificationView } from './NotificationView';

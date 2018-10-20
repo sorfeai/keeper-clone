@@ -2,26 +2,10 @@
   width: 24rem;
 }
 
+.ntfWrapper:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
 .cancel {
   margin-left: 2rem;
-}
-
-
-/* -------- animation -------- */
-.fadeEnter {
-  opacity: 0.01;
-}
-
-.fadeEnterActive {
-  opacity: 1;
-  transition: opacity .5s ease-in;
-}
-
-.fadeExit {
-  opacity: 1;
-}
-
-.fadeExitActive {
-  opacity: 0.01;
-  transition: opacity .5s ease-in;
 }

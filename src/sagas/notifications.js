@@ -15,9 +15,6 @@ import {
 } from '../actions';
 
 
-/**
-* moved to trash
-*/
 const notifyMovedToTrash = function* (action) {
   const { ids } = action.payload;
   const notesCount = ids.size ? ids.size : ids.length;
@@ -37,9 +34,6 @@ const watchMoveNotesToTrash = function* () {
 };
 
 
-/**
-* deleted forever
-*/
 const notifyNotesDeleted = function* (action) {
   const { ids } = action.payload;
   const notesCount = ids.size ? ids.size : ids.length;

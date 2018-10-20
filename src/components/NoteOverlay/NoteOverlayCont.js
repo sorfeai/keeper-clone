@@ -37,19 +37,16 @@ let NoteOverlayCont = class extends Component {
   handleMoveToTrash = () => {
     const { id, moveNotesToTrash } = this.props;
     moveNotesToTrash(id);
-    this.hideOtherMenu();
   }
 
   handleRestore = () => {
     const { id, restoreNotesFromTrash } = this.props;
     restoreNotesFromTrash(id);
-    this.hideOtherMenu();
   }
 
   handleDeleteForever = () => {
     const { id, deleteNotes } = this.props;
     deleteNotes(id);
-    this.hideOtherMenu();
   }
 
   saveEdited = () => {

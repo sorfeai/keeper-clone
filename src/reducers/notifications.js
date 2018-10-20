@@ -36,7 +36,7 @@ const notificationsReducer = (state = defaultState, action) => {
         // })
       }
 
-      return state.update('notification', (ntfs) => ntfs.push(notification));
+      return state.update('notifications', (ntfs) => ntfs.push(notification));
     }
     case HIDE_NOTIFICATION:
       return state.update('notifications', (ntfs) => ntfs.filterNot(

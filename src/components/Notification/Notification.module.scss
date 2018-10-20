@@ -1,0 +1,20 @@
+.ntfWrapper {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .4s cubic-bezier(0.215, 0.61, 0.355, 1),
+              transform .4s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+  &.isShown {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.isHidden {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.cancel {
+  margin-left: 2rem;
+}

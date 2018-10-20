@@ -12,7 +12,11 @@ import {
   NOTIFICATION_DANGER,
 } from '../../constants/types';
 
-import { Notification } from '..';
+import {
+  Notification,
+  AnimateMount,
+} from '..';
+
 import style from './NotificationsManager.module.scss';
 
 
@@ -64,18 +68,17 @@ let NotificationsManager = ({
         const message = ntf.get('message');
         const action = ntf.get('action');
 
-        const CompName = componentsByTypes[type];
-        const onClose = () => hideNotification(id);
+        const NotificationType = componentsByTypes[type];
 
         return (
-          <CompName
-            key={id}
-            id={id}
-            message={message}
-            onClose={onClose}
-            action={action}
-            expires={NOTIFICATION_LIFE_TIME}
-          />
+          <div key={id} className={style.ntfWrapper}>
+            <NotificationType
+              id={id}
+              message={message}
+              action={action}
+              expires={NOTIFICATION_LIFE_TIME}
+            />
+          </div>
         );
       })}
     </div>
@@ -83,9 +86,6 @@ let NotificationsManager = ({
 };
 
 
-/**
-* prop types
-*/
 NotificationsManager.propTypes = {
   notifications: ImmutablePropTypes.list.isRequired,
   hideNotification: PropTypes.func.isRequired,
@@ -93,9 +93,6 @@ NotificationsManager.propTypes = {
 };
 
 
-/**
-* connect to state
-*/
 const mapStateToProps = (state) => ({
   notifications: state.notifications.get('notifications'),
 });
