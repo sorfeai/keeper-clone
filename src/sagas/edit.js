@@ -16,7 +16,7 @@ const saveNote = function* () {
   const content = yield select(getEditNoteFormContent);
   const errors = yield select(getEditNoteFormErrors);
 
-  if (!errors) {
+  if (!errors || errors === {}) {
     yield put(updateNote(id, { title, content }));
   }
 
@@ -24,7 +24,7 @@ const saveNote = function* () {
 };
 
 
-const watchSave = function* () {
+export const watchSave = function* () {
   yield takeLatest(SAVE_EDITED_NOTE, saveNote);
 };
 
