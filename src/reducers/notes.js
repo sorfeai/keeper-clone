@@ -1,4 +1,4 @@
-import { fromJS, List, Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 import {
   UPDATE_NOTE,
@@ -7,9 +7,6 @@ import {
 } from '../constants/types';
 
 
-/**
-* default state
-*/
 const defaultState = fromJS({
   byId: {
     1: {
@@ -43,9 +40,6 @@ const defaultState = fromJS({
 });
 
 
-/**
-* reducer
-*/
 const notesReducer = (state = defaultState, action) => {
   switch (action.type) {
     case UPDATE_NOTE: {

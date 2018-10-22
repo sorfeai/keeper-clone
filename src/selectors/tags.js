@@ -1,4 +1,4 @@
-export const getTagById = (id) => (state) =>
+export const getTagById = (state, id) =>
   state.tags.getIn(['byId', id]);
 
 export const getCreateTagValue = (state) =>

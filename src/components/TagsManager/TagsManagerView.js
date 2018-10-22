@@ -14,7 +14,6 @@ const TagsManagerView = ({
   isModalShown,
   onModalClose,
   onHideTagsModal,
-  onCreateTag,
   onDeleteTags,
   onStartEditingTag,
   onEndEditingTag,
@@ -53,7 +52,7 @@ const TagsManagerView = ({
     </div>
   );
 
-  const renderTagEditing = (id, title) => (
+  const renderTagEditing = (id) => (
     <div key={id} className={`${style.tagItem} level`}>
       <div className='level-left'>
         <div className={`${style.tagTitle} level-item`}>

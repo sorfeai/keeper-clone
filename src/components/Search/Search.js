@@ -58,10 +58,6 @@ const Dummy = class extends Component {
 };
 
 
-/**
-* connect to store
-*/
-
 const mapStateToProps = (state) => ({
   searching: state.common.searching,
   searchQuery: state.common.searchQuery,
@@ -69,10 +65,6 @@ const mapStateToProps = (state) => ({
 
 Search = connect(mapStateToProps, { focus })(Search);
 
-
-/**
-* connect to redux-form
-*/
 
 Search = reduxForm({ form: 'search' })(Search);
 

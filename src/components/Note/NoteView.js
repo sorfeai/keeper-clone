@@ -80,22 +80,22 @@ const NoteView = ({
   })(EditForm);
 
   const note = (
-      <Box className={noteCls}>
-        <div className={style.inner}>
-          <div className={style.overlayWrapper}>
-            <NoteOverlay
-              id={id}
-              isInTrash={isInTrash}
-              isPinned={isPinned}
-              isSelected={isSelected}
-              isEditing={isEditing}
-            />
-          </div>
-          <div className={style.content}>
-            {isEditing ? <EditForm /> : preview}
-          </div>
+    <Box className={noteCls}>
+      <div className={style.inner}>
+        <div className={style.overlayWrapper}>
+          <NoteOverlay
+            id={id}
+            isInTrash={isInTrash}
+            isPinned={isPinned}
+            isSelected={isSelected}
+            isEditing={isEditing}
+          />
         </div>
-      </Box>
+        <div className={style.content}>
+          {isEditing ? <EditForm /> : preview}
+        </div>
+      </div>
+    </Box>
   );
 
   return (

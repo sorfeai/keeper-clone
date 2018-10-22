@@ -23,14 +23,14 @@ import {
 } from '../constants/types';
 
 
-const initializeCreate = function* () {
+export const initializeCreate = function* () {
   yield delay(0);
   yield put(focus('tags', 'create'));
 };
 
 const initializeEdit = function* (action) {
   const { id } = action.payload;
-  const tag = yield select(getTagById(id));
+  const tag = yield select(getTagById, id);
   const title = tag.get('title');
 
   yield put(initialize('tags', { edit: title }));
@@ -56,19 +56,19 @@ const updateTag = function* () {
 };
 
 
-const watchShowTagsModal = function* () {
+export const watchShowTagsModal = function* () {
   yield takeLatest(SHOW_TAGS_MODAL, initializeCreate);
 };
 
-const watchStartEditingTag = function* () {
+export const watchStartEditingTag = function* () {
   yield takeLatest(START_EDITING_TAG, initializeEdit);
 };
 
-const watchSubmitCreateTag = function* () {
+export const watchSubmitCreateTag = function* () {
   yield takeLatest(SUBMIT_CREATE_TAG, createTag);
 };
 
-const watchSubmitEditTag = function* () {
+export const watchSubmitEditTag = function* () {
   yield takeLatest(SUBMIT_EDIT_TAG, updateTag);
 };
 

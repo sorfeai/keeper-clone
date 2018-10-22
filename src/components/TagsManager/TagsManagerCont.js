@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm } from 'redux-form';
 
 import { TagsManagerView } from './TagsManagerView';
-import style from './TagsManager.module.scss';
 
 import {
   createTag,
@@ -21,7 +20,6 @@ import {
 let TagsManagerCont = class extends Component {
   handleModalClose = () => {
     const { hideTagsModal } = this.props;
-    // this.saveEdited();
     hideTagsModal();
   }
 

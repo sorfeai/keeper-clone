@@ -23,7 +23,7 @@ const IconButton = ({
 
   const handleClick = disabled ? undefined : onClick;
 
-  const regular = () => (
+  const regular = (
     <button
       type="button"
       onClick={handleClick}
@@ -33,7 +33,7 @@ const IconButton = ({
     </button>
   );
 
-  const withTooltip = () => (
+  const withTooltip = (
     <Tooltip
       text={tooltip}
       alignRight={alignTooltipRight}
@@ -50,15 +50,11 @@ const IconButton = ({
 
   return (
     <div className={className}>
-      {(!tooltip || disabled) ? regular() : withTooltip()}
+      {(!tooltip || disabled) ? regular : withTooltip}
     </div>
   );
 };
 
-
-/**
-* prop types/defaults
-*/
 
 IconButton.propTypes = {
   onClick: PropTypes.func,

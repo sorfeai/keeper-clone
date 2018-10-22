@@ -68,11 +68,13 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
+    "verbose": false,
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"
     ],
     "setupFiles": [
-      "<rootDir>/config/polyfills.js"
+      "<rootDir>/config/polyfills.js",
+      "<rootDir>/tests/setup.js"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
@@ -83,6 +85,7 @@
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^.+\\.scss$": "<rootDir>/node_modules/jest-css-modules-transform",
       "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
@@ -112,9 +115,14 @@
     "babel-preset-airbnb": "^3.0.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
+    "jest-css-modules": "^1.1.0",
+    "jest-css-modules-transform": "^2.1.1",
+    "jest-immutable-matchers": "^2.0.1",
     "node-sass": "^4.9.3",
+    "react-test-renderer": "^16.5.2",
     "redux-devtools-extension": "^2.13.5",
     "redux-logger": "^3.0.6",
+    "redux-saga-test-plan": "^3.7.0",
     "sass-loader": "^7.1.0"
   }
 }

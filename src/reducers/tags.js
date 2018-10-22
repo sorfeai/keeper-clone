@@ -13,17 +13,8 @@ import {
 
 
 const defaultState = fromJS({
-  byId: {
-    '01': {
-      id: '01',
-      title: 'useless notes',
-    },
-    '02': {
-      id: '02',
-      title: 'useful notes',
-    },
-  },
-  allIds: ['01', '02'],
+  byId: {},
+  allIds: [],
   isModalShown: false,
   editingId: null,
 });

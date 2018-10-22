@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { NavLink } from 'react-router-dom';
+import { Icon } from 'react-bulma-components/full';
 import uuid from 'small-uuid';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -127,10 +128,6 @@ let MainMenu = ({
   );
 };
 
-
-/**
-* prop types/defaults
-*/
 
 MainMenu.propTypes = {
   isActive: PropTypes.bool,

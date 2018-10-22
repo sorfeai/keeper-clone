@@ -1,7 +1,6 @@
 export { AnimateMount } from './AnimateMount';
 export { PageHOC } from './PageHOC';
 export { App } from './App';
-export { EditNote } from './EditNote';
 export { FocusHOC } from './FocusHOC';
 export { Header } from './Header';
 export { IconButton } from './IconButton';

@@ -37,7 +37,7 @@ const NotificationView = ({
 );
 
 
-Notification.propTypes = {
+NotificationView.propTypes = {
   message: PropTypes.string.isRequired,
   action: PropTypes.func,
   onClose: PropTypes.func,
@@ -50,7 +50,7 @@ Notification.propTypes = {
   ]),
 };
 
-Notification.defaultProps = {
+NotificationView.defaultProps = {
   color: 'primary',
 };
 
