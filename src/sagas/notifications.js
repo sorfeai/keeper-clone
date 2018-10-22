@@ -29,11 +29,6 @@ const notifyMovedToTrash = function* (action) {
   ));
 };
 
-const watchMoveNotesToTrash = function* () {
-  yield takeLatest(MOVE_NOTES_TO_TRASH, notifyMovedToTrash);
-};
-
-
 const notifyNotesDeleted = function* (action) {
   const { ids } = action.payload;
   const notesCount = ids.size ? ids.size : ids.length;
@@ -44,7 +39,12 @@ const notifyNotesDeleted = function* (action) {
   ));
 };
 
-const watchDeleteNotes = function* () {
+
+export const watchMoveNotesToTrash = function* () {
+  yield takeLatest(MOVE_NOTES_TO_TRASH, notifyMovedToTrash);
+};
+
+export const watchDeleteNotes = function* () {
   yield takeLatest(DELETE_NOTES, notifyNotesDeleted);
 };
 
