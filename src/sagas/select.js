@@ -29,7 +29,7 @@ const toggleSelect = function* (action) {
 };
 
 
-const watchToggleSelect = function* () {
+export const watchToggleSelect = function* () {
   yield takeLatest(TOGGLE_SELECT_NOTE, toggleSelect);
 };
 

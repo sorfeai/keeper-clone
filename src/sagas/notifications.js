@@ -49,9 +49,6 @@ const watchDeleteNotes = function* () {
 };
 
 
-/**
-* export forked
-*/
 const forked = [
   fork(watchMoveNotesToTrash),
   fork(watchDeleteNotes),
