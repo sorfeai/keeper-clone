@@ -14,7 +14,7 @@ import {
 } from '../notifications';
 
 
-describe('pin sagas', () => {
+describe('notifications sagas', () => {
   describe('MOVE_NOTES_TO_TRASH', () => {
     it('dispatches showNotification(type, message)', () => {
       const ids = [1, 2, 3];

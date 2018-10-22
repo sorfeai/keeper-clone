@@ -15,7 +15,7 @@ import {
 } from '../../selectors';
 
 
-describe('pin sagas', () => {
+describe('edit sagas', () => {
   describe('SAVE_EDITED_NOTE', () => {
     it('dispatches updateNote(id, data) and endEditingNote() if no errors', () => {
       const id = 0;

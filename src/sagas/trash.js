@@ -11,7 +11,7 @@ const delNotes = function* () {
   yield put(emptyTrash());
 };
 
-const watchClearTrash = function* () {
+export const watchClearTrash = function* () {
   yield takeLatest(CLEAR_TRASH, delNotes);
 };
 
