@@ -11,7 +11,7 @@ import {
 } from '../../actions';
 
 
-describe('select saga', () => {
+describe('select sagas', () => {
   describe('TOGGLE_SELECT_NOTE', () => {
     it('sets to true if note isn\'t selected', () => {
       const id = 1;

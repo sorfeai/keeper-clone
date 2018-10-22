@@ -27,7 +27,7 @@ import {
 } from '../../selectors';
 
 
-describe('tags saga', () => {
+describe('tags sagas', () => {
   it('`SHOW_TAGS_MODAL`: focuses `create tag` input', () => {
     return expectSaga(watchShowTagsModal)
       .put(focus('tags', 'create'))

@@ -31,7 +31,7 @@ const togglePin = function* (action) {
 };
 
 
-const watchTogglePin = function* () {
+export const watchTogglePin = function* () {
   yield takeLatest(TOGGLE_PIN_NOTES, togglePin);
 };
 
