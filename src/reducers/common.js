@@ -1,5 +1,4 @@
-import uuid from 'small-uuid';
-import { fromJS, List, Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 import {
   PAGE_HOME,
@@ -11,14 +10,9 @@ import {
   ENTER_SEARCH_MODE,
   EXIT_SEARCH_MODE,
   TOGGLE_MAIN_MENU,
-  UPDATE_NOTE,
-  DELETE_NOTES,
 } from '../constants/types';
 
 
-/**
-* default state
-*/
 const defaultState = fromJS({
   currentPage: PAGE_HOME,
   mainMenuActive: false,
@@ -27,18 +21,15 @@ const defaultState = fromJS({
   searchQuery: '',
   refreshStatus: null,
   user: {
-    username: '@aisorfe',
-    firstName: 'Nikita',
-    lastName: 'Belousov',
-    email: 'seriouscat1001@gmail.com',
-    avatar: 'user-avatar.jpg',
+    // username: '@aisorfe',
+    // firstName: 'Nikita',
+    // lastName: 'Belousov',
+    // email: 'seriouscat1001@gmail.com',
+    // avatar: 'user-avatar.jpg',
   },
 });
 
 
-/**
-* reducer
-*/
 const commonReducer = (state = defaultState, action) => {
   switch (action.type) {
     case SET_PAGE:

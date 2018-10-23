@@ -9,3 +9,13 @@
 .pinnedNotesSection {
   margin-bottom: 1.8rem;
 }
+
+
+// dummy classes for ui unit tests
+.notesFeed,
+.notesGrid,
+.notesList,
+.sectionPinned,
+.sectionUnpinned {
+  visibility: normal;
+}

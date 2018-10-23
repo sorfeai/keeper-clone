@@ -1,6 +1,8 @@
-import { fromJS } from 'immutable';
+import uuid from 'small-uuid';
+import { fromJS, Map, List } from 'immutable';
 
 import {
+  CREATE_NOTE,
   UPDATE_NOTE,
   TAG_NOTE,
   DELETE_NOTES,
@@ -8,40 +10,24 @@ import {
 
 
 const defaultState = fromJS({
-  byId: {
-    1: {
-      id: '1',
-      deleting: false,
-      title: 'Todo List',
-      content: `One, two... and finally three! One, two...
-        and finally three! One, two...
-        and finally three! One, two... and finally three!`,
-    },
-    2: {
-      id: '2',
-      deleting: false,
-      title: 'Todo List',
-      content: 'One, two... and finally three!',
-    },
-    3: {
-      id: '3',
-      deleting: false,
-      title: 'Todo List',
-      content: 'One, two... and finally three!',
-    },
-    4: {
-      id: '4',
-      deleting: false,
-      title: 'Todo List',
-      content: 'One, two... and finally three!',
-    },
-  },
-  allIds: ['1', '2', '3'],
+  byId: {},
+  allIds: [],
 });
 
 
 const notesReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case CREATE_NOTE: {
+      const generatedId = uuid.create();
+      const { id = generatedId, title, content, tags } = action.payload;
+
+      return state
+        .update('byId', (notes) => notes.set(id, Map({
+          id, title, content,
+          tags: tags ? List().concat(tags) : List(),
+        })))
+        .update('allIds', (ids) => ids.push(id));
+    }
     case UPDATE_NOTE: {
       const { id, changes } = action.payload;
       return state.updateIn(['byId', id], (note) => note.merge(changes));
@@ -60,13 +46,14 @@ const notesReducer = (state = defaultState, action) => {
         );
     }
     case TAG_NOTE: {
-      const { noteId, tagId } = action.payload;
+      const { noteId, tagIds } = action.payload;
 
-      return state.map((note) => {
+      return state.update('byId', (notes) => notes.map((note) => {
         if (note.get('id') === noteId) {
-          return note.update('tags', (tags) => tags.push(tagId));
-        } return note;
-      });
+          return note.update('tags', (tags) => tags.concat(tagIds));
+        }
+        return note;
+      }));
     }
     default:
       return state;

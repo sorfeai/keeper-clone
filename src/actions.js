@@ -2,8 +2,9 @@ import {
   SET_PAGE,
   TOGGLE_FEED_VIEW,
   CLEAR_SELECTION,
-  TOGGLE_SELECT_MODE,
+  TOGGLE_IS_SELECTING,
   TOGGLE_SELECT_NOTE,
+  CREATE_NOTE,
   SELECT_NOTE,
   DESELECT_NOTE,
   TAG_NOTE,
@@ -53,7 +54,7 @@ export const clearSelection = () => ({
 });
 
 export const toggleSelectMode = () => ({
-  type: TOGGLE_SELECT_MODE,
+  type: TOGGLE_IS_SELECTING,
 });
 
 export const toggleSelectNote = (id) => ({
@@ -71,9 +72,9 @@ export const deselectNote = (id) => ({
   payload: { id },
 });
 
-export const tagNote = (noteId, tagId) => ({
+export const tagNote = (noteId, tagIds) => ({
   type: TAG_NOTE,
-  payload: { noteId, tagId },
+  payload: { noteId, tagIds },
 });
 
 export const moveNotesToTrash = (ids) => ({
@@ -99,9 +100,9 @@ export const deleteNotes = (ids) => ({
   payload: { ids },
 });
 
-export const showNotification = (type, message, action) => ({
+export const showNotification = ({ id, type, message, action }) => ({
   type: SHOW_NOTIFICATION,
-  payload: { type, message, action },
+  payload: { id, type, message, action },
 });
 
 export const hideNotification = (id) => ({
@@ -157,6 +158,11 @@ export const startEditingNote = (id, title, content)  => ({
 
 export const endEditingNote = () => ({
   type: END_EDITING_NOTE,
+});
+
+export const createNote = ({ id, title, content, tags }) => ({
+  type: CREATE_NOTE,
+  payload: { id, title, content, tags },
 });
 
 export const updateNote = (id, changes) => ({

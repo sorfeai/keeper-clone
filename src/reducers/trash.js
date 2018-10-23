@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import { Map, List } from 'immutable';
 
 import {
   MOVE_NOTES_TO_TRASH,
@@ -8,30 +8,25 @@ import {
 } from '../constants/types';
 
 
-/**
-* default state
-*/
-const defaultState = fromJS({
-  notesById: [],
+const defaultState = Map({
+  notesIds: List(),
 });
 
 
-/**
-* reducer
-*/
 const trashReducer = (state = defaultState, action) => {
   switch (action.type) {
     case MOVE_NOTES_TO_TRASH:
-      return state.update('notesById',
+      return state.update('notesIds',
         (notes) => notes.concat(action.payload.ids));
     case RESTORE_NOTES_FROM_TRASH:
-      return state.update('notesById',
-        (notes) => notes.filterNot((id) => action.payload.ids.includes(id)));
-    case DELETE_NOTES:
-      return state.update('notesById',
-        (notes) => notes.filterNot((id) => action.payload.ids.includes(id)));
+    case DELETE_NOTES: {
+      const { ids } = action.payload;
+      return state.update('notesIds', (notes) => (
+        notes.filterNot((id) => ids.includes(id))
+      ));
+    }
     case EMPTY_TRASH:
-      return state.update('notesById', (notes) => notes.clear());
+      return state.update('notesIds', (notes) => notes.clear());
     default:
       return state;
   }

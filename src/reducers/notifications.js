@@ -1,5 +1,5 @@
 import uuid from 'small-uuid';
-import { fromJS, Map } from 'immutable';
+import { Map, List } from 'immutable';
 
 import {
   SHOW_NOTIFICATION,
@@ -7,41 +7,39 @@ import {
 } from '../constants/types';
 
 
-/**
-* default state
-*/
-const defaultState = fromJS({
-  notifications: [],
+const defaultState = Map({
+  byId: Map(),
+  allIds: List(),
 });
 
 
-/**
-* reducer
-*/
 const notificationsReducer = (state = defaultState, action) => {
   switch (action.type) {
     case SHOW_NOTIFICATION: {
-      const id = uuid.create();
-      const notification = Map({
-        id,
-        type: action.payload.type,
-        message: action.payload.message,
-      });
+      const { id = uuid.create(), type, message } = action.payload;
+      const notification = Map({ id, type, message });
 
       // FIXME: move this functionality to saga
-      if (action.payload.action) {
+      // if (action.payload.action) {
         // notification = notification.set('action', () => {
         //   store.dispatch(hideNotification(id))
         //   action.payload.action()
         // })
-      }
+      // }
 
-      return state.update('notifications', (ntfs) => ntfs.push(notification));
+      return state
+        .update('byId', (notfs) => notfs.set(id, notification))
+        .update('allIds', (ids) => ids.push(id));
     }
-    case HIDE_NOTIFICATION:
-      return state.update('notifications', (ntfs) => ntfs.filterNot(
-        (ntf) => ntf.get('id') === action.payload.id
-      ));
+    case HIDE_NOTIFICATION: {
+      const { id: removeId } = action.payload;
+
+      return state
+        .update('byId', (notfs) => notfs.delete(removeId))
+        .update('allIds', (ids) => (
+          ids.filterNot((id) => id === removeId)
+        ));
+    }
     default:
       return state;
   }

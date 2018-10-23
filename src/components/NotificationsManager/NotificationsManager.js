@@ -9,7 +9,7 @@ import {
   NOTIFICATION_SUCCESS,
   NOTIFICATION_INFO,
   NOTIFICATION_WARNING,
-  NOTIFICATION_DANGER,
+  NOTIFICATION_ERROR,
 } from '../../constants/types';
 
 import { Notification } from '..';
@@ -50,7 +50,7 @@ let NotificationsManager = ({ notifications }) => {
     [NOTIFICATION_SUCCESS]: NotificationSuccess,
     [NOTIFICATION_INFO]: NotificationInfo,
     [NOTIFICATION_WARNING]: NotificationWarning,
-    [NOTIFICATION_DANGER]: NotificationDanger,
+    [NOTIFICATION_ERROR]: NotificationDanger,
   };
 
   return (

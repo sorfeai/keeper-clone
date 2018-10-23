@@ -52,8 +52,13 @@ const NotesFeedView = ({
     const notes = isPinned ? pinned : other;
     const heading = isPinned ? 'Pinned' : 'Other';
 
+    const cls = classNames({
+      [style.sectionPinned]: isPinned,
+      [style.sectionUnpinned]: !isPinned,
+    });
+
     return (
-      <div>
+      <div className={cls}>
         {hasPinned && (
           <Heading subtitle size={6}>
             <div className="heading">{heading}</div>
@@ -80,8 +85,14 @@ const NotesFeedView = ({
     <div>{notes.map(renderNote)}</div>
   );
 
+  const cls = classNames({
+    [style.notesFeed]: true,
+    [style.notesGrid]: isGrid,
+    [style.notesList]: !isGrid,
+  });
+
   return (
-    <div className={style.notesFeed}>
+    <div className={cls}>
       {hasPinned && renderSection(true)}
       {hasUnpinned && renderSection()}
     </div>

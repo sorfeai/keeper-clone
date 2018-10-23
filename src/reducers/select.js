@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 
 import {
-  TOGGLE_SELECT_MODE,
+  TOGGLE_IS_SELECTING,
   SELECT_NOTE,
   DESELECT_NOTE,
   CLEAR_SELECTION,
@@ -10,28 +10,30 @@ import {
 
 const defaultState = fromJS({
   selecting: false,
-  selectedNotes: [],
+  selectedIds: [],
 });
 
 
 const selectReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case TOGGLE_SELECT_MODE:
-      return state.update('selecting', (selecting) => !selecting);
-    case SELECT_NOTE:
+    case TOGGLE_IS_SELECTING:
+      return state.update('isSelecting', (selecting) => !selecting);
+    case SELECT_NOTE: {
+      const { id } = action.payload;
       return state
-        .update('selecting', (selecting) => selecting || true)
-        .update('selectedNotes', (notes) => notes.push(action.payload.id));
-    case DESELECT_NOTE:
+        .update('selectedIds', (notes) => notes.push(id));
+    }
+    case DESELECT_NOTE: {
+      const { id } = action.payload;
       return state
-        .set('selecting', state.get('selectedNotes').size > 1)
-        .update('selectedNotes', (notes) => notes.delete(
-          notes.indexOf(action.payload.id)
+        .update('selectedIds', (notes) => (
+          notes.delete(notes.indexOf(id))
         ));
+    }
     case CLEAR_SELECTION:
       return state
         .set('selecting', false)
-        .update('selectedNotes', (notes) => notes.clear());
+        .update('selectedIds', (notes) => notes.clear());
     default:
       return state;
   }
