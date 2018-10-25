@@ -1,4 +1,14 @@
 export {
+  getCurrentPage,
+  getIsGridView,
+} from './common';
+
+export {
+  getSearchQuery,
+} from './search';
+
+export {
+  getNotesRaw,
   getNoteById,
 } from './notes';
 

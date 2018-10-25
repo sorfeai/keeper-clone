@@ -1,4 +1,12 @@
 import {
+  FORMAT_NOTES_FOR_FEED,
+  FORMAT_NOTES_FOR_FEED_DONE,
+  APPLY_SEARCH_FILTER,
+  APPLY_SEARCH_FILTER_DONE,
+  SPLIT_BY_PIN,
+  SPLIT_BY_PIN_DONE,
+  SPLIT_TO_COLUMNS,
+  SPLIT_TO_COLUMNS_DONE,
   SET_PAGE,
   TOGGLE_FEED_VIEW,
   CLEAR_SELECTION,
@@ -39,6 +47,46 @@ import {
   UPDATE_TAG,
 } from './constants/types';
 
+
+export const splitToColumns = (data) => ({
+  type: SPLIT_TO_COLUMNS,
+  payload: { data },
+});
+
+export const splitToColumnsDone = (data) => ({
+  type: SPLIT_TO_COLUMNS,
+  payload: { data },
+});
+
+export const splitByPin = (data) => ({
+  type: SPLIT_BY_PIN,
+  payload: { data },
+});
+
+export const splitByPinDone = (pinned, other) => ({
+  type: SPLIT_BY_PIN_DONE,
+  payload: { pinned, other },
+});
+
+export const applySearchFilter = (data) => ({
+  type: APPLY_SEARCH_FILTER,
+  payload: { data },
+});
+
+export const applySearchFilterDone = (data) => ({
+  type: APPLY_SEARCH_FILTER_DONE,
+  payload: { data },
+});
+
+export const formatNotesForFeed = (data) => ({
+  type: FORMAT_NOTES_FOR_FEED,
+  payload: { data },
+});
+
+export const formatNotesForFeedDone = (data) => ({
+  type: FORMAT_NOTES_FOR_FEED_DONE,
+  payload: { data },
+});
 
 export const setPage = (page) => ({
   type: SET_PAGE,

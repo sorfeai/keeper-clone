@@ -27,21 +27,6 @@ let NotesFeedCont = class extends Component {
     return { pinned, other };
   }
 
-  applySearchFilter (data) {
-    const { searchQuery } = this.props;
-
-    const hasMatch = (note, field) => (
-      note
-      .get(field)
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-    );
-
-    return data.filter((note) => (
-      hasMatch(note, 'title') || hasMatch(note, 'content')
-    ));
-  }
-
   splitByPin () {
     const { notesData, notesInTrash, pinnedNotes } = this.props;
     const pinned = [];

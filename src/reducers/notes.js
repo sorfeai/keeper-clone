@@ -1,5 +1,5 @@
 import uuid from 'small-uuid';
-import { fromJS, Map, List } from 'immutable';
+import { Map, List } from 'immutable';
 
 import {
   CREATE_NOTE,
@@ -9,9 +9,10 @@ import {
 } from '../constants/types';
 
 
-const defaultState = fromJS({
-  byId: {},
-  allIds: [],
+const defaultState = Map({
+  byId: Map(),
+  allIds: List(),
+  formmated: Map(),
 });
 
 

@@ -14,7 +14,7 @@ import { IconButton } from '..';
 
 let Search = ({ focus }) => (
   <div className={style.wrapper}>
-    <form action="#">
+    <form>
       <Field
         component={Dummy}
         name="search"
