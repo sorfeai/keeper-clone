@@ -1,39 +1,44 @@
 export {
-  getCurrentPage,
-  getIsGridView,
-} from './common';
+  getApp,
+  getAppCurrentPage,
+  getAppIsMainMenuActive,
+  getAppIsFeedViewGrid,
+  getAppIsSearchingNotes,
+  getAppRefreshStatus,
+  getAppMaxColumns,
+  getAppUser,
+} from './app';
 
 export {
-  getSearchQuery,
-} from './search';
-
-export {
-  getNotesRaw,
-  getNoteById,
+  getNotes,
+  getNotesById,
+  getNotesAllIds,
+  getNotesNoteById,
+  getNotesFeed,
+  getNotesPinnedIds,
+  getNotesIsEditing,
+  getNotesEditingId,
+  getNotesIsSelecting,
+  getNotesSelectedIds,
 } from './notes';
 
 export {
-  getEditNoteId,
-  getEditNoteFormTitle,
-  getEditNoteFormContent,
-  getEditNoteFormErrors,
-} from './editNote';
+  getTags,
+  getTagsById,
+  getTagsTagById,
+  getTagsAllIds,
+  getTagsEditingId,
+  getTagsIsModalShown,
+} from './tags';
 
 export {
-  getNotesInTrash,
+  getTrash,
+  getTrashNotesIds,
 } from './trash';
 
 export {
-  getPinnedIds,
-} from './pin';
-
-export {
-  getSelectedIds,
-} from './select';
-
-export {
-  getTagById,
-  getCreateTagValue,
-  getEditTagValue,
-  getEditingTagId,
-} from './tags';
+  getNotifications,
+  getNotificationsById,
+  getNotificationById,
+  getNotificationsAllIds,
+} from './notifications';

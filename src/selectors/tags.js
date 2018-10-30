@@ -1,11 +1,29 @@
-export const getTagById = (state, id) =>
-  state.tags.getIn(['byId', id]);
+import { createSelector } from 'reselect';
 
-export const getCreateTagValue = (state) =>
-  state.form.tags.values.create;
 
-export const getEditTagValue = (state) =>
-  state.form.tags.values.edit;
+export const getTags = (state) => state.tags;
 
-export const getEditingTagId = (state) =>
-  state.tags.get('editingId');
+export const getTagsById = createSelector(
+  getTags,
+  (tags) => tags.get('byId')
+);
+
+export const getTagsTagById = (id) => createSelector(
+  getTagsById,
+  (byId) => byId.get(id)
+);
+
+export const getTagsAllIds = createSelector(
+  getTags,
+  (tags) => tags.get('allIds')
+);
+
+export const getTagsEditingId = createSelector(
+  getTags,
+  (tags) => tags.get('editingId')
+);
+
+export const getTagsIsModalShown = createSelector(
+  getTags,
+  (tags) => tags.get('isModalShown')
+);
