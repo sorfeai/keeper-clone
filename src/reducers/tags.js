@@ -1,5 +1,5 @@
 import uuid from 'small-uuid';
-import { fromJS } from 'immutable';
+import { Map, List } from 'immutable';
 
 import {
   SHOW_TAGS_MODAL,
@@ -12,9 +12,9 @@ import {
 } from '../constants/types';
 
 
-const defaultState = fromJS({
-  byId: {},
-  allIds: [],
+const defaultState = Map({
+  byId: Map(),
+  allIds: List(),
   isModalShown: false,
   editingId: null,
 });
@@ -29,7 +29,10 @@ const tagsReducer = (state = defaultState, action) => {
       return state
         .update(
           'byId',
-          (byId) => byId.set(id, fromJS({ id, title }))
+          (byId) => byId.set(
+            id,
+            Map({ id, title })
+          )
         )
         .update(
           'allIds',
