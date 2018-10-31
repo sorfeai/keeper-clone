@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 
 export const getNotes = (state) => state.notes;
 
-
 export const getNotesById = createSelector(
   getNotes,
   (notes) => notes.get('byId')

@@ -1,6 +1,7 @@
 /**
 * Action types
 */
+export const SET_USER = 'SET_USER';
 export const SET_MAX_COLUMNS = 'SET_MAX_COLUMNS';
 export const SEARCH_INPUT_UPDATED = 'SEARCH_INPUT_UPDATED';
 export const INIT_APP = 'INIT_APP';

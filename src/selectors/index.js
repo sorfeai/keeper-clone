@@ -10,6 +10,14 @@ export {
 } from './app';
 
 export {
+  getFormState,
+  getForm,
+  getFormValue,
+  getFormErrors,
+  getFieldErrors,
+} from './forms';
+
+export {
   getNotes,
   getNotesById,
   getNotesAllIds,
@@ -44,8 +52,10 @@ export {
 } from './notifications';
 
 export {
-  getFormState,
-  getForm,
-  getFormValue,
-  getFormErrors,
-} from './forms';
+  getUser,
+  getUserUsername,
+  getUserFirstName,
+  getUserLastName,
+  getUserEmail,
+  getUserAvatar,
+} from './user';

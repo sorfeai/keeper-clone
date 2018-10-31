@@ -22,12 +22,12 @@ describe('notes selectors', () => {
   });
 
   describe('`getNotes`', () => {
-    const notes = Map({
-      byId: Map(),
-      allIds: List(),
-    });
-
     it('gets notes state', () => {
+      const notes = Map({
+        byId: Map(),
+        allIds: List(),
+      });
+
       expect(
         getNotes({ notes })
       ).toEqualImmutable(notes);
@@ -35,12 +35,12 @@ describe('notes selectors', () => {
   });
 
   describe('`getNotesById`', () => {
-    const byId = Map({
-      one: Map({ title: 'test' }),
-    });
-    const state = Map({ byId });
-
     it('gets `byId`', () => {
+      const byId = Map({
+        one: Map({ title: 'test' }),
+      });
+      const state = Map({ byId });
+
       expect(
          getNotesById.resultFunc(state)
       ).toEqualImmutable(byId);
