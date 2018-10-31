@@ -1,5 +1,7 @@
 import * as matchers from 'jest-immutable-matchers';
 import { Map, List } from 'immutable';
+import { getTrashNotesIds } from '../../selectors';
+import rootReducer from '..';
 import trashReducer from '../trash';
 
 import {
@@ -31,50 +33,67 @@ describe('trash reducer', () => {
       const ids = ['one', 'two', 'three'];
 
       defaultState = ids.reduce((state, id) => (
-        trashReducer(state, moveNotesToTrash(id))
+        rootReducer(state, moveNotesToTrash(id))
       ), undefined);
     });
 
     it('`MOVE_NOTES_TO_TRASH`: adds provided id(s) to `notesIds`', () => {
       const ids = ['four', 'five'];
-      const state = trashReducer(
+      const state = rootReducer(
         defaultState,
         moveNotesToTrash(ids)
       );
 
-      expect(state.get('notesIds').includes(ids[0])).toBeTruthy();
-      expect(state.get('notesIds').includes(ids[1])).toBeTruthy();
+      expect(
+        getTrashNotesIds(state).includes(ids[0])
+      ).toBeTruthy();
+
+      expect(
+        getTrashNotesIds(state).includes(ids[1])
+      ).toBeTruthy();
     });
 
     it('`RESTORE_NOTES_FROM_TRASH`: removes provided id(s) from `notesIds`', () => {
       const ids = ['one', 'two'];
-      const state = trashReducer(
+      const state = rootReducer(
         defaultState,
         restoreNotesFromTrash(ids)
       );
 
-      expect(state.get('notesIds').includes(ids[0])).toBeFalsy();
-      expect(state.get('notesIds').includes(ids[1])).toBeFalsy();
+      expect(
+        getTrashNotesIds(state).includes(ids[0])
+      ).toBeFalsy();
+
+      expect(
+        getTrashNotesIds(state).includes(ids[1])
+      ).toBeFalsy();
     });
 
     it('`DELETE_NOTES`: removes provided id(s) from `notesIds`', () => {
       const ids = ['one', 'two'];
-      const state = trashReducer(
+      const state = rootReducer(
         defaultState,
         deleteNotes(ids)
       );
 
-      expect(state.get('notesIds').includes(ids[0])).toBeFalsy();
-      expect(state.get('notesIds').includes(ids[1])).toBeFalsy();
+      expect(
+        getTrashNotesIds(state).includes(ids[0])
+      ).toBeFalsy();
+
+      expect(
+        getTrashNotesIds(state).includes(ids[1])
+      ).toBeFalsy();
     });
 
     it('`EMPTY_TRASH`: clears `notesIds`', () => {
-      const state = trashReducer(
+      const state = rootReducer(
         defaultState,
         emptyTrash()
       );
 
-      expect(state.get('notesIds').size).toEqual(0);
+      expect(
+        getTrashNotesIds(state).size
+      ).toEqual(0);
     });
   });
 });

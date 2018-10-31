@@ -1,5 +1,15 @@
+import * as matchers from 'jest-immutable-matchers';
 import { Map, List } from 'immutable';
-import tagsReducer from '../tags';
+import reducer from '..';
+
+import {
+  getTags,
+  getTagsById,
+  getTagsTagById,
+  getTagsAllIds,
+  getTagsEditingId,
+  getTagsIsModalShown,
+} from '../../selectors';
 
 import {
   createTag,
@@ -13,13 +23,23 @@ import {
 
 
 describe('tags reducer', () => {
-  it('provides correct default state', () => {
-    const defaultState = tagsReducer(undefined, { type: undefined });
+  beforeEach(() => {
+    jest.addMatchers(matchers);
+  });
 
-    expect(defaultState.get('byId')).toEqual(Map());
-    expect(defaultState.get('allIds')).toEqual(List());
-    expect(defaultState.get('isModalShown')).toBe(false);
-    expect(defaultState.get('editingId')).toBe(null);
+  it('provides correct default state', () => {
+    const state = reducer(undefined, { type: undefined });
+
+    const expected = Map({
+      byId: Map(),
+      allIds: List(),
+      editingId: null,
+      isModalShown: false,
+    });
+
+    expect(
+      getTags(state)
+    ).toEqualImmutable(expected);
   });
 
   describe('actions', () => {
@@ -27,9 +47,12 @@ describe('tags reducer', () => {
     let sampleTagId;
 
     beforeEach(() => {
-      defaultState = tagsReducer(undefined, createTag('sample tag'));
-      sampleTagId = defaultState
-        .get('byId')
+      defaultState = reducer(
+        undefined,
+        createTag('sample tag')
+      );
+
+      sampleTagId = getTagsById(defaultState)
         .last()
         .get('id');
     });
@@ -37,60 +60,71 @@ describe('tags reducer', () => {
     it('CREATE_TAG: creates new tag in `byId` and pushes its id to `allIds`', () => {
       const title = 'test tag';
       const action = createTag(title);
-      const updatedState = tagsReducer(defaultState, action);
-      const tag = updatedState.get('byId').last();
-      const allIds = updatedState.get('allIds');
+      const updatedState = reducer(defaultState, action);
+      const tag = getTagsById(updatedState).last();
+      const allIds = getTagsAllIds(updatedState);
 
-      expect(tag.get('title')).toEqual(title);
-      expect(allIds.includes(tag.get('id')));
+      expect(tag.get('title')).toBe(title);
+
+      expect(
+        allIds.includes(tag.get('id'))
+      ).toBeTruthy();
     });
 
     it('UPDATE_TAG: updates existing tag title', () => {
       const newTitle = 'updated tag';
       const action = updateTag(sampleTagId, newTitle);
-      const updatedState = tagsReducer(defaultState, action);
-      const tag = updatedState.getIn(['byId', sampleTagId]);
+      const updatedState = reducer(defaultState, action);
+      const tag = getTagsTagById(sampleTagId)(updatedState);
 
-      expect(tag.get('title')).toEqual(newTitle);
+      expect(tag.get('title')).toBe(newTitle);
     });
 
     it('DELETE_TAGS: deletes tag(s) from `byId` and its id from `allIds`', () => {
       const action = deleteTags([sampleTagId]);
-      const updatedState = tagsReducer(defaultState, action);
-      const byId = updatedState.get('byId');
-      const allIds = updatedState.get('allIds');
+      const updatedState = reducer(defaultState, action);
+      const byId = getTagsById(updatedState);
+      const allIds = getTagsAllIds(updatedState);
 
-      expect(byId.get(sampleTagId)).toBe(undefined);
-      expect(allIds.includes(sampleTagId)).toBe(false);
+      expect(byId.get(sampleTagId)).toBeUndefined();
+      expect(allIds.includes(sampleTagId)).toBeFalsy();
     });
 
     it('SHOW_TAGS_MODAL: sets `isModalShown` to true', () => {
       const action = showTagsModal();
-      const updatedState = tagsReducer(defaultState, action);
+      const updatedState = reducer(defaultState, action);
 
-      expect(updatedState.get('isModalShown')).toBe(true);
+      expect(
+        getTagsIsModalShown(updatedState)
+      ).toBeTruthy();
     });
 
     it('HIDE_TAGS_MODAL: sets `isModalShown` to false', () => {
       const action = hideTagsModal();
-      const updatedState = tagsReducer(defaultState, action);
+      const updatedState = reducer(defaultState, action);
 
-      expect(updatedState.get('isModalShown')).toBe(false);
+      expect(
+        getTagsIsModalShown(updatedState)
+      ).toBeFalsy();
     });
 
     it('START_EDITING_TAG: sets `editingId` to provided one', () => {
       const id = 'editing-tag-id';
       const action = startEditingTag(id);
-      const updatedState = tagsReducer(defaultState, action);
+      const updatedState = reducer(defaultState, action);
 
-      expect(updatedState.get('editingId')).toEqual(id);
+      expect(
+        getTagsEditingId(updatedState)
+      ).toBe(id);
     });
 
     it('END_EDITING_TAG: sets `editingId` to null', () => {
       const action = endEditingTag();
-      const updatedState = tagsReducer(defaultState, action);
+      const updatedState = reducer(defaultState, action);
 
-      expect(updatedState.get('editingId')).toBe(null);
+      expect(
+        getTagsEditingId(updatedState)
+      ).toBeNull();
     });
   });
 });

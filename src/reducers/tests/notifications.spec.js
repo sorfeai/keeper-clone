@@ -1,6 +1,12 @@
 import * as matchers from 'jest-immutable-matchers';
 import { Map, List } from 'immutable';
-import notificationsReducer from '../notifications';
+import reducer from '..';
+
+import {
+  getNotifications,
+  getNotificationById,
+  getNotificationsAllIds,
+} from '../../selectors';
 
 import {
   NOTIFICATION_INFO,
@@ -19,13 +25,16 @@ describe('notifications reducer', () => {
   });
 
   it('provides correct default state', () => {
-    const state = notificationsReducer(undefined, { type: undefined });
+    const state = reducer(undefined, { type: undefined });
+
     const expected =  Map({
       byId: Map(),
       allIds: List(),
     });
 
-    expect(state).toEqualImmutable(expected);
+    expect(
+      getNotifications(state)
+    ).toEqualImmutable(expected);
   });
 
   describe('actions', () => {
@@ -46,7 +55,7 @@ describe('notifications reducer', () => {
       ];
 
       defaultState = testData.reduce((state, notf) => (
-        notificationsReducer(state, showNotification(notf))
+        reducer(state, showNotification(notf))
       ), undefined);
     });
 
@@ -54,32 +63,38 @@ describe('notifications reducer', () => {
       const id = 'three';
       const type = NOTIFICATION_INFO;
       const message = 'test message';
-      const state = notificationsReducer(
+
+      const state = reducer(
         defaultState,
         showNotification({ id, type, message })
       );
-      const notf = state.getIn(['byId', id]);
+
+      const notf = getNotificationById(id)(state);
 
       expect(notf.get('id')).toEqual(id);
       expect(notf.get('type')).toEqual(type);
       expect(notf.get('message')).toEqual(message);
 
       expect(
-        state
-        .get('allIds')
-        .includes(id)
-      ).toBe(true);
+        getNotificationsAllIds(state).includes(id)
+      ).toBeTruthy();
     });
 
     it('`HIDE_NOTIFICATION`: remove notification from `allIds` and its id from `allIds`', () => {
       const id = 'one';
-      const state = notificationsReducer(
+
+      const state = reducer(
         defaultState,
         hideNotification(id)
       );
 
-      expect(state.getIn(['byId', id])).toBeUndefined();
-      expect(state.get('allIds').includes(id)).toBeFalsy();
+      expect(
+        getNotificationById(id)(state)
+      ).toBeUndefined();
+
+      expect(
+        getNotificationsAllIds(state).includes(id)
+      ).toBeFalsy();
     });
   });
 });
