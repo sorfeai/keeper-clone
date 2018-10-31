@@ -17,3 +17,8 @@ export const getFormErrors = (formName) => createSelector(
   getForm(formName),
   (form) => form && form.syncErrors
 );
+
+export const getFieldErrors = (formName, fieldName) => createSelector(
+  getFormErrors(formName),
+  (errors) => errors && errors[fieldName]
+);

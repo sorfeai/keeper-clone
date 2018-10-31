@@ -3,6 +3,7 @@ import {
   getForm,
   getFormValue,
   getFormErrors,
+  getFieldErrors,
 } from '..';
 
 
@@ -88,7 +89,7 @@ describe('form selectors', () => {
       expect(res).toBeUndefined();
     });
 
-    it('if there is errors object returns it', () => {
+    it('if there is `syncErrors` object returns it', () => {
       const { resultFunc } = getFormErrors('myForm', 'myVal');
       const syncErrors = { myField: 'Required' };
       const res = resultFunc({ syncErrors });
@@ -96,11 +97,34 @@ describe('form selectors', () => {
       expect(res).toBe(syncErrors);
     });
 
-    it('if there isn\'t errors object returns undefined', () => {
+    it('if there isn\'t `syncErrors` object returns undefined', () => {
       const { resultFunc } = getFormErrors('myForm', 'myVal');
       const res = resultFunc({});
 
       expect(res).toBe(undefined);
+    });
+  });
+
+  describe.only('`getFieldErrors(formName, fieldName)`', () => {
+    it('if there isn\'t `syncErrors` object returns undefined', () => {
+      expect(
+        getFieldErrors('myForm', 'email').resultFunc(undefined)
+      ).toBeUndefined();
+    });
+
+    it('if `syncErrors` contains provided field returns it', () => {
+      const error = 'Error!';
+      const state = { email: error };
+
+      expect(
+        getFieldErrors('myForm', 'email').resultFunc(state)
+      ).toBe(error);
+    });
+
+    it('if `syncErrors` doesn\'t contain provided field returns undefined', () => {
+      expect(
+        getFieldErrors('myForm', 'email').resultFunc({})
+      ).toBeUndefined();
     });
   });
 });
