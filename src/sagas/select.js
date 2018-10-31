@@ -1,5 +1,5 @@
 import { put, fork, select, takeLatest } from 'redux-saga/effects';
-import { getSelectedIds } from '../selectors';
+import { getNotesSelectedIds } from '../selectors';
 import { TOGGLE_SELECT_NOTE } from '../constants/types';
 
 import  {
@@ -11,7 +11,7 @@ import  {
 
 const toggleSelect = function* (action) {
   const { id } = action.payload;
-  const selectedIds = yield select(getSelectedIds);
+  const selectedIds = yield select(getNotesSelectedIds);
   const isSelected = selectedIds.includes(id);
 
   if (isSelected) {

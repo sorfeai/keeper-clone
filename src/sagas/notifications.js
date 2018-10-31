@@ -1,18 +1,12 @@
-import { put, fork, takeLatest, select } from 'redux-saga/effects';
-import { getNotesInTrash } from '../selectors';
+import { put, fork, takeLatest } from 'redux-saga/effects';
 import { notesMovedToTrashMessage, notesDeletedMessage } from '../messages';
+import { showNotification } from '../actions';
 
 import {
   MOVE_NOTES_TO_TRASH,
   NOTIFICATION_INFO,
   DELETE_NOTES,
 } from '../constants/types';
-
-import {
-  showNotification,
-  restoreNotesFromTrash,
-  deleteNotes,
-} from '../actions';
 
 
 const notifyMovedToTrash = function* (action) {

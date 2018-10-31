@@ -1,7 +1,7 @@
 import { List } from 'immutable';
 import { expectSaga, matchers } from 'redux-saga-test-plan';
 import { watchToggleSelect } from '../select';
-import { getSelectedIds } from '../../selectors';
+import { getNotesSelectedIds } from '../../selectors';
 
 import {
   toggleSelectMode,
@@ -19,7 +19,7 @@ describe('select sagas', () => {
 
       return expectSaga(watchToggleSelect)
         .provide([
-          [matchers.select.selector(getSelectedIds), selectedIds],
+          [matchers.select.selector(getNotesSelectedIds), selectedIds],
         ])
         .put(selectNote(id))
         .dispatch(toggleSelectNote(id))
@@ -32,7 +32,7 @@ describe('select sagas', () => {
 
       return expectSaga(watchToggleSelect)
         .provide([
-          [matchers.select.selector(getSelectedIds), selectedIds],
+          [matchers.select.selector(getNotesSelectedIds), selectedIds],
         ])
         .put(deselectNote(id))
         .dispatch(toggleSelectNote(id))
@@ -45,7 +45,7 @@ describe('select sagas', () => {
 
       return expectSaga(watchToggleSelect)
         .provide([
-          [matchers.select.selector(getSelectedIds), selectedIds],
+          [matchers.select.selector(getNotesSelectedIds), selectedIds],
         ])
         .put(toggleSelectMode())
         .dispatch(toggleSelectNote(id))
@@ -58,7 +58,7 @@ describe('select sagas', () => {
 
       return expectSaga(watchToggleSelect)
         .provide([
-          [matchers.select.selector(getSelectedIds), selectedIds],
+          [matchers.select.selector(getNotesSelectedIds), selectedIds],
         ])
         .put(toggleSelectMode())
         .dispatch(toggleSelectNote(id))

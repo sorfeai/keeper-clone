@@ -1,5 +1,5 @@
 import { put, fork, select, takeLatest } from 'redux-saga/effects';
-import { getPinnedIds } from '../selectors';
+import { getNotesPinnedIds } from '../selectors';
 import { TOGGLE_PIN_NOTES } from '../constants/types';
 
 import  {
@@ -10,7 +10,7 @@ import  {
 
 const togglePin = function* (action) {
   const { ids } = action.payload;
-  const pinnedIds = yield select(getPinnedIds);
+  const pinnedIds = yield select(getNotesPinnedIds);
 
   // counting pinned and unpinned in received `ids` array
   const [pinned, unpinned] = ids.reduce((acc, id) => {

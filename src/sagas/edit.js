@@ -3,18 +3,24 @@ import { updateNote, endEditingNote } from '../actions';
 import { SAVE_EDITED_NOTE } from '../constants/types';
 
 import {
-  getEditNoteId,
-  getEditNoteFormTitle,
-  getEditNoteFormContent,
-  getEditNoteFormErrors,
+  getNotesEditingId,
+  getFormValue,
+  getFormErrors,
 } from '../selectors';
 
 
 const saveNote = function* () {
-  const id = yield select(getEditNoteId);
-  const title = yield select(getEditNoteFormTitle);
-  const content = yield select(getEditNoteFormContent);
-  const errors = yield select(getEditNoteFormErrors);
+  const id = yield select(getNotesEditingId);
+
+  const title = yield select(
+    getFormValue('editNote', 'title')
+  );
+  const content = yield select(
+    getFormValue('editNote', 'content')
+  );
+  const errors = yield select(
+    getFormErrors('editNote')
+  );
 
   if (!errors || errors === {}) {
     yield put(updateNote(id, { title, content }));

@@ -42,3 +42,10 @@ export {
   getNotificationById,
   getNotificationsAllIds,
 } from './notifications';
+
+export {
+  getFormState,
+  getForm,
+  getFormValue,
+  getFormErrors,
+} from './forms';

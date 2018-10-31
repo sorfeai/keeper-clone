@@ -9,10 +9,9 @@ import {
 } from '../actions';
 
 import {
-  getTagById,
-  getCreateTagValue,
-  getEditTagValue,
-  getEditingTagId,
+  getFormValue,
+  getTagsTagById,
+  getTagsEditingId,
 } from '../selectors';
 
 import {
@@ -30,7 +29,7 @@ export const initializeCreate = function* () {
 
 const initializeEdit = function* (action) {
   const { id } = action.payload;
-  const tag = yield select(getTagById, id);
+  const tag = yield select(getTagsTagById(id));
   const title = tag.get('title');
 
   yield put(initialize('tags', { edit: title }));
@@ -41,15 +40,20 @@ const initializeEdit = function* (action) {
 };
 
 const createTag = function* () {
-  const title = yield select(getCreateTagValue);
+  const title = yield select(
+    getFormValue('tags', 'title')
+  );
 
   yield put(createTagAction(title));
   yield put(reset('tags', 'create'));
 };
 
 const updateTag = function* () {
-  const id = yield select(getEditingTagId);
-  const title = yield select(getEditTagValue);
+  const id = yield select(getTagsEditingId);
+
+  const title = yield select(
+    getFormValue('tags', 'title')
+  );
 
   yield put(updateTagAction(id, title));
   yield put(endEditingTag());

@@ -1,7 +1,7 @@
 import { List } from 'immutable';
 import { expectSaga, matchers } from 'redux-saga-test-plan';
 import { watchTogglePin } from '../pin';
-import { getPinnedIds } from '../../selectors';
+import { getNotesPinnedIds } from '../../selectors';
 
 import {
   togglePinNotes,
@@ -18,7 +18,7 @@ describe('pin sagas', () => {
 
       return expectSaga(watchTogglePin)
         .provide([
-          [matchers.select.selector(getPinnedIds), pinnedIds],
+          [matchers.select.selector(getNotesPinnedIds), pinnedIds],
         ])
         .put(pinNotes(ids))
         .dispatch(togglePinNotes(ids))
@@ -33,7 +33,7 @@ describe('pin sagas', () => {
 
       return expectSaga(watchTogglePin)
         .provide([
-          [matchers.select.selector(getPinnedIds), pinnedIds],
+          [matchers.select.selector(getNotesPinnedIds), pinnedIds],
         ])
         .put(unpinNotes(ids))
         .dispatch(togglePinNotes(ids))
@@ -48,7 +48,7 @@ describe('pin sagas', () => {
 
       return expectSaga(watchTogglePin)
         .provide([
-          [matchers.select.selector(getPinnedIds), pinnedIds],
+          [matchers.select.selector(getNotesPinnedIds), pinnedIds],
         ])
         .put(pinNotes(ids))
         .dispatch(togglePinNotes(ids))

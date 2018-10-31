@@ -1,18 +1,12 @@
 import { expectSaga, matchers } from 'redux-saga-test-plan';
 import { watchSave } from '../edit';
+import { getNotesEditingId } from '../../selectors';
 
 import {
   saveEditedNote,
   updateNote,
   endEditingNote,
 } from '../../actions';
-
-import {
-  getEditNoteId,
-  getEditNoteFormTitle,
-  getEditNoteFormContent,
-  getEditNoteFormErrors,
-} from '../../selectors';
 
 
 describe('edit sagas', () => {
@@ -21,14 +15,25 @@ describe('edit sagas', () => {
       const id = 0;
       const title = 'note title';
       const content = 'note content';
-      const errors = null;
+
+      // providing state cause can't target
+      // curried selectors with match
+      const state = {
+        form: {
+          editNote: {
+            values: {
+              title,
+              content,
+            },
+            syncErrors: undefined,
+          },
+        },
+      };
 
       return expectSaga(watchSave)
+        .withState(state)
         .provide([
-          [matchers.select.selector(getEditNoteId), id],
-          [matchers.select.selector(getEditNoteFormTitle), title],
-          [matchers.select.selector(getEditNoteFormContent), content],
-          [matchers.select.selector(getEditNoteFormErrors), errors],
+          [matchers.select.selector(getNotesEditingId), id],
         ])
         .put(updateNote(id, { title, content }))
         .put(endEditingNote())
@@ -41,14 +46,23 @@ describe('edit sagas', () => {
     const id = 0;
     const title = '';
     const content = 'note content';
-    const errors = { title: 'missing' };
+
+    const state = {
+      form: {
+        editNote: {
+          values: {
+            title,
+            content,
+          },
+          syncErrors: undefined,
+        },
+      },
+    };
 
     return expectSaga(watchSave)
+      .withState(state)
       .provide([
-        [matchers.select.selector(getEditNoteId), id],
-        [matchers.select.selector(getEditNoteFormTitle), title],
-        [matchers.select.selector(getEditNoteFormContent), content],
-        [matchers.select.selector(getEditNoteFormErrors), errors],
+        [matchers.select.selector(getNotesEditingId), id],
       ])
       .put(endEditingNote())
       .dispatch(saveEditedNote())

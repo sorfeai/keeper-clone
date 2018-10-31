@@ -1,6 +1,6 @@
 import { expectSaga, matchers } from 'redux-saga-test-plan';
 import { watchClearTrash } from '../trash';
-import { getNotesInTrash } from '../../selectors';
+import { getTrashNotesIds } from '../../selectors';
 
 import {
   clearTrash,
@@ -16,7 +16,7 @@ describe('trash sagas', () => {
 
       return expectSaga(watchClearTrash)
         .provide([
-          [matchers.select.selector(getNotesInTrash), ids],
+          [matchers.select.selector(getTrashNotesIds), ids],
         ])
         .put(deleteNotes(ids))
         .put(emptyTrash())

@@ -15,8 +15,8 @@ import {
 const defaultState = Map({
   byId: Map(),
   allIds: List(),
-  isModalShown: false,
   editingId: null,
+  isModalShown: false,
 });
 
 

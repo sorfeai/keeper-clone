@@ -1,11 +1,11 @@
 import { put, fork, takeLatest, select } from 'redux-saga/effects';
 import { emptyTrash, deleteNotes } from '../actions';
-import { getNotesInTrash } from '../selectors';
+import { getTrashNotesIds } from '../selectors';
 import { CLEAR_TRASH } from '../constants/types';
 
 
 const delNotes = function* () {
-  const notesInTrash = yield select(getNotesInTrash);
+  const notesInTrash = yield select(getTrashNotesIds);
 
   yield put(deleteNotes(notesInTrash));
   yield put(emptyTrash());

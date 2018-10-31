@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { expectSaga, matchers } from 'redux-saga-test-plan';
+import { expectSaga } from 'redux-saga-test-plan';
 import { focus, initialize, reset } from 'redux-form';
 
 import {
@@ -19,13 +19,6 @@ import {
   endEditingTag,
 } from '../../actions';
 
-import {
-  getTagById,
-  getCreateTagValue,
-  getEditTagValue,
-  getEditingTagId,
-} from '../../selectors';
-
 
 describe('tags sagas', () => {
   it('`SHOW_TAGS_MODAL`: focuses `create tag` input', () => {
@@ -36,25 +29,39 @@ describe('tags sagas', () => {
   });
 
   it('`EDIT_TAGS_MODAL`: initializes edit form and focuses title input', () => {
-    const tag = Map({ title: 'test tag' });
+    const id = '1';
+    const tag = Map({ id, title: 'test tag' });
+
+    const state = {
+      tags: Map({
+        byId: Map({ [id]: tag }),
+      }),
+    };
 
     return expectSaga(watchStartEditingTag)
-      .provide([
-        [matchers.select.selector(getTagById), tag],
-      ])
-      .put(initialize('tags', { edit: tag.get('title') }))
+      .withState(state)
+      .put(initialize(
+        'tags',
+        { edit: tag.get('title') }
+      ))
       .put(focus('tags', 'edit'))
-      .dispatch(startEditingTag(1))
+      .dispatch(startEditingTag(id))
       .run();
   });
 
   it('`SUBMIT_CREATE_TAG`: dispatches `createTag()` with title from form and resets it', () => {
     const title = 'test tag';
 
+    const state = {
+      form: {
+        tags: {
+          values: { title },
+        },
+      },
+    };
+
     return expectSaga(watchSubmitCreateTag)
-      .provide([
-        [matchers.select.selector(getCreateTagValue), title],
-      ])
+      .withState(state)
       .put(createTag(title))
       .put(reset('tags', 'create'))
       .dispatch(submitCreateTag())
@@ -62,14 +69,22 @@ describe('tags sagas', () => {
   });
 
   it('`SUBMIT_EDIT_TAG`: dispatches `updateTag()` (with `id` and `title`) and `endEditingTag()`', () => {
-    const id = 1;
+    const id = '1';
     const title = 'test tag';
 
+    const state = {
+      tags: Map({
+        editingId: id,
+      }),
+      form: {
+        tags: {
+          values: { title },
+        },
+      },
+    };
+
     return expectSaga(watchSubmitEditTag)
-      .provide([
-        [matchers.select.selector(getEditingTagId), id],
-        [matchers.select.selector(getEditTagValue), title],
-      ])
+      .withState(state)
       .put(updateTag(id, title))
       .put(endEditingTag())
       .dispatch(submitEditTag())

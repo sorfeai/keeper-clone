@@ -3,7 +3,7 @@ import {
   getForm,
   getFormValue,
   getFormErrors,
-} from '../forms';
+} from '..';
 
 
 describe('form selectors', () => {

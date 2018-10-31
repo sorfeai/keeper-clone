@@ -2,7 +2,7 @@ import * as matchers from 'jest-immutable-matchers';
 import { Map, List } from 'immutable';
 import rootReducer from '..';
 import notesReducer from '../notes';
-import { getNotesMockData } from '../../testUtils';
+import { mockNotesData } from '../../testUtils';
 
 import {
   getNotesById,
@@ -42,7 +42,7 @@ describe('notes reducer', () => {
     let defaultState;
 
     beforeEach(() => {
-      const notes = getNotesMockData(3);
+      const notes = mockNotesData(3);
 
       defaultState = notes.reduce((acc, note) => (
         rootReducer(
@@ -81,7 +81,7 @@ describe('notes reducer', () => {
     });
 
     it('`FORMAT_NOTES_FOR_FEED_DONE`: sets `formmated` to provided', () => {
-      const notesData = getNotesMockData(3);
+      const notesData = mockNotesData(3);
       const state = rootReducer(
         undefined,
         formatNotesForFeedDone(notesData)
