@@ -41,7 +41,7 @@ const initializeEdit = function* (action) {
 
 const createTag = function* () {
   const title = yield select(
-    getFormValue('tags', 'title')
+    getFormValue('tags', 'create')
   );
 
   yield put(createTagAction(title));
@@ -52,7 +52,7 @@ const updateTag = function* () {
   const id = yield select(getTagsEditingId);
 
   const title = yield select(
-    getFormValue('tags', 'title')
+    getFormValue('tags', 'edit')
   );
 
   yield put(updateTagAction(id, title));

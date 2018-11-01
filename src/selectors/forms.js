@@ -10,7 +10,7 @@ export const getForm = (formName) => createSelector(
 
 export const getFormValue = (formName, fieldName) => createSelector(
   getForm(formName),
-  (form) => form && form.values[fieldName]
+  (form) => form && form.values && (form.values[fieldName] || undefined)
 );
 
 export const getFormErrors = (formName) => createSelector(

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { focus, initialize } from 'redux-form';
+
 import { NoteView } from '.';
+import { getNotesIsSelecting } from '../../selectors';
 
 import {
   startEditingNote,
@@ -86,7 +88,6 @@ let NoteCont = class extends Component {
       id,
       title,
       content,
-      isInTrash,
       isEditing,
       isSelected,
       isPinned,
@@ -97,7 +98,6 @@ let NoteCont = class extends Component {
         id={id}
         title={title}
         content={content}
-        isInTrash={isInTrash}
         isEditing={isEditing}
         isSelected={isSelected}
         isPinned={isPinned}
@@ -126,7 +126,6 @@ NoteCont.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
-  isInTrash: PropTypes.bool,
   isEditing: PropTypes.bool,
   isSelected: PropTypes.bool,
   isPinned: PropTypes.bool,
@@ -134,7 +133,7 @@ NoteCont.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-  selecting: state.select.get('selecting'),
+  selecting: getNotesIsSelecting(state),
 });
 
 const mapDispatchToProps = {

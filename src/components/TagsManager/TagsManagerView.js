@@ -72,7 +72,7 @@ const TagsManagerView = ({
             onClick={onSubmitEditTag}
             icon='check'
             tooltip='Save'
-            disabled={!canSubmitEdit()}
+            disabled={!canSubmitEdit}
             small
           />
         </div>
@@ -117,7 +117,7 @@ const TagsManagerView = ({
             onClick={onSubmitCreateTag}
             icon='plus'
             tooltip='Create tag'
-            disabled={!canSubmitCreate()}
+            disabled={!canSubmitCreate}
           />
         </div>
         {tags && (
@@ -125,6 +125,7 @@ const TagsManagerView = ({
             {tags.map((tag) => {
               const id = tag.get('id');
               const title = tag.get('title');
+
               return id !== editingId
                 ? renderTag(id, title)
                 : renderTagEditing(id, title);
@@ -149,8 +150,8 @@ TagsManagerView.propTypes = {
   onEndEditingTag: PropTypes.func.isRequired,
   onSubmitCreateTag: PropTypes.func.isRequired,
   onSubmitEditTag: PropTypes.func.isRequired,
-  canSubmitCreate: PropTypes.func.isRequired,
-  canSubmitEdit: PropTypes.func.isRequired,
+  canSubmitCreate: PropTypes.bool,
+  canSubmitEdit: PropTypes.bool,
 };
 
 

@@ -11,7 +11,7 @@ export const mockNote = (id) => {
     : id;
 
   return {
-    id,
+    id: id.toString(),
     title: `title ${wordId}`,
     content: `content ${wordId}`,
     tags: List(),

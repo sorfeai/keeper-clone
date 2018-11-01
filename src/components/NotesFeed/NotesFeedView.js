@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -9,20 +9,31 @@ import { Note } from '..';
 
 
 const NotesFeedView = ({
-  notes: { pinned, other },
+  notes,
+  isTrash,
   pinnedIds,
   selectedIds,
   editingId,
   isGrid,
 }) => {
-  const hasPinned = pinned && pinned[0];
-  const hasUnpinned = other && other[0];
+  if (!notes) return null;
+
+  let pinned;
+  let unpinned;
+  let hasPinned;
+  let hasUnpinned;
+
+  if (!isTrash) {
+    pinned = notes.get('pinned');
+    unpinned = notes.get('unpinned');
+    hasPinned = pinned.first();
+    hasUnpinned = unpinned.first();
+  }
 
   const renderNote = (note) => {
     const id = note.get('id');
     const title = note.get('title');
     const content = note.get('content');
-    const deleting = note.get('deleting');
 
     const isPinned = pinnedIds.includes(id);
     const isSelected = selectedIds.includes(id);
@@ -39,7 +50,6 @@ const NotesFeedView = ({
           id={id}
           title={title}
           content={content}
-          isInTrash={deleting}
           isPinned={isPinned}
           isSelected={isSelected}
           isEditing={isEditing}
@@ -49,7 +59,7 @@ const NotesFeedView = ({
   };
 
   const renderSection = (isPinned = false) => {
-    const notes = isPinned ? pinned : other;
+    const notes = isPinned ? pinned : unpinned;
     const heading = isPinned ? 'Pinned' : 'Other';
 
     const cls = classNames({
@@ -64,7 +74,9 @@ const NotesFeedView = ({
             <div className="heading">{heading}</div>
           </Heading>
         )}
-        {isGrid ? renderGrid(notes) : renderList(notes)}
+        {isGrid
+          ? renderGrid(notes)
+          : renderList(notes)}
       </div>
     );
   };
@@ -72,9 +84,11 @@ const NotesFeedView = ({
   const renderGrid = (notes) => (
     <div className={style.notes}>
       <Columns>
-        {Object.keys(notes).map((key) => (
+        {notes.keySeq().map((key) => (
           <Columns.Column key={key}>
-            {notes[key].map(renderNote)}
+            {notes
+            .get(key)
+            .map(renderNote)}
           </Columns.Column>
         ))}
       </Columns>
@@ -91,34 +105,32 @@ const NotesFeedView = ({
     [style.notesList]: !isGrid,
   });
 
-  return (
-    <div className={cls}>
+  const home = (
+    <Fragment>
       {hasPinned && renderSection(true)}
       {hasUnpinned && renderSection()}
+    </Fragment>
+  );
+
+  const trash = isGrid
+    ? renderGrid(notes)
+    : renderList(notes);
+
+  return (
+    <div className={cls}>
+      {isTrash ? trash : home}
     </div>
   );
 };
 
 
 NotesFeedView.propTypes = {
-  notes: PropTypes.shape({
-    pinned: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.object,
-    ]).isRequired,
-    other: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.object,
-    ]).isRequired,
-  }).isRequired,
-  pinnedIds: ImmutablePropTypes.list.isRequired,
-  selectedIds: ImmutablePropTypes.list.isRequired,
+  notes: ImmutablePropTypes.map,
+  pinnedIds: ImmutablePropTypes.list,
+  selectedIds: ImmutablePropTypes.list,
   editingId: PropTypes.string,
+  isTrash: PropTypes.bool,
   isGrid: PropTypes.bool,
-};
-
-NotesFeedView.defaultProps = {
-  isGrid: true,
 };
 
 

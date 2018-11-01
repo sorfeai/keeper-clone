@@ -53,6 +53,7 @@ export {
 
 export {
   getUser,
+  getUserIsMenuActive,
   getUserUsername,
   getUserFirstName,
   getUserLastName,

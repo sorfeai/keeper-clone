@@ -1,0 +1,1 @@
+export { SetPageHOC } from './SetPageHOC';

@@ -1,4 +1,7 @@
+import capitalize from 'lodash/capitalize';
+
 import {
+  TOGGLE_USER_MENU,
   SET_USER,
   SET_MAX_COLUMNS,
   SEARCH_INPUT_UPDATED,
@@ -52,6 +55,10 @@ import {
 } from './constants/types';
 
 
+export const toggleUserMenu = () => ({
+  type: TOGGLE_USER_MENU,
+});
+
 export const setUser = ({
   username,
   firstName,
@@ -62,8 +69,8 @@ export const setUser = ({
   type: SET_USER,
   payload: {
     username,
-    firstName,
-    lastName,
+    firstName: capitalize(firstName),
+    lastName: capitalize(lastName),
     email,
     avatar,
   },
@@ -106,11 +113,11 @@ export const splitByPin = (data) => ({
   },
 });
 
-export const splitByPinDone = (pinned, other) => ({
+export const splitByPinDone = (pinned, unpinned) => ({
   type: SPLIT_BY_PIN_DONE,
   payload: {
     pinned,
-    other,
+    unpinned,
   },
 });
 

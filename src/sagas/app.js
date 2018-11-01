@@ -6,6 +6,7 @@ import { INIT_APP } from '../constants/types';
 
 import {
   createNote,
+  moveNotesToTrash,
   formatNotesForFeed,
 } from '../actions';
 
@@ -15,6 +16,8 @@ const handleInitApp = function* () {
   yield all(times(6).map(
     (id) => put(createNote(mockNote(id)))
   ));
+
+  yield put(moveNotesToTrash(['1', '2']));
 
   const data = yield select(getNotesById);
   yield put(formatNotesForFeed(data));

@@ -29,10 +29,6 @@ class OuterClick extends Component {
 }
 
 
-/**
-* prop types/defaults
-*/
-
 OuterClick.propTypes = {
   children: PropTypes.element.isRequired,
   onClick: PropTypes.func.isRequired,

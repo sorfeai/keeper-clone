@@ -15,6 +15,14 @@ import {
 } from '..';
 
 import {
+  getAppCurrentPage,
+  getAppIsFeedViewGrid,
+  getAppIsMainMenuActive,
+  getNotesIsSelecting,
+  getNotesSelectedIds,
+} from '../../selectors';
+
+import {
   clearSelection,
   deleteNotes,
   moveNotesToTrash,
@@ -125,11 +133,11 @@ Header.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-  currentPage: state.common.get('currentPage'),
-  selectedNotes: state.select.get('selectedNotes'),
-  isGrid: state.common.get('feedViewIsGrid'),
-  isMainMenuActive: state.common.get('mainMenuActive'),
-  isSelecting: state.select.get('selecting'),
+  currentPage: getAppCurrentPage(state),
+  selectedNotes: getNotesSelectedIds(state),
+  isGrid: getAppIsFeedViewGrid(state),
+  isMainMenuActive: getAppIsMainMenuActive(state),
+  isSelecting: getNotesIsSelecting(state),
 });
 
 const mapDispatchToProps = {

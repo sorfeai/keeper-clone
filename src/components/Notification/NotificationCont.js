@@ -76,7 +76,10 @@ const mapDispatchToProps = {
   hideNotification,
 };
 
-NotificationCont = connect(() => ({}), mapDispatchToProps)(NotificationCont);
+NotificationCont = connect(
+  () => ({}),
+  mapDispatchToProps
+)(NotificationCont);
 
 
 export { NotificationCont };

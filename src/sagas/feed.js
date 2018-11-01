@@ -1,6 +1,14 @@
 import { Map, List } from 'immutable';
 import trim from 'lodash/trim';
-import { fork, put, take, takeLatest, select } from 'redux-saga/effects';
+
+import {
+  call,
+  fork,
+  put,
+  take,
+  takeLatest,
+  select,
+} from 'redux-saga/effects';
 
 import {
   getFormValue,
@@ -13,19 +21,23 @@ import {
 } from '../selectors';
 
 import {
+  PAGE_TRASH,
+  SET_PAGE,
   FORMAT_NOTES_FOR_FEED,
   CREATE_NOTE,
+  DELETE_NOTES,
   UPDATE_NOTE,
   PIN_NOTES,
   UNPIN_NOTES,
+  MOVE_NOTES_TO_TRASH,
+  RESTORE_NOTES_FROM_TRASH,
   SEARCH_INPUT_UPDATED,
-  APPLY_SEARCH_FILTER,
-  APPLY_SEARCH_FILTER_DONE,
-  SPLIT_BY_PIN,
-  SPLIT_BY_PIN_DONE,
-  SPLIT_TO_COLUMNS,
-  SPLIT_TO_COLUMNS_DONE,
-  PAGE_TRASH,
+  // APPLY_SEARCH_FILTER,
+  // APPLY_SEARCH_FILTER_DONE,
+  // SPLIT_BY_PIN,
+  // SPLIT_BY_PIN_DONE,
+  // SPLIT_TO_COLUMNS,
+  // SPLIT_TO_COLUMNS_DONE,
 } from '../constants/types';
 
 import {
@@ -40,14 +52,23 @@ import {
 } from '../actions';
 
 
-export const handleApplySearchFilter = function* ({ payload: { data } }) {
+export const filterTrash = function* (data, isTrash) {
+  const trashIds = yield select(getTrashNotesIds);
+
+  return data.filter((note) => {
+    const includes = trashIds.includes(note.get('id'));
+    return isTrash ? includes : !includes;
+  });
+};
+
+export const _applySearchFilter = function* (data) {
   let filtered = data;
 
   const searchQuery = yield select(
     getFormValue('search', 'search')
   );
 
-  if (searchQuery !== '') {
+  if (typeof searchQuery !== 'undefined') {
     const hasMatch = (note, field) => {
       const query = trim(
         searchQuery
@@ -66,36 +87,31 @@ export const handleApplySearchFilter = function* ({ payload: { data } }) {
     ));
   }
 
-  yield put(applySearchFilterDone(filtered));
+  return filtered;
 };
 
-export const handleSplitByPin = function* ({ payload: { data } }) {
+export const _splitByPin = function* (data) {
   let pinned = List();
-  let other = List();
+  let unpinned = List();
 
-  const notesInTrash = yield select(getTrashNotesIds);
   const pinnedNotes = yield select(getNotesPinnedIds);
 
   data.forEach((note) => {
     const id = note.get('id');
 
-    if (!notesInTrash.includes(id)) {
-      if (pinnedNotes.includes(id)) {
-        pinned = pinned.push(note);
-      } else {
-        other = other.push(note);
-      }
+    if (pinnedNotes.includes(id)) {
+      pinned = pinned.push(note);
+    } else {
+      unpinned = unpinned.push(note);
     }
   });
 
-  yield put(splitByPinDone(pinned, other));
+  return { pinned, unpinned };
 };
 
-export const handleSplitToColumns = function* ({
-  payload: { data, maxColumns },
-}) {
+export const _splitToColumns = (data, maxColumns) => {
   // TODO: smart split considering element heights
-  const splitted = data.reduce((acc, note, index) => {
+  return data.reduce((acc, note, index) => {
     const column = index % maxColumns;
 
     return acc.update(
@@ -104,90 +120,75 @@ export const handleSplitToColumns = function* ({
       (notes) => notes.push(note)
     );
   }, Map());
-
-  yield put(splitToColumnsDone(splitted));
 };
 
 export const handleFormatNotesForFeed = function* () {
-  let formattedData = yield select(getNotesById);
+  let feedData = yield select(getNotesById);
   const currentPage = yield select(getAppCurrentPage);
+  const isPageTrash = currentPage === PAGE_TRASH;
 
-  // apply search filter
-  yield put(applySearchFilter(formattedData));
-  const {
-    payload: { data: filtered },
-  } = yield take(APPLY_SEARCH_FILTER_DONE);
+  feedData = yield call(filterTrash, feedData, isPageTrash);
+  feedData = yield call(_applySearchFilter, feedData);
 
-  formattedData = filtered;
-
-  // split by pin
-  if (currentPage !== PAGE_TRASH) {
-    yield put(splitByPin(formattedData));
-    const { payload: { pinned, other } } = yield take(SPLIT_BY_PIN_DONE);
-
-    formattedData = { pinned, other };
+  if (!isPageTrash) {
+    feedData = yield call(_splitByPin, feedData);
   }
 
-  // split to columns
   const isGrid = yield select(getAppIsFeedViewGrid);
   if (isGrid) {
     const maxColumns = yield select(getAppMaxColumns);
 
-    if (currentPage !== PAGE_TRASH) {
-      const { pinned, other } = formattedData;
+    if (!isPageTrash) {
+      const { pinned, unpinned } = feedData;
 
-      yield put(splitToColumns(pinned, maxColumns));
-      const {
-        payload: { data: splittedPinned },
-      } = yield take(SPLIT_TO_COLUMNS_DONE);
+      const splittedPinned = yield call(
+        _splitToColumns,
+        pinned,
+        maxColumns
+      );
+      const splittedUnpinned = yield call(
+        _splitToColumns,
+        unpinned,
+        maxColumns
+      );
 
-      yield put(splitToColumns(other, maxColumns));
-      const {
-        payload: { data: splittedOther },
-      } = yield take(SPLIT_TO_COLUMNS_DONE);
-
-      formattedData = Map({
+      feedData = Map({
         pinned: splittedPinned,
-        other: splittedOther,
+        unpinned: splittedUnpinned,
       });
     } else {
-      yield put(splitToColumns(formattedData, maxColumns));
+      const splitted = yield call(
+        _splitToColumns,
+        feedData,
+        maxColumns
+      );
 
-      const {
-        payload: { data: splitted },
-      } = yield take(SPLIT_TO_COLUMNS_DONE);
-
-      formattedData = splitted;
+      feedData = splitted;
     }
   }
 
-  yield put(formatNotesForFeedDone(formattedData));
+  yield put(formatNotesForFeedDone(feedData));
 };
 
-
-export const watchApplySearchFilter = function* () {
-  yield takeLatest(APPLY_SEARCH_FILTER, handleApplySearchFilter);
-};
-
-export const watchSplitByPin = function* () {
-  yield takeLatest(SPLIT_BY_PIN, handleSplitByPin);
-};
-
-export const watchSplitToColumns = function* () {
-  yield takeLatest(SPLIT_TO_COLUMNS, handleSplitToColumns);
-};
 
 export const watchFormatNotesForFeed = function* () {
-  yield takeLatest(FORMAT_NOTES_FOR_FEED, handleFormatNotesForFeed);
+  yield takeLatest(
+    FORMAT_NOTES_FOR_FEED,
+    handleFormatNotesForFeed
+  );
 };
 
 export const watchRelatedActions = function* () {
   while (true) {
     yield take([
+      SET_PAGE,
       CREATE_NOTE,
+      DELETE_NOTES,
       UPDATE_NOTE,
       PIN_NOTES,
       UNPIN_NOTES,
+      MOVE_NOTES_TO_TRASH,
+      RESTORE_NOTES_FROM_TRASH,
       SEARCH_INPUT_UPDATED,
     ]);
 
@@ -197,9 +198,6 @@ export const watchRelatedActions = function* () {
 
 
 const forked = [
-  fork(watchApplySearchFilter),
-  fork(watchSplitByPin),
-  fork(watchSplitToColumns),
   fork(watchFormatNotesForFeed),
   fork(watchRelatedActions),
 ];

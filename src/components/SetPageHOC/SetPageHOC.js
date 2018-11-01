@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { setPage } from '../../actions';
 
 
-const PageHOC = (page) => (Wrapped) => {
+const SetPageHOC = (page) => (Wrapped) => {
   const mapDispatchToProps = { setPage };
 
   const Wrapper = class extends Component {
@@ -21,4 +21,4 @@ const PageHOC = (page) => (Wrapped) => {
 };
 
 
-export { PageHOC };
+export { SetPageHOC };

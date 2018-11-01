@@ -3,6 +3,7 @@ import * as matchers from 'jest-immutable-matchers';
 
 import {
   getUser,
+  getUserIsMenuActive,
   getUserUsername,
   getUserFirstName,
   getUserLastName,
@@ -23,10 +24,22 @@ describe('user selectors', () => {
         firstName: 'John',
         lastName: 'Doe',
       });
-      
+
       expect(
         getUser({ user })
       ).toEqualImmutable(user);
+    });
+  });
+
+  describe('`getUserIsMenuActive`', () => {
+    it('gets `isMenuActive`', () => {
+      const state = Map({
+        isMenuActive: true,
+      });
+
+      expect(
+         getUserIsMenuActive.resultFunc(state)
+      ).toBeTruthy();
     });
   });
 

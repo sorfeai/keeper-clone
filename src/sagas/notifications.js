@@ -13,24 +13,24 @@ const notifyMovedToTrash = function* (action) {
   const { ids } = action.payload;
   const notesCount = ids.size ? ids.size : ids.length;
 
-  yield put(showNotification(
-    NOTIFICATION_INFO,
-    notesMovedToTrashMessage.format({ notesCount }),
+  yield put(showNotification({
+    type: NOTIFICATION_INFO,
+    message: notesMovedToTrashMessage.format({ notesCount }),
     // FIXME: get rid of store.dispatch
     // () => store.dispatch(
     //   restoreNotesFromTrash(action.payload.ids)
     // )
-  ));
+  }));
 };
 
-const notifyNotesDeleted = function* (action) {
+const notifyDeleted = function* (action) {
   const { ids } = action.payload;
   const notesCount = ids.size ? ids.size : ids.length;
 
-  yield put(showNotification(
-    NOTIFICATION_INFO,
-    notesDeletedMessage.format({ notesCount })
-  ));
+  yield put(showNotification({
+    type: NOTIFICATION_INFO,
+    message: notesDeletedMessage.format({ notesCount }),
+  }));
 };
 
 
@@ -39,7 +39,7 @@ export const watchMoveNotesToTrash = function* () {
 };
 
 export const watchDeleteNotes = function* () {
-  yield takeLatest(DELETE_NOTES, notifyNotesDeleted);
+  yield takeLatest(DELETE_NOTES, notifyDeleted);
 };
 
 

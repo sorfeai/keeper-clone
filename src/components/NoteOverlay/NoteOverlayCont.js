@@ -5,9 +5,16 @@ import { connect } from 'react-redux';
 import { NoteOverlayView } from '.';
 
 import {
+  getTagsById,
+  getNotesIsSelecting,
+  getTrashNotesIds,
+} from '../../selectors'
+
+import {
   toggleSelectNote,
   endEditingNote,
   moveNotesToTrash,
+  deleteNotes,
   pinNotes,
   restoreNotesFromTrash,
   saveEditedNote,
@@ -56,10 +63,11 @@ let NoteOverlayCont = class extends Component {
 
   render () {
     const {
+      id,
+      trashIds,
       isPinned,
       isSelected,
       isEditing,
-      isInTrash,
     } = this.props;
 
     return (
@@ -67,7 +75,7 @@ let NoteOverlayCont = class extends Component {
         isPinned={isPinned}
         isSelected={isSelected}
         isEditing={isEditing}
-        isInTrash={isInTrash}
+        isInTrash={trashIds.includes(id)}
         onPin={this.handlePin}
         onSelect={this.handleSelect}
         onSave={this.handleSave}
@@ -85,6 +93,7 @@ NoteOverlayCont.propTypes = {
   // state
   tags: ImmutablePropTypes.map.isRequired,
   selecting: PropTypes.bool,
+  trashIds: ImmutablePropTypes.list,
 
   // actions
   toggleSelectNote: PropTypes.func.isRequired,
@@ -103,19 +112,20 @@ NoteOverlayCont.propTypes = {
   isPinned: PropTypes.bool,
   isSelected: PropTypes.bool,
   isEditing: PropTypes.bool,
-  isInTrash: PropTypes.bool,
 };
 
 
 const mapStateToProps = (state) => ({
-  tags: state.tags.get('byId'),
-  selecting: state.select.get('selecting'),
+  tags: getTagsById(state),
+  selecting: getNotesIsSelecting(state),
+  trashIds: getTrashNotesIds(state),
 });
 
 const mapDispatchToProps = {
   toggleSelectNote,
   endEditingNote,
   moveNotesToTrash,
+  deleteNotes,
   pinNotes,
   restoreNotesFromTrash,
   saveEditedNote,
@@ -125,7 +135,10 @@ const mapDispatchToProps = {
   togglePinNotes,
 };
 
-NoteOverlayCont = connect(mapStateToProps, mapDispatchToProps)(NoteOverlayCont);
+NoteOverlayCont = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NoteOverlayCont);
 
 
 export { NoteOverlayCont };

@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-
 import { TagsManagerView } from './TagsManagerView';
+
+import {
+  getTagsById,
+  getTagsEditingId,
+  getTagsIsModalShown,
+  getFieldErrors,
+} from '../../selectors';
 
 import {
   createTag,
@@ -23,24 +29,6 @@ let TagsManagerCont = class extends Component {
     hideTagsModal();
   }
 
-  canSubmitCreate = () => {
-    const { form: { tags } } = this.props;
-
-    if (tags) {
-      return tags.syncErrors ? !tags.syncErrors.create : true;
-    }
-    return false;
-  }
-
-  canSubmitEdit = () => {
-    const { form: { tags } } = this.props;
-
-    if (tags) {
-      return tags.syncErrors ? !tags.syncErrors.edit : true;
-    }
-    return false;
-  }
-
   render () {
     const {
       tags,
@@ -53,6 +41,8 @@ let TagsManagerCont = class extends Component {
       endEditingTag,
       submitCreateTag,
       submitEditTag,
+      createErrors,
+      editErrors,
     } = this.props;
 
     if (!isModalShown) return null;
@@ -70,8 +60,8 @@ let TagsManagerCont = class extends Component {
         onEndEditingTag={endEditingTag}
         onSubmitCreateTag={submitCreateTag}
         onSubmitEditTag={submitEditTag}
-        canSubmitCreate={this.canSubmitCreate}
-        canSubmitEdit={this.canSubmitEdit}
+        canSubmitCreate={!createErrors}
+        canSubmitEdit={!editErrors}
       />
     );
   }
@@ -83,7 +73,7 @@ TagsManagerCont.propTypes = {
   tags: ImmutablePropTypes.list.isRequired,
   editingId: PropTypes.string,
   isModalShown: PropTypes.bool,
-  form: PropTypes.object.isRequired,
+  formErrors: PropTypes.object,
 
   // actions
   createTag: PropTypes.func.isRequired,
@@ -97,10 +87,11 @@ TagsManagerCont.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-  tags: state.tags.get('byId').toList(),
-  editingId: state.tags.get('editingId'),
-  isModalShown: state.tags.get('isModalShown'),
-  form: state.form,
+  tags: getTagsById(state).toList(),
+  editingId: getTagsEditingId(state),
+  isModalShown: getTagsIsModalShown(state),
+  createErrors: getFieldErrors('tags', 'create')(state),
+  editErrors: getFieldErrors('tags', 'edit')(state),
 });
 
 const mapDispatchTopProps = {

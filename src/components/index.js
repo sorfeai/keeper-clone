@@ -1,5 +1,5 @@
 export { AnimateMount } from './AnimateMount';
-export { PageHOC } from './PageHOC';
+export { SetPageHOC } from './SetPageHOC';
 export { App } from './App';
 export { FocusHOC } from './FocusHOC';
 export { Header } from './Header';

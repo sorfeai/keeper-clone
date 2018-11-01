@@ -11,11 +11,13 @@ let TextInput = ({
   defaultValue,
   input,
   onRef,
+  onChangeCustom,
   appearance,
   isFullwidth,
   isBoldText,
   ...restProps
 }) => {
+  // TODO: extract boilerplate code from this component and Textarea
   const cls = classNames({
     [style.textInput]: true,
     'input is-rounded': appearance === 'rounded',
@@ -25,6 +27,12 @@ let TextInput = ({
     [style.isBoldText]: isBoldText,
   });
 
+  const onChange = onChangeCustom
+    ? (ev) => {
+      input.onChange(ev);
+      onChangeCustom(ev);
+    } : input.onChange;
+
   return (
     <input
       ref={onRef}
@@ -32,6 +40,7 @@ let TextInput = ({
       className={cls}
       {...input}
       {...restProps}
+      onChange={onChange}
     />
   );
 };

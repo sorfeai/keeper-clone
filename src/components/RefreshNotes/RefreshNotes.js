@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
+import { getAppRefreshStatus } from '../../selectors';
 import { startRefresh } from '../../actions';
 import { IconButton, SpinnerLoading } from '..';
 import { REFRESH_IN_PROGRESS, REFRESH_DONE } from '../../constants/types';
@@ -23,17 +25,16 @@ let RefreshNotes = ({ refreshStatus, startRefresh }) => {
 };
 
 
-/**
-* connect to state
-*/
-
 const mapStateToProps = (state) => ({
-  refreshStatus: state.common.refreshStatus,
+  refreshStatus: getAppRefreshStatus(state),
 });
 
 const mapDispatchToProps = { startRefresh };
 
-RefreshNotes = connect(mapStateToProps, mapDispatchToProps)(RefreshNotes);
+RefreshNotes = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RefreshNotes);
 
 
 export { RefreshNotes };

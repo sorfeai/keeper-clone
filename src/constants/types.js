@@ -1,6 +1,7 @@
 /**
 * Action types
 */
+export const TOGGLE_USER_MENU = 'TOGGLE_USER_MENU';
 export const SET_USER = 'SET_USER';
 export const SET_MAX_COLUMNS = 'SET_MAX_COLUMNS';
 export const SEARCH_INPUT_UPDATED = 'SEARCH_INPUT_UPDATED';

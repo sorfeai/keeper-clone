@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import uuid from 'small-uuid';
-import { getEditNoteFormTitle, getEditNoteFormContent } from '../../selectors';
-import style from './NoteToolbar.module.scss';
+
+import { getFormErrors } from '../../selectors';
 import { IconButton, OuterClick } from '..';
+import style from './NoteToolbar.module.scss';
 
 
 let NoteToolbar = class extends Component {
@@ -55,7 +56,7 @@ let NoteToolbar = class extends Component {
       onRestore,
       onDeleteForever,
       tags,
-      editNoteForm,
+      formEditErrors,
     } = this.props;
 
     const { editTitle, editContent } = this.props;
@@ -101,7 +102,7 @@ let NoteToolbar = class extends Component {
       <button
         type="button"
         onClick={onSave}
-        disabled={editNoteForm && editNoteForm.syncErrors}
+        disabled={formEditErrors}
         className="button is-light"
       >
         {'Save'}
@@ -130,7 +131,7 @@ let NoteToolbar = class extends Component {
 
 
 const mapStateToProps = (state) => ({
-  editNoteForm: state.form.editNote,
+  formEditErrors: getFormErrors('edit')(state),
 });
 
 NoteToolbar = connect(mapStateToProps)(NoteToolbar);

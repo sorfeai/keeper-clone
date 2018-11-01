@@ -2,25 +2,32 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, focus } from 'redux-form';
 
+import style from './Search.module.scss';
+import { TextInput, IconButton } from '..';
+
+import {
+  getAppIsSearchingNotes,
+  getFormValue,
+} from '../../selectors';
+
 import {
   enterSearchMode,
   exitSearchMode,
   updateSearchQuery,
+  searchInputUpdated,
 } from '../../actions';
 
-import style from './Search.module.scss';
-import { IconButton } from '..';
 
-
-let Search = ({ focus }) => (
+let Search = ({ focus, searchInputUpdated }) => (
   <div className={style.wrapper}>
     <form>
       <Field
-        component={Dummy}
+        component={TextInput}
         name="search"
         className={style.searchInput}
         placeholder="Search"
         autoComplete="off"
+        onChangeCustom={searchInputUpdated}
       />
       <div className={style.iconWrapper}>
         <IconButton
@@ -59,13 +66,16 @@ const Dummy = class extends Component {
 
 
 const mapStateToProps = (state) => ({
-  searching: state.common.searching,
-  searchQuery: state.common.searchQuery,
+  searching: getAppIsSearchingNotes(state),
+  searchQuery: getFormValue('search', 'search')(state),
 });
 
-Search = connect(mapStateToProps, { focus })(Search);
+const mapDispatchToProps = {
+  focus,
+  searchInputUpdated,
+};
 
-
+Search = connect(mapStateToProps, mapDispatchToProps)(Search);
 Search = reduxForm({ form: 'search' })(Search);
 
 

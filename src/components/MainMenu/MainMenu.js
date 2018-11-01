@@ -2,14 +2,18 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { NavLink } from 'react-router-dom';
-import { Icon } from 'react-bulma-components/full';
 import uuid from 'small-uuid';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 
-import { IconButton } from '..';
 import { showTagsModal } from '../../actions';
 import style from './MainMenu.module.scss';
+
+import {
+  getAppIsMainMenuActive,
+  getTagsById,
+  getTrashNotesIds,
+} from '../../selectors';
 
 
 const itemsData = [
@@ -142,14 +146,10 @@ MainMenu.propTypes = {
 };
 
 
-/**
-* connect to store
-*/
-
 const mapStateToProps = (state) => ({
-  isActive: state.common.get('mainMenuActive'),
-  tags: state.tags.get('byId').toList(),
-  notesInTrashCount: state.trash.get('notesById').size,
+  isActive: getAppIsMainMenuActive(state),
+  tags: getTagsById(state).toList(),
+  notesInTrashCount: getTrashNotesIds(state).size,
 });
 
 const mapDispatchToProps = { showTagsModal };

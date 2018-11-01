@@ -41,8 +41,8 @@ const Textarea = class extends Component {
 
     const onChange = onChangeCustom
       ? (ev) => {
-        onChangeCustom(ev);
         input.onChange(ev);
+        onChangeCustom(ev);
       } : input.onChange;
 
     return (

@@ -2,8 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { hideNotification, restoreNotesFromTrash } from '../../actions';
+
 import { NOTIFICATION_LIFE_TIME } from '../../constants/settings';
+import { getNotificationsById } from '../../selectors';
+import { Notification } from '..';
+import style from './NotificationsManager.module.scss';
+
+import {
+  hideNotification,
+  restoreNotesFromTrash,
+} from '../../actions';
 
 import {
   NOTIFICATION_SUCCESS,
@@ -11,9 +19,6 @@ import {
   NOTIFICATION_WARNING,
   NOTIFICATION_ERROR,
 } from '../../constants/types';
-
-import { Notification } from '..';
-import style from './NotificationsManager.module.scss';
 
 
 const NotificationSuccess = (props) => (
@@ -87,7 +92,7 @@ NotificationsManager.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-  notifications: state.notifications.get('notifications'),
+  notifications: getNotificationsById(state).toList(),
 });
 
 const mapDispatchToProps = {

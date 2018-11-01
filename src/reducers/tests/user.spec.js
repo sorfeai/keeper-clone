@@ -1,8 +1,12 @@
 import * as matchers from 'jest-immutable-matchers';
 import { Map } from 'immutable';
 import userReducer from '../user';
-import { setUser } from '../../actions';
 import { getUser } from '../../selectors';
+
+import {
+  setUser,
+  toggleUserMenu,
+} from '../../actions';
 
 
 describe('user reducer', () => {
@@ -14,6 +18,7 @@ describe('user reducer', () => {
     const state = userReducer(undefined, { type: undefined });
 
     const expected = Map({
+      isMenuActive: false,
       username: null,
       firstName: null,
       lastName: null,
@@ -25,7 +30,7 @@ describe('user reducer', () => {
   });
 
   describe('actions', () => {
-    describe('SET_USER', () => {
+    describe('setUser(userData)', () => {
       it('sets fields to corresponding provided', () => {
         const user = Map({
           username: 'johndoe',
@@ -36,9 +41,18 @@ describe('user reducer', () => {
         });
 
         const state = userReducer(undefined, setUser(user));
+        console.log(state);
 
         expect(getUser(state)).toEqualImmutable(user);
       });
     });
+
+    // describe('toggleUserMenu()', () => {
+    //   it('toggles `isMenuActive`', () => {
+    //     const state = userReducer(undefined, toggleUserMenu());
+    //
+    //     expect(getUser(state)).toEqualImmutable(user);
+    //   });
+    // });
   });
 });

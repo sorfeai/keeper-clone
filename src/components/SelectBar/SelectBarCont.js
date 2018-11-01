@@ -3,15 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import { PAGE_TRASH } from '../../constants/types';
+import { SelectBarView } from '.';
+
+import {
+  getAppCurrentPage,
+  getNotesSelectedIds,
+} from '../../selectors';
+
 import {
   togglePinNotes,
   clearSelection,
   moveNotesToTrash,
   deleteNotes,
 } from '../../actions';
-
-import { PAGE_TRASH } from '../../constants/types';
-import { SelectBarView } from '.';
 
 
 let SelectBarCont = class extends Component {
@@ -73,11 +78,8 @@ let SelectBarCont = class extends Component {
 
 
 SelectBarCont.propTypes = {
-  // state
   currentPage: PropTypes.string.isRequired,
   selectedNotes: ImmutablePropTypes.list.isRequired,
-
-  // actions
   togglePinNotes: PropTypes.func.isRequired,
   clearSelection: PropTypes.func.isRequired,
   moveNotesToTrash: PropTypes.func.isRequired,
@@ -86,8 +88,8 @@ SelectBarCont.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-  currentPage: state.common.get('currentPage'),
-  selectedNotes: state.select.get('selectedNotes'),
+  currentPage: getAppCurrentPage(state),
+  selectedNotes: getNotesSelectedIds(state),
 });
 
 const mapDispatchToProps = {
@@ -97,6 +99,10 @@ const mapDispatchToProps = {
   deleteNotes,
 };
 
-SelectBarCont = connect(mapStateToProps, mapDispatchToProps)(SelectBarCont);
+SelectBarCont = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectBarCont);
+
 
 export { SelectBarCont };

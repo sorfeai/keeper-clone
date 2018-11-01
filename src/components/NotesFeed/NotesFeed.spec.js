@@ -1,5 +1,5 @@
 import times from 'lodash/times';
-import { Map, List } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { NotesFeedView } from '.';
@@ -19,14 +19,14 @@ const propsSetup = {
 
 describe('NotesFeedView', () => {
   it('renders as grid if `isGrid` set to true', () => {
-    const data = {
+    const data = fromJS({
       pinned: {},
       other: {
         1: times(2, sampleNote),
         2: times(2, sampleNote),
         3: times(2, sampleNote),
       },
-    };
+    });
 
     const wrapper = shallow(
       <NotesFeedView
@@ -44,10 +44,10 @@ describe('NotesFeedView', () => {
   });
 
   it('renders as list if `isGrid` set to false or not provided', () => {
-    const data = {
+    const data = fromJS({
       pinned: {},
       other: times(6, sampleNote),
-    };
+    });
 
     const wrapper = shallow(
       <NotesFeedView

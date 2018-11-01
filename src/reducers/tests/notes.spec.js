@@ -119,7 +119,7 @@ describe('notes reducer', () => {
       };
 
       it('adds new note to `byId` and its id to `allIds`', () => {
-        const id = 'one';
+        const id = 1;
         const { note, state } = addNote(id);
 
         expect(note).toBeDefined();
@@ -136,7 +136,7 @@ describe('notes reducer', () => {
     });
 
     it('`UPDATE_NOTE`: merges note with provided id with provided changes', () => {
-      const id = 'one';
+      const id = 1;
       const title = 'updated title';
       const content = 'updated content';
       const state = rootReducer(
@@ -150,7 +150,7 @@ describe('notes reducer', () => {
     });
 
     it('`DELETE_NOTES`: removes note(s) with provided id(s) from `byId` and its id(s) from `allIds`', () => {
-      const id = 'one';
+      const id = 1;
       const state = rootReducer(
         defaultState,
         deleteNotes([id])
@@ -167,7 +167,7 @@ describe('notes reducer', () => {
 
     describe('`TAG_NOTE`: adds provided tag id(s) to `tags`', () => {
       it('handles single number as `id` param', () => {
-        const noteId = 'one';
+        const noteId = 1;
         const tagId = 'tag one';
         const state = rootReducer(
           defaultState,
@@ -182,7 +182,7 @@ describe('notes reducer', () => {
       });
 
       it('handles array of ids as `id` param', () => {
-        const noteId = 'one';
+        const noteId = 1;
         const tagIds = ['tag one', 'tag two'];
         const state = rootReducer(
           defaultState,
@@ -207,12 +207,12 @@ describe('notes reducer', () => {
       beforeEach(() => {
         defaultState = rootReducer(
           defaultState,
-          pinNotes(['one', 'two', 'three'])
+          pinNotes([1, 2, 3])
         );
       });
 
       it('`PIN_NOTES`: adds provided id(s) to `pinnedIds`', () => {
-        const ids = ['four', 'five'];
+        const ids = [4, 5];
         const state = rootReducer(
           defaultState,
           pinNotes(ids)
@@ -230,7 +230,7 @@ describe('notes reducer', () => {
       });
 
       it('`UNPIN_NOTES`: removes provided id(s) from `pinnedIds`', () => {
-        const ids = ['two', 'three'];
+        const ids = [2, 3];
         const state = rootReducer(
           defaultState,
           unpinNotes(ids)
@@ -250,7 +250,7 @@ describe('notes reducer', () => {
 
     describe('select', () => {
       beforeEach(() => {
-        const ids = ['one', 'two', 'three'];
+        const ids = [1, 2, 3];
 
         defaultState = ids.reduce((state, id) => (
           rootReducer(state, selectNote(id))
@@ -269,7 +269,7 @@ describe('notes reducer', () => {
       });
 
       it('`SELECT_NOTE`: adds provided id to `ids`', () => {
-        const id = 'four';
+        const id = 4;
         const state = rootReducer(
           defaultState,
           selectNote(id)
@@ -281,7 +281,7 @@ describe('notes reducer', () => {
       });
 
       it('`DESELECT_NOTE`: removes provided id from `ids`', () => {
-        const id = 'one';
+        const id = 1;
         const state = rootReducer(
           defaultState,
           deselectNote(id)

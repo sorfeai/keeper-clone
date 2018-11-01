@@ -3,6 +3,11 @@ import { createSelector } from 'reselect';
 
 export const getUser = (state) => state.user;
 
+export const getUserIsMenuActive = createSelector(
+  getUser,
+  (user) => user.get('isMenuActive')
+);
+
 export const getUserUsername = createSelector(
   getUser,
   (user) => user.get('username')

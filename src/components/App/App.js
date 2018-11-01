@@ -1,59 +1,76 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
+import { getAppIsMainMenuActive } from '../../selectors';
+import { initApp } from '../../actions';
+import { PAGE_HOME, PAGE_TRASH } from '../../constants/types';
+import style from './App.module.scss';
+
 import {
+  SetPageHOC,
   Header,
   MainMenu,
   NotesFeed,
   NotificationsManager,
   TagsManager,
-  Trash,
 } from '..';
 
-import style from './App.module.scss';
 
+let App = class extends Component {
+  componentDidMount () {
+    this.props.initApp();
+  }
 
-let App = ({ isMainMenuActive }) => {
-  const contentCls = classNames({
-    [style.content]: true,
-    [style.isMainMenuActive]: isMainMenuActive,
-  });
+  render () {
+    const { isMainMenuActive } = this.props;
 
-  const redirectHome = () => <Redirect to='/home' />;
+    const contentCls = classNames({
+      [style.content]: true,
+      [style.isMainMenuActive]: isMainMenuActive,
+    });
 
-  return (
-    <BrowserRouter>
-      <div className={style.app}>
-        <TagsManager />
-        <div className={style.notifications}>
-          <NotificationsManager />
+    const redirectHome = () => <Redirect to='/home' />;
+
+    const HomePage = SetPageHOC(PAGE_HOME)(NotesFeed);
+    const TrashPage = SetPageHOC(PAGE_TRASH)(NotesFeed);
+
+    return (
+      <BrowserRouter>
+        <div className={style.app}>
+          <TagsManager />
+          <div className={style.notifications}>
+            <NotificationsManager />
+          </div>
+          <Header />
+          <MainMenu />
+          <div className={`${contentCls} container`}>
+            <Route exact path='/' render={redirectHome} />
+            <Route exact path='/home' component={HomePage} />
+            <Route exact path='/trash' component={TrashPage} />
+          </div>
         </div>
-        <Header />
-        <MainMenu />
-        <div className={`${contentCls} container`}>
-          <Route exact path='/' render={redirectHome} />
-          <Route exact path='/home' component={NotesFeed} />
-          <Route exact path='/trash' component={Trash} />
-        </div>
-      </div>
-    </BrowserRouter>
-  );
+      </BrowserRouter>
+    );
+  }
 };
 
 
 App.propTypes = {
   isMainMenuActive: PropTypes.bool,
+  initApp: PropTypes.func.isRequired,
 };
 
 
 const mapStateToProps = (state) => ({
-  isMainMenuActive: state.common.get('mainMenuActive'),
+  isMainMenuActive: getAppIsMainMenuActive(state),
 });
 
-App = connect(mapStateToProps)(App);
+const mapDispatchToProps = { initApp };
+
+App = connect(mapStateToProps, mapDispatchToProps)(App);
 
 
 export { App };

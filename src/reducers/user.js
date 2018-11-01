@@ -1,8 +1,13 @@
 import { Map } from 'immutable';
-import { SET_USER } from '../constants/types';
+
+import {
+  SET_USER,
+  TOGGLE_USER_MENU,
+} from '../constants/types';
 
 
 const defaultState = Map({
+  isMenuActive: false,
   username: null,
   firstName: null,
   lastName: null,
@@ -13,6 +18,8 @@ const defaultState = Map({
 
 const appReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case TOGGLE_USER_MENU:
+      return state.update('isMenuActive', (active) => !active);
     case SET_USER: {
       const {
         username,

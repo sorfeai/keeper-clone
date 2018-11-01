@@ -1,10 +1,22 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import style from './Trash.module.scss';
-import { PageHOC, Note } from '..';
+
 import { clearTrash } from '../../actions';
+import { SetPageHOC, Note } from '..';
 import { PAGE_TRASH } from '../../constants/types';
+import style from './Trash.module.scss';
+
+import {
+  getAppIsFeedViewGrid,
+  getNotesFeed,
+  getNotesIsSelecting,
+  getNotesSelectedIds,
+  getNotesPinnedIds,
+  getNotesIsEditing,
+  getTrashNotesIds,
+  getFormValue,
+} from '../../selectors';
 
 
 let Trash = class extends Component {
@@ -237,36 +249,32 @@ let Trash = class extends Component {
 };
 
 
-/**
-* prop types
-*/
 Trash.propTypes = {
+  // TODO: complete it
   gridView: PropTypes.bool,
 };
 
 Trash.defaultProps = {
+  // TODO: complete it
   gridView: true,
 };
 
 
-/**
-* HOCs
-*/
 const mapStateToProps = (state) => ({
-  gridView: state.common.get('feedViewIsGrid'),
-  notesData: state.notes.get('byId'),
-  searchQuery: state.common.get('searchQuery'),
-  selecting: state.select.get('selecting'),
-  selectedNotes: state.select.get('selectedNotes'),
-  pinnedNotes: state.pin.get('ids'),
-  editing: state.edit.get('editing'),
-  notesInTrash: state.trash.get('notesById'),
+  gridView: getAppIsFeedViewGrid(state),
+  notesData: getNotesFeed(state),
+  searchQuery: getFormValue('search', 'search')(state),
+  selecting: getNotesIsSelecting(state),
+  selectedNotes: getNotesSelectedIds(state),
+  pinnedNotes: getNotesPinnedIds(state),
+  editing: getNotesIsEditing(state),
+  notesInTrash: getTrashNotesIds(state),
 });
 
 const mapDispatchToProps = { clearTrash };
 
 Trash = connect(mapStateToProps, mapDispatchToProps)(Trash);
-Trash = PageHOC(PAGE_TRASH)(Trash);
+Trash = SetPageHOC(PAGE_TRASH)(Trash);
 
 
 export { Trash };
