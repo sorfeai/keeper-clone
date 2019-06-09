@@ -8,6 +8,7 @@ import {
   createNote,
   moveNotesToTrash,
   formatNotesForFeed,
+  addTagsToNote,
 } from '../actions';
 
 
@@ -18,6 +19,7 @@ const handleInitApp = function* () {
   ));
 
   yield put(moveNotesToTrash(['1', '2']));
+  yield put(addTagsToNote('4', ['test-1', 'test-2']));
 
   const data = yield select(getNotesById);
   yield put(formatNotesForFeed(data));

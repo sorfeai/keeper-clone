@@ -8,6 +8,7 @@ import {
   getTagsAllIds,
   getTagsEditingId,
   getTagsIsModalShown,
+  getTagsIsApplyTagsShown,
 } from '..';
 
 
@@ -82,6 +83,16 @@ describe('tags selectors', () => {
       expect(
         getTagsIsModalShown.resultFunc(state)
       ).toBe(true);
+    });
+  });
+
+  describe('getTagsIsApplyTagsShown', () => {
+    it('gets `isApplyTagsShown`', () => {
+      const state = Map({ isApplyTagsShown: true });
+
+      expect(
+        getTagsIsApplyTagsShown.resultFunc(state)
+      ).toBeTruthy();
     });
   });
 });

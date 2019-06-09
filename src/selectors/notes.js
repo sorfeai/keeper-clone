@@ -47,3 +47,8 @@ export const getNotesSelectedIds = createSelector(
   getNotes,
   (notes) => notes.get('selectedIds')
 );
+
+export const getNotesTagFilter = createSelector(
+  getNotes,
+  (notes) => notes.get('tagFilter')
+);

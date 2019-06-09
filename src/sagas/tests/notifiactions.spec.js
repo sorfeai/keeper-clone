@@ -17,13 +17,15 @@ import {
 describe('notifications sagas', () => {
   describe('MOVE_NOTES_TO_TRASH', () => {
     it('dispatches showNotification(type, message)', () => {
-      const ids = [1, 2, 3];
+      const ids = ['1', '2', '3'];
 
       return expectSaga(watchMoveNotesToTrash)
-        .put(showNotification(
-          NOTIFICATION_INFO,
-          notesMovedToTrashMessage.format({ notesCount: ids.length })
-        ))
+        .put(showNotification({
+          type: NOTIFICATION_INFO,
+          message: notesMovedToTrashMessage.format({
+            notesCount: ids.length,
+          }),
+        }))
         .dispatch(moveNotesToTrash(ids))
         .run();
     });
@@ -31,13 +33,15 @@ describe('notifications sagas', () => {
 
   describe('DELETE_NOTES', () => {
     it('dispatches showNotification(type, message)', () => {
-      const ids = [1, 2, 3];
+      const ids = ['1', '2', '3'];
 
       return expectSaga(watchDeleteNotes)
-        .put(showNotification(
-          NOTIFICATION_INFO,
-          notesDeletedMessage.format({ notesCount: ids.length })
-        ))
+        .put(showNotification({
+          type: NOTIFICATION_INFO,
+          message: notesDeletedMessage.format({
+            notesCount: ids.length,
+          }),
+        }))
         .dispatch(deleteNotes(ids))
         .run();
     });

@@ -1,6 +1,6 @@
 import * as matchers from 'jest-immutable-matchers';
 import { Map, List } from 'immutable';
-import rootReducer from '..';
+import reducer from '..';
 import notesReducer from '../notes';
 import { mockNotesData } from '../../testUtils';
 
@@ -20,7 +20,7 @@ import {
   formatNotesForFeedDone,
   createNote,
   updateNote,
-  tagNote,
+  applyTags,
   deleteNotes,
   pinNotes,
   unpinNotes,
@@ -45,7 +45,7 @@ describe('notes reducer', () => {
       const notes = mockNotesData(3);
 
       defaultState = notes.reduce((acc, note) => (
-        rootReducer(
+        reducer(
           acc,
           createNote({
             id: note.get('id'),
@@ -82,7 +82,7 @@ describe('notes reducer', () => {
 
     it('`FORMAT_NOTES_FOR_FEED_DONE`: sets `formmated` to provided', () => {
       const notesData = mockNotesData(3);
-      const state = rootReducer(
+      const state = reducer(
         undefined,
         formatNotesForFeedDone(notesData)
       );
@@ -98,7 +98,7 @@ describe('notes reducer', () => {
         const content = 'content';
         const tags = List(['tag one', 'tag two']);
 
-        const state = rootReducer(
+        const state = reducer(
           undefined,
           createNote({
             id,
@@ -119,7 +119,7 @@ describe('notes reducer', () => {
       };
 
       it('adds new note to `byId` and its id to `allIds`', () => {
-        const id = 1;
+        const id = '1';
         const { note, state } = addNote(id);
 
         expect(note).toBeDefined();
@@ -136,10 +136,10 @@ describe('notes reducer', () => {
     });
 
     it('`UPDATE_NOTE`: merges note with provided id with provided changes', () => {
-      const id = 1;
+      const id = '1';
       const title = 'updated title';
       const content = 'updated content';
-      const state = rootReducer(
+      const state = reducer(
         defaultState,
         updateNote(id, { title, content })
       );
@@ -150,8 +150,8 @@ describe('notes reducer', () => {
     });
 
     it('`DELETE_NOTES`: removes note(s) with provided id(s) from `byId` and its id(s) from `allIds`', () => {
-      const id = 1;
-      const state = rootReducer(
+      const id = '1';
+      const state = reducer(
         defaultState,
         deleteNotes([id])
       );
@@ -165,28 +165,28 @@ describe('notes reducer', () => {
       ).toBeFalsy();
     });
 
-    describe('`TAG_NOTE`: adds provided tag id(s) to `tags`', () => {
+    describe('`APPLY_TAGS`: adds provided tag id(s) to `tags`', () => {
       it('handles single number as `id` param', () => {
-        const noteId = 1;
+        const noteId = '1';
         const tagId = 'tag one';
-        const state = rootReducer(
+        const state = reducer(
           defaultState,
-          tagNote(noteId, tagId)
+          applyTags(noteId, tagId)
         );
 
         expect(
           getNotesNoteById(noteId)(state)
           .get('tags')
           .includes(tagId)
-        ).toBe(true);
+        ).toBeTruthy();
       });
 
       it('handles array of ids as `id` param', () => {
-        const noteId = 1;
+        const noteId = '1';
         const tagIds = ['tag one', 'tag two'];
-        const state = rootReducer(
+        const state = reducer(
           defaultState,
-          tagNote(noteId, tagIds)
+          applyTags(noteId, tagIds)
         );
 
         expect(
@@ -205,15 +205,15 @@ describe('notes reducer', () => {
 
     describe('pin', () => {
       beforeEach(() => {
-        defaultState = rootReducer(
+        defaultState = reducer(
           defaultState,
-          pinNotes([1, 2, 3])
+          pinNotes(['1', '2', '3'])
         );
       });
 
       it('`PIN_NOTES`: adds provided id(s) to `pinnedIds`', () => {
-        const ids = [4, 5];
-        const state = rootReducer(
+        const ids = ['4', '5'];
+        const state = reducer(
           defaultState,
           pinNotes(ids)
         );
@@ -230,8 +230,8 @@ describe('notes reducer', () => {
       });
 
       it('`UNPIN_NOTES`: removes provided id(s) from `pinnedIds`', () => {
-        const ids = [2, 3];
-        const state = rootReducer(
+        const ids = ['2', '3'];
+        const state = reducer(
           defaultState,
           unpinNotes(ids)
         );
@@ -250,15 +250,15 @@ describe('notes reducer', () => {
 
     describe('select', () => {
       beforeEach(() => {
-        const ids = [1, 2, 3];
+        const ids = ['1', '2', '3'];
 
         defaultState = ids.reduce((state, id) => (
-          rootReducer(state, selectNote(id))
+          reducer(state, selectNote(id))
         ), undefined);
       });
 
       it('`TOGGLE_IS_SELECTING`: toggles `isSelecting`', () => {
-        const state = rootReducer(
+        const state = reducer(
           undefined,
           toggleSelectMode(undefined)
         );
@@ -269,8 +269,8 @@ describe('notes reducer', () => {
       });
 
       it('`SELECT_NOTE`: adds provided id to `ids`', () => {
-        const id = 4;
-        const state = rootReducer(
+        const id = '4';
+        const state = reducer(
           defaultState,
           selectNote(id)
         );
@@ -281,8 +281,8 @@ describe('notes reducer', () => {
       });
 
       it('`DESELECT_NOTE`: removes provided id from `ids`', () => {
-        const id = 1;
-        const state = rootReducer(
+        const id = '1';
+        const state = reducer(
           defaultState,
           deselectNote(id)
         );
@@ -294,21 +294,21 @@ describe('notes reducer', () => {
       });
 
       it('`CLEAR_SELECTION`: clears `ids`', () => {
-        const state = rootReducer(
+        const state = reducer(
           defaultState,
           clearSelection()
         );
 
         expect(
           getNotesSelectedIds(state).size
-        ).toEqual(0);
+        ).toBe(0);
       });
     });
 
     describe('edit', () => {
       it('`EDIT_NOTE_START`: sets `editing` to true and `id` to provided  one', () => {
-        const id = 1;
-        const state = rootReducer(
+        const id = '1';
+        const state = reducer(
           undefined,
           startEditingNote(id)
         );
@@ -323,7 +323,7 @@ describe('notes reducer', () => {
       });
 
       it('`EDIT_NOTE_END`: sets `editing` to false and `id` to null', () => {
-        const state = rootReducer(
+        const state = reducer(
           undefined,
           endEditingNote()
         );

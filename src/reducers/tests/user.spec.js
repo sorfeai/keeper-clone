@@ -1,7 +1,12 @@
 import * as matchers from 'jest-immutable-matchers';
 import { Map } from 'immutable';
+import reducer from '..';
 import userReducer from '../user';
-import { getUser } from '../../selectors';
+
+import {
+  getUser,
+  getUserIsMenuActive,
+} from '../../selectors';
 
 import {
   setUser,
@@ -14,7 +19,7 @@ describe('user reducer', () => {
     jest.addMatchers(matchers);
   });
 
-  it.only('provides correct default state', () => {
+  it('provides correct default state', () => {
     const state = userReducer(undefined, { type: undefined });
 
     const expected = Map({
@@ -32,27 +37,26 @@ describe('user reducer', () => {
   describe('actions', () => {
     describe('setUser(userData)', () => {
       it('sets fields to corresponding provided', () => {
-        const user = Map({
+        const user = {
           username: 'johndoe',
           firstName: 'John',
           lastName: 'Doe',
           email: 'john@doe.com',
           avatar: 'johndoe.jpeg',
-        });
+        };
+        const state = reducer(undefined, setUser(user));
 
-        const state = userReducer(undefined, setUser(user));
-        console.log(state);
-
-        expect(getUser(state)).toEqualImmutable(user);
+        expect(
+          getUser(state).isSuperset(user)
+        ).toBeTruthy();
       });
     });
 
-    // describe('toggleUserMenu()', () => {
-    //   it('toggles `isMenuActive`', () => {
-    //     const state = userReducer(undefined, toggleUserMenu());
-    //
-    //     expect(getUser(state)).toEqualImmutable(user);
-    //   });
-    // });
+    describe('toggleUserMenu()', () => {
+      it('toggles `isMenuActive`', () => {
+        const state = reducer(undefined, toggleUserMenu());
+        expect(getUserIsMenuActive(state)).toBeTruthy();
+      });
+    });
   });
 });

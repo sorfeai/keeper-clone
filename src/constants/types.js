@@ -1,5 +1,5 @@
 /**
-* Action types
+* action types
 */
 export const TOGGLE_USER_MENU = 'TOGGLE_USER_MENU';
 export const SET_USER = 'SET_USER';
@@ -19,10 +19,13 @@ export const TOGGLE_FEED_VIEW = 'TOGGLE_FEED_VIEW';
 export const CLEAR_SELECTION = 'CLEAR_SELECTION';
 export const TOGGLE_IS_SELECTING = 'TOGGLE_IS_SELECTING';
 export const TOGGLE_SELECT_NOTE = 'TOGGLE_SELECT_NOTE';
+export const NEW_NOTE = 'NEW_NOTE';
 export const CREATE_NOTE = 'CREATE_NOTE';
 export const SELECT_NOTE = 'SELECT_NOTE';
 export const DESELECT_NOTE = 'DESELECT_NOTE';
-export const TAG_NOTE = 'TAG_NOTE';
+export const APPLY_TAGS = 'APPLY_TAGS';
+export const ADD_TAGS_TO_NOTE = 'ADD_TAGS_TO_NOTE';
+export const REMOVE_TAG_FROM_NOTE = 'REMOVE_TAG_FROM_NOTE';
 export const MOVE_NOTES_TO_TRASH = 'MOVE_NOTES_TO_TRASH';
 export const RESTORE_NOTES_FROM_TRASH = ' RESTORE_NOTES_FROM_TRASH';
 export const CLEAR_TRASH = 'CLEAR_TRASH';
@@ -45,6 +48,8 @@ export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const SAVE_EDITED_NOTE = 'SAVE_EDITED_NOTE';
 export const SHOW_TAGS_MODAL = 'SHOW_TAGS_MODAL';
 export const HIDE_TAGS_MODAL = 'HIDE_TAGS_MODAL';
+export const SHOW_APPLY_TAGS = 'SHOW_APPLY_TAGS';
+export const HIDE_APPLY_TAGS = 'HIDE_APPLY_TAGS';
 export const SUBMIT_CREATE_TAG = 'SUBMIT_CREATE_TAG';
 export const SUBMIT_EDIT_TAG = 'SUBMIT_EDIT_TAG';
 export const CREATE_TAG = 'CREATE_TAG';
@@ -52,16 +57,18 @@ export const DELETE_TAG = 'DELETE_TAG';
 export const START_EDITING_TAG = 'START_EDITING_TAG';
 export const END_EDITING_TAG = 'END_EDITING_TAG';
 export const UPDATE_TAG = 'UPDATE_TAG';
+export const SET_TAG_FILTER = 'SET_TAG_FILTER';
+export const RESET_TAG_FILTER = 'RESET_TAG_FILTER';
 
 
 /**
-* Deletion types
+* deletion types
 */
 export const DELETION_DELETE = 'DELETION_DELETE';
 
 
 /**
-* Notification types
+* notification types
 */
 export const NOTIFICATION_SUCCESS = 'NOTIFICATION_SUCCESS';
 export const NOTIFICATION_INFO = 'NOTIFICATION_INFO';
@@ -70,7 +77,7 @@ export const NOTIFICATION_ERROR = 'NOTIFICATION_ERROR';
 
 
 /**
-* Pages
+* pages
 */
 export const PAGE_HOME = 'PAGE_HOME';
 export const PAGE_TRASH = 'PAGE_TRASH';

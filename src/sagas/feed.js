@@ -17,6 +17,7 @@ import {
   getAppMaxColumns,
   getNotesById,
   getNotesPinnedIds,
+  getNotesTagFilter,
   getTrashNotesIds,
 } from '../selectors';
 
@@ -32,6 +33,8 @@ import {
   MOVE_NOTES_TO_TRASH,
   RESTORE_NOTES_FROM_TRASH,
   SEARCH_INPUT_UPDATED,
+  SET_TAG_FILTER,
+  RESET_TAG_FILTER,
   // APPLY_SEARCH_FILTER,
   // APPLY_SEARCH_FILTER_DONE,
   // SPLIT_BY_PIN,
@@ -64,31 +67,70 @@ export const filterTrash = function* (data, isTrash) {
 export const _applySearchFilter = function* (data) {
   let filtered = data;
 
-  const searchQuery = yield select(
+  let searchQuery = yield select(
     getFormValue('search', 'search')
   );
 
+  // returns first index of search query substring 
+  // or false if there's no match
   if (typeof searchQuery !== 'undefined') {
-    const hasMatch = (note, field) => {
-      const query = trim(
-        searchQuery
-        .replace(/\s\s+/g, ' ')
-        .toLowerCase()
-      );
+    searchQuery = searchQuery
+      .trim()
+      .replace(/\s\s+/g, ' ')
+      .toLowerCase();
 
+    const hasMatch = (note, field) => {
       return note
         .get(field)
         .toLowerCase()
-        .includes(query);
+        .indexOf(searchQuery);
     };
 
-    filtered = data.filter((note) => (
-      hasMatch(note, 'title') || hasMatch(note, 'content')
-    ));
+    // inserts special tags around highlighted part of text
+    // that would be replaced with styled spans in view component
+    const highlight = (index) => (text) => {
+      return `${text.slice(0, index)}[HL_START]${text.slice(index, index + searchQuery.length)}[HL_END]${text.slice(index + searchQuery.length)}`;
+    };
+
+    filtered = data.reduce((filtered, note) => {
+      const titleMatch = hasMatch(note, 'title');
+      const contentMatch = hasMatch(note, 'content');
+
+      let highlighted = note;
+
+      if (titleMatch !== -1 || contentMatch !== -1) {
+        if (titleMatch !== -1) {
+          highlighted = highlighted.update('title', highlight(titleMatch));
+        }
+        if (contentMatch !== -1) {
+          highlighted = highlighted.update('content', highlight(contentMatch));
+        }
+
+        filtered.push(highlighted);
+      }
+
+      return filtered;
+    }, []);
+
+    filtered = List(filtered);
   }
 
   return filtered;
 };
+
+export const _applyTagFilter = function* (data) {
+  let filtered = data;
+
+  const tagId = yield select(getNotesTagFilter);
+
+  if (tagId !== undefined) {
+    filtered = data.filter((note) => {
+      return (note.get('tags').includes(tagId));
+    })
+  }
+  
+  return filtered;
+}
 
 export const _splitByPin = function* (data) {
   let pinned = List();
@@ -129,6 +171,7 @@ export const handleFormatNotesForFeed = function* () {
 
   feedData = yield call(filterTrash, feedData, isPageTrash);
   feedData = yield call(_applySearchFilter, feedData);
+  feedData = yield call(_applyTagFilter, feedData);
 
   if (!isPageTrash) {
     feedData = yield call(_splitByPin, feedData);
@@ -190,6 +233,8 @@ export const watchRelatedActions = function* () {
       MOVE_NOTES_TO_TRASH,
       RESTORE_NOTES_FROM_TRASH,
       SEARCH_INPUT_UPDATED,
+      SET_TAG_FILTER,
+      RESET_TAG_FILTER,
     ]);
 
     yield put(formatNotesForFeed());

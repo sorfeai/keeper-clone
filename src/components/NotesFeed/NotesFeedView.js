@@ -15,6 +15,7 @@ const NotesFeedView = ({
   selectedIds,
   editingId,
   isGrid,
+  tagFilter,
 }) => {
   if (!notes) return null;
 
@@ -87,8 +88,8 @@ const NotesFeedView = ({
         {notes.keySeq().map((key) => (
           <Columns.Column key={key}>
             {notes
-            .get(key)
-            .map(renderNote)}
+              .get(key)
+              .map(renderNote)}
           </Columns.Column>
         ))}
       </Columns>
@@ -131,6 +132,7 @@ NotesFeedView.propTypes = {
   editingId: PropTypes.string,
   isTrash: PropTypes.bool,
   isGrid: PropTypes.bool,
+  tagFilter: PropTypes.string,
 };
 
 

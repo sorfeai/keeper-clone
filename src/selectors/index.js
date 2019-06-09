@@ -28,6 +28,7 @@ export {
   getNotesEditingId,
   getNotesIsSelecting,
   getNotesSelectedIds,
+  getNotesTagFilter,
 } from './notes';
 
 export {
@@ -37,6 +38,7 @@ export {
   getTagsAllIds,
   getTagsEditingId,
   getTagsIsModalShown,
+  getTagsIsApplyTagsShown,
 } from './tags';
 
 export {

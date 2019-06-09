@@ -4,7 +4,7 @@
   &.isEditing {
     background: rgba(white, .6);
     position: fixed;
-    z-index: 1500;
+    z-index: 99999;
     top: 0;
     left: 0;
     right: 0;
@@ -56,6 +56,8 @@
   pointer-events: none;
 
   .isEditing & {
+    padding-top: 5px;
+    max-height: 70vh;
     pointer-events: auto;
   }
 }
@@ -67,10 +69,26 @@ $titleMargin: -.4rem 0 .6rem;
 
 .titleInputWrapper {
   margin: $titleMargin;
+  padding-bottom: .5rem;
+
+  input {
+    font-size: 26px;
+    font-weight: normal;
+  }
+}
+
+.contentInputWrapper {
+  max-height: 55vh;
+  margin-bottom: .8rem;
+  overflow-y: scroll;
 }
 
 .editForm {
   input[type=text], textarea {
     background: 0;
   }
+}
+
+.highlightText {
+  background: yellow;
 }

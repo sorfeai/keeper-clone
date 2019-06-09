@@ -6,73 +6,73 @@ import style from './Search.module.scss';
 import { TextInput, IconButton } from '..';
 
 import {
-  getAppIsSearchingNotes,
-  getFormValue,
+    getAppIsSearchingNotes,
+    getFormValue,
 } from '../../selectors';
 
 import {
-  enterSearchMode,
-  exitSearchMode,
-  updateSearchQuery,
-  searchInputUpdated,
+    enterSearchMode,
+    exitSearchMode,
+    updateSearchQuery,
+    searchInputUpdated,
 } from '../../actions';
 
 
 let Search = ({ focus, searchInputUpdated }) => (
-  <div className={style.wrapper}>
-    <form>
-      <Field
-        component={TextInput}
-        name="search"
-        className={style.searchInput}
-        placeholder="Search"
-        autoComplete="off"
-        onChangeCustom={searchInputUpdated}
-      />
-      <div className={style.iconWrapper}>
-        <IconButton
-          onClick={() => focus('search', 'search')}
-          icon="search"
-        />
-      </div>
-    </form>
-  </div>
+    <div className={style.wrapper}>
+        <form>
+            <Field
+                component={TextInput}
+                name="search"
+                className={style.searchInput}
+                placeholder="Search"
+                autoComplete="off"
+                onChangeCustom={searchInputUpdated}
+            />
+            <div className={style.iconWrapper}>
+                <IconButton
+                    onClick={() => focus('search', 'search')}
+                    icon="search"
+                />
+            </div>
+        </form>
+    </div>
 );
 
 const Dummy = class extends Component {
-  constructor (props) {
-    super(props);
-    this.node = null;
-  }
-
-  componentDidUpdate ({ meta: { active: prevActive  } }) {
-    const { meta: { active: nextActive } } = this.props;
-
-    // FIXME: duplicates with native focus event
-    if (nextActive !== focus) {
-      nextActive ? this.node.focus() : this.node.blur();
+    constructor (props) {
+        super(props);
+        this.node = null;
     }
-   }
 
-  handleRef = (node) => {
-    if (!this.node) this.node = node;
-  }
+    componentDidUpdate ({ meta: { active: prevActive    } }) {
+        const { meta: { active: nextActive } } = this.props;
 
-  render () {
-    const { input, ...restProps } = this.props;
-    return <input ref={this.handleRef} {...input} {...restProps} />;
-  }
+        // FIXME: duplicates with native focus event
+        if (nextActive !== focus) {
+            nextActive ? this.node.focus() : this.node.blur();
+        }
+     }
+
+    handleRef = (node) => {
+        if (!this.node) this.node = node;
+    }
+
+    render () {
+        const { input, ...restProps } = this.props;
+        return <input ref={this.handleRef} {...input} {...restProps} />;
+    }
 };
 
 
 const mapStateToProps = (state) => ({
-  searching: getAppIsSearchingNotes(state),
-  searchQuery: getFormValue('search', 'search')(state),
+    searching: getAppIsSearchingNotes(state),
+    searchQuery: getFormValue('search', 'search')(state),
 });
 
 const mapDispatchToProps = {
-  focus,
-  searchInputUpdated,
+    focus,
+    searchInputUpdated,
 };
 
 Search = connect(mapStateToProps, mapDispatchToProps)(Search);

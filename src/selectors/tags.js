@@ -27,3 +27,8 @@ export const getTagsIsModalShown = createSelector(
   getTags,
   (tags) => tags.get('isModalShown')
 );
+
+export const getTagsIsApplyTagsShown = createSelector(
+  getTags,
+  (tags) => tags.get('isApplyTagsShown')
+);

@@ -1,6 +1,7 @@
 $header-height: 4rem;
+
 .header {
-  z-index: 999;
+  z-index: 99999;
   position: fixed;
   top: 0;
   width: 100%;
@@ -71,7 +72,8 @@ $header-height: 4rem;
 }
 
 .logoWrapper {
-  padding-left: 1.8rem;
+  padding-left: .4rem;
+  width: 10rem;
 }
 
 .searchWrapper {

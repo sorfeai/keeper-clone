@@ -5,7 +5,8 @@ import {
   FORMAT_NOTES_FOR_FEED_DONE,
   CREATE_NOTE,
   UPDATE_NOTE,
-  TAG_NOTE,
+  ADD_TAGS_TO_NOTE,
+  REMOVE_TAG_FROM_NOTE,
   DELETE_NOTES,
   PIN_NOTES,
   UNPIN_NOTES,
@@ -15,6 +16,8 @@ import {
   CLEAR_SELECTION,
   EDIT_NOTE_START,
   EDIT_NOTE_END,
+  SET_TAG_FILTER,
+  RESET_TAG_FILTER,
 } from '../constants/types';
 
 
@@ -30,6 +33,7 @@ const defaultState = Map({
   editingId: null,
   isSelecting: false,
   selectedIds: List(),
+  tagFilter: undefined,
 });
 
 
@@ -53,12 +57,7 @@ const notesReducer = (state = defaultState, action) => {
       return state
         .update('byId', (notes) => notes.set(
           id,
-          Map({
-            id,
-            title,
-            content,
-            tags,
-          })
+          Map({ id, title, content, tags })
         ))
         .update('allIds', (ids) => ids.push(id));
     }
@@ -83,7 +82,7 @@ const notesReducer = (state = defaultState, action) => {
           (allIds) => allIds.filterNot((id) => ids.includes(id))
         );
     }
-    case TAG_NOTE: {
+    case ADD_TAGS_TO_NOTE: {
       const { noteId, tagIds } = action.payload;
 
       return state.update('byId', (notes) => notes.map((note) => {
@@ -92,6 +91,19 @@ const notesReducer = (state = defaultState, action) => {
         }
         return note;
       }));
+    }
+    case REMOVE_TAG_FROM_NOTE: {
+      const { noteId, tagId } = action.payload;
+
+      return state.update('byId', (notes) => notes.map((note) => {
+        if (note.get('id') === noteId) {
+          return note.update('tags', (tags) => {
+            const index = tags.indexOf(tagId);
+            return tags.delete(index);
+          })
+        }
+        return note;
+      }))
     }
     case PIN_NOTES: {
       return state.update(
@@ -141,6 +153,10 @@ const notesReducer = (state = defaultState, action) => {
       return state
         .set('isEditing', false)
         .set('editingId', null);
+    case SET_TAG_FILTER:
+      return state.set('tagFilter', action.payload.tagId);
+    case RESET_TAG_FILTER:
+      return state.set('tagFilter', undefined);
     default:
       return state;
   }

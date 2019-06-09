@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import autosize from 'autosize';
+
+import { FocusHOC } from '..';
 import style from './Textarea.module.scss';
 
 
-const Textarea = class extends Component {
+let Textarea = class extends Component {
   componentDidMount () {
     const { isAutosized } = this.props;
 
@@ -26,10 +28,12 @@ const Textarea = class extends Component {
     const {
       meta,
       input,
+      onRef,
       onChangeCustom,
       appearance,
       isFullwidth,
       isAutosized,
+      ...restProps,
     } = this.props;
 
     const cls = classNames({
@@ -47,10 +51,14 @@ const Textarea = class extends Component {
 
     return (
       <textarea
-        ref={this.handleRef}
+        ref={(node) => {
+          this.handleRef(node);
+          onRef(node);
+        }}
         className={cls}
-        {...input}
         onChange={onChange}
+        {...input}
+        {...restProps}
       />
     );
   }
@@ -70,6 +78,9 @@ Textarea.propTypes = {
   dirty: PropTypes.bool,
   error: PropTypes.string,
 };
+
+
+Textarea = FocusHOC(Textarea);
 
 
 export { Textarea };

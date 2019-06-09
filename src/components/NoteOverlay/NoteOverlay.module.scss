@@ -83,6 +83,60 @@ $select-size: 24px;
   }
 }
 
+.tagsWrapper {
+  position: absolute;
+  display: flex;
+  left: 20px;
+  bottom: 33px;
+}
+
+.noteTag {
+  position: relative;
+  background: #e5e5e5;
+  margin-right: 7px;
+  padding: 2px 10px;
+  border-radius: 50vh;
+  cursor: pointer;
+
+  &:hover {
+    .noteTagRemove {
+      opacity: 1;
+    }
+  }
+}
+
+.noteTagTitle {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.noteTagRemove {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 1.4;
+  font-size: 13px;
+  background: rgba(0,0,0,.65);
+  color: rgba(255,255,255,.7);
+  border-radius: 50vh;
+  opacity: 0;
+
+  &:hover {
+    color: rgba(255,255,255,1);
+  }
+}
+  
+.noteTagsLeft {
+  composes: noteTag;
+
+  padding: 2px 7px;
+  border-radius: 3px;
+  cursor: default;
+}
+
 $padPreview: 5px;
 $padFull: 20px;
 .toolbarWrapper {

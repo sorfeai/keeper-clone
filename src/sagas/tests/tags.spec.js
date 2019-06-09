@@ -7,6 +7,7 @@ import {
   watchStartEditingTag,
   watchSubmitCreateTag,
   watchSubmitEditTag,
+  watchApplyTags,
 } from '../tags';
 
 import {
@@ -17,6 +18,9 @@ import {
   createTag,
   updateTag,
   endEditingTag,
+  applyTags,
+  addTagsToNote,
+  hideApplyTags,
 } from '../../actions';
 
 
@@ -49,13 +53,15 @@ describe('tags sagas', () => {
       .run();
   });
 
-  it('`SUBMIT_CREATE_TAG`: dispatches `createTag()` with title from form and resets it', () => {
+  it('`SUBMIT_CREATE_TAG`: dispatches `createTag(title)` and resets form', () => {
     const title = 'test tag';
 
     const state = {
       form: {
         tags: {
-          values: { title },
+          values: {
+            create: title,
+          },
         },
       },
     };
@@ -68,7 +74,7 @@ describe('tags sagas', () => {
       .run();
   });
 
-  it('`SUBMIT_EDIT_TAG`: dispatches `updateTag()` (with `id` and `title`) and `endEditingTag()`', () => {
+  it('`SUBMIT_EDIT_TAG`: dispatches `updateTag(id, title)` and `endEditingTag()`', () => {
     const id = '1';
     const title = 'test tag';
 
@@ -78,7 +84,9 @@ describe('tags sagas', () => {
       }),
       form: {
         tags: {
-          values: { title },
+          values: {
+            edit: title,
+          },
         },
       },
     };
@@ -88,6 +96,29 @@ describe('tags sagas', () => {
       .put(updateTag(id, title))
       .put(endEditingTag())
       .dispatch(submitEditTag())
+      .run();
+  });
+
+  it('`APPLY_TAGS`: selects `tagIds` from form, dispatches \
+      `addTagsToNote(noteId, tagIds)` and `hideApplyTags()`', () => {
+    const noteId = 'note__1';
+    const tagIds = ['tag__1', 'tag__2'];
+
+    const state = {
+      form: {
+        applyTags: {
+          values: {
+            tags: tagIds,
+          },
+        },
+      },
+    };
+
+    return expectSaga(watchApplyTags)
+      .withState(state)
+      .put(addTagsToNote(noteId, tagIds))
+      .put(hideApplyTags())
+      .dispatch(applyTags(noteId))
       .run();
   });
 });

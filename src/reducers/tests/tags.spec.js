@@ -9,6 +9,7 @@ import {
   getTagsAllIds,
   getTagsEditingId,
   getTagsIsModalShown,
+  getTagsIsApplyTagsShown,
 } from '../../selectors';
 
 import {
@@ -17,6 +18,8 @@ import {
   deleteTags,
   showTagsModal,
   hideTagsModal,
+  showApplyTags,
+  hideApplyTags,
   startEditingTag,
   endEditingTag,
 } from '../../actions';
@@ -35,6 +38,7 @@ describe('tags reducer', () => {
       allIds: List(),
       editingId: null,
       isModalShown: false,
+      isApplyTagsShown: false,
     });
 
     expect(
@@ -106,6 +110,18 @@ describe('tags reducer', () => {
       expect(
         getTagsIsModalShown(updatedState)
       ).toBeFalsy();
+    });
+
+    it('SHOW_APPLY_TAGS: sets `isApplyTagsShown` to true', () => {
+      const state = reducer(undefined, showApplyTags());
+
+      expect(getTagsIsApplyTagsShown(state)).toBeTruthy();
+    });
+
+    it('HIDE_APPLY_TAGS: sets `isApplyTagsShown` to false', () => {
+      const state = reducer(undefined, hideApplyTags());
+
+      expect(getTagsIsApplyTagsShown(state)).toBeFalsy();
     });
 
     it('START_EDITING_TAG: sets `editingId` to provided one', () => {

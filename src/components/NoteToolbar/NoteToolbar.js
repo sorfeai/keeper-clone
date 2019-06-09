@@ -1,46 +1,72 @@
+import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
+import DOM from 'react-dom-factories';
 import { connect } from 'react-redux';
 import uuid from 'small-uuid';
+
+import {
+  Field,
+  FieldArray,
+  reduxForm,
+  change,
+  registerField,
+} from 'redux-form';
 
 import { getFormErrors } from '../../selectors';
 import { IconButton, OuterClick } from '..';
 import style from './NoteToolbar.module.scss';
 
+import {
+  showApplyTags,
+  hideApplyTags,
+  applyTags,
+} from '../../actions';
+
 
 let NoteToolbar = class extends Component {
-  state = {
-    applyTagsPopup: false,
-    applyTagsForm: { tags: [] },
-  }
-
-  handleApplyTagPopup = () => {
-    this.setState((prev) => ({
-      ...prev,
-      applyTagsPopup: !prev.applyTagsPopup,
-    }));
+  shouldComponentUpdate(nextProps, nextState) {
+    // without this check redux-form stucks in infinite loop of
+    // register/unregister actions dispatch for whatever reason
+    return JSON.stringify(this.props) !== JSON.stringify(nextProps) ||
+           JSON.stringify(this.state) !== JSON.stringify(nextState)
   }
 
   renderApplyTagPopup = () => {
-    const { tags } = this.props;
+    const {
+      allTags,
+      change,
+      hideApplyTags,
+      onApplyTags,
+      handleSubmit,
+    } = this.props;
 
-    const onOuterClick = () => {
-      this.onAddTag();
-      this.handleApplyTagPopup();
+    const applyTags = () => {
+      onApplyTags();
+      hideApplyTags();
     };
 
     return (
-      <OuterClick onClick={onOuterClick}>
+      <OuterClick onClick={applyTags}>
         <div className={`${style.popup} box`}>
           {'Apply tags'}
           <div className={style.tagsCheckList}>
-            {tags.map((tag) =>
-              <label
-                key={tag.get('id')}
-                className={`${style.tagCheckItem} checkbox`}
-              >
-                <input type='checkbox' />
-                {tag.get('title')}
-              </label>)}
+            <form onSubmit={handleSubmit(applyTags)}>
+              {allTags.map((tag) => (
+                <div key={tag.get('id')}>
+                  <label
+                    key={tag.get('id')}
+                    className={`${style.tagCheckItem} checkbox`}
+                  >
+                    <Field
+                      type="checkbox"
+                      component="input"
+                      name={tag.get('id')}
+                    />
+                    {tag.get('title')}
+                  </label>
+                </div>
+              ))}
+            </form>
           </div>
         </div>
       </OuterClick>
@@ -49,37 +75,38 @@ let NoteToolbar = class extends Component {
 
   render () {
     const {
+      id,
       isInTrash,
       isEditing,
       onSave,
       onMoveToTrash,
       onRestore,
       onDeleteForever,
-      tags,
+      onApplyTags,
+      allTags,
       formEditErrors,
+      isApplyTagsShown,
+      showApplyTags,
     } = this.props;
 
-    const { editTitle, editContent } = this.props;
-    const { applyTagsPopup } = this.state;
-
-    const itemsFeed = [
+    const itemsHome = [
       <Fragment>
         <IconButton
           small
-          onClick={this.handleApplyTagPopup}
+          onClick={() => showApplyTags(id)}
           icon="tag"
-          tooltip="Add tag"
-        />
-        <div className={style.popupWrapper}>
-          {applyTagsPopup && this.renderApplyTagPopup()}
-        </div>
+          tooltip="Apply tags"/>
+        {(isApplyTagsShown && isApplyTagsShown === id) && (
+          <div className={style.popupWrapper}>
+            {this.renderApplyTagPopup()}
+          </div>)}
       </Fragment>,
       <IconButton
         small
         onClick={onMoveToTrash}
         icon="trash"
         tooltip="Move to trash"
-      />,
+      />
     ];
 
     const itemsTrash = [
@@ -115,13 +142,16 @@ let NoteToolbar = class extends Component {
     } else if (isEditing) {
       items = itemsEditing;
     } else {
-      items = itemsFeed;
+      items = itemsHome;
     }
 
     return (
       <div className={style.wrapper}>
         {items.map((item) =>
-          <div key={uuid.create()} className={style.toolbarItem}>
+          <div
+            key={uuid.create()}
+            className={style.toolbarItem}
+          >
             {item}
           </div>)}
       </div>
@@ -134,7 +164,16 @@ const mapStateToProps = (state) => ({
   formEditErrors: getFormErrors('edit')(state),
 });
 
-NoteToolbar = connect(mapStateToProps)(NoteToolbar);
+const mapDispatchToProps = {
+  registerField,
+  change,
+  showApplyTags,
+  hideApplyTags,
+  applyTags,
+};
+
+NoteToolbar = connect(mapStateToProps, mapDispatchToProps)(NoteToolbar);
+NoteToolbar = reduxForm({ form: 'applyTags' })(NoteToolbar);
 
 
 export { NoteToolbar };

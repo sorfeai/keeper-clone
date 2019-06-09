@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -16,6 +16,7 @@ import {
   NotesFeed,
   NotificationsManager,
   TagsManager,
+  CreateNote,
 } from '..';
 
 
@@ -32,9 +33,17 @@ let App = class extends Component {
       [style.isMainMenuActive]: isMainMenuActive,
     });
 
-    const redirectHome = () => <Redirect to='/home' />;
+    const redirectHome = () => <Redirect to="/home" />;
 
-    const HomePage = SetPageHOC(PAGE_HOME)(NotesFeed);
+    let HomePage = () => (
+      <Fragment>
+        <CreateNote />
+        <NotesFeed />
+      </Fragment>
+    );
+
+    HomePage = SetPageHOC(PAGE_HOME)(HomePage);
+
     const TrashPage = SetPageHOC(PAGE_TRASH)(NotesFeed);
 
     return (
@@ -47,9 +56,9 @@ let App = class extends Component {
           <Header />
           <MainMenu />
           <div className={`${contentCls} container`}>
-            <Route exact path='/' render={redirectHome} />
-            <Route exact path='/home' component={HomePage} />
-            <Route exact path='/trash' component={TrashPage} />
+            <Route exact path="/" render={redirectHome} />
+            <Route exact path="/home" component={HomePage} />
+            <Route exact path="/trash" component={TrashPage} />
           </div>
         </div>
       </BrowserRouter>

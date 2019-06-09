@@ -19,10 +19,13 @@ import {
   CLEAR_SELECTION,
   TOGGLE_IS_SELECTING,
   TOGGLE_SELECT_NOTE,
+  NEW_NOTE,
   CREATE_NOTE,
   SELECT_NOTE,
   DESELECT_NOTE,
-  TAG_NOTE,
+  APPLY_TAGS,
+  ADD_TAGS_TO_NOTE,
+  REMOVE_TAG_FROM_NOTE,
   MOVE_NOTES_TO_TRASH,
   RESTORE_NOTES_FROM_TRASH,
   CLEAR_TRASH,
@@ -49,9 +52,13 @@ import {
   DELETE_TAG,
   SHOW_TAGS_MODAL,
   HIDE_TAGS_MODAL,
+  SHOW_APPLY_TAGS,
+  HIDE_APPLY_TAGS,
   START_EDITING_TAG,
   END_EDITING_TAG,
   UPDATE_TAG,
+  SET_TAG_FILTER,
+  RESET_TAG_FILTER,
 } from './constants/types';
 
 
@@ -189,11 +196,26 @@ export const deselectNote = (id) => ({
   },
 });
 
-export const tagNote = (noteId, tagIds) => ({
-  type: TAG_NOTE,
+export const applyTags = (noteId) => ({
+  type: APPLY_TAGS,
+  payload: {
+    noteId,
+  },
+});
+
+export const addTagsToNote = (noteId, tagIds) => ({
+  type: ADD_TAGS_TO_NOTE,
   payload: {
     noteId,
     tagIds,
+  },
+});
+
+export const removeTagFromNote = (noteId, tagId) => ({
+  type: REMOVE_TAG_FROM_NOTE,
+  payload: {
+    noteId,
+    tagId,
   },
 });
 
@@ -312,6 +334,10 @@ export const endEditingNote = () => ({
   type: EDIT_NOTE_END,
 });
 
+export const newNote = () => ({
+  type: NEW_NOTE,
+});
+
 export const createNote = ({ id, title, content, tags }) => ({
   type: CREATE_NOTE,
   payload: {
@@ -340,6 +366,17 @@ export const showTagsModal = () => ({
 
 export const hideTagsModal = () => ({
   type: HIDE_TAGS_MODAL,
+});
+
+export const showApplyTags = (noteId) => ({
+  type: SHOW_APPLY_TAGS,
+  payload: {
+    noteId,
+  }
+});
+
+export const hideApplyTags = () => ({
+  type: HIDE_APPLY_TAGS,
 });
 
 export const submitCreateTag = (title) => ({
@@ -387,4 +424,15 @@ export const startEditingTag = (id) => ({
 
 export const endEditingTag = () => ({
   type: END_EDITING_TAG,
+});
+
+export const setTagFilter = (tagId) => ({
+  type: SET_TAG_FILTER,
+  payload: {
+    tagId,
+  }
+});
+
+export const resetTagFilter = () => ({
+  type: RESET_TAG_FILTER,
 });

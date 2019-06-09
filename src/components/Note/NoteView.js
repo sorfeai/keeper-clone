@@ -40,12 +40,63 @@ const NoteView = ({
     [style.isPinned]: isPinned,
   });
 
+  const isTitleHighlighted = title.indexOf('[HL_START]') !== -1;
+  const isContentHighlighted = content.indexOf('[HL_START]') !== -1;
+
+  let titleHighlightPre;
+  let titleHighlightInner;
+  let titleHighlightAfter;
+
+  let contentHighlightPre;
+  let contentHighlightInner;
+  let contentHighlightAfter;
+
+  if (isTitleHighlighted) {
+    titleHighlightPre = title.slice(0, title.indexOf('[HL_START]'));
+    titleHighlightInner = title.slice(title.indexOf('[HL_START]') + 10, title.indexOf('[HL_END]'));
+    titleHighlightAfter = title.slice(title.indexOf('[HL_END]') + 8);
+
+    title = title
+      .replace('[HL_START]', '')
+      .replace('[HL_END]', '');
+  }
+
+  if (isContentHighlighted) {
+    contentHighlightPre = content.slice(0, content.indexOf('[HL_START]'));
+    contentHighlightInner = content.slice(content.indexOf('[HL_START]') + 10, content.indexOf('[HL_END]'));
+    contentHighlightAfter = content.slice(content.indexOf('[HL_END]') + 8);
+
+    content = content
+      .replace('[HL_START]', '')
+      .replace('[HL_END]', '');
+  }
+
   const preview = (
     <Fragment>
       <div className={style.titleWrapper}>
-        <strong>{title}</strong>
+        <strong>
+          {isTitleHighlighted ? (
+            <span>
+              {titleHighlightPre}
+              <span className={style.highlightText}>
+                {titleHighlightInner}
+              </span>
+              {titleHighlightAfter}
+            </span>
+          ) : title}
+        </strong>
       </div>
-      <p>{content}</p>
+      <p>
+        {isContentHighlighted ? (
+          <span>
+            {contentHighlightPre}
+            <span className={style.highlightText}>
+              {contentHighlightInner}
+            </span>
+            {contentHighlightAfter}
+          </span>
+        ) : content}
+      </p>
     </Fragment>
   );
 
@@ -61,7 +112,9 @@ const NoteView = ({
           isBoldText
         />
       </div>
-      <div ref={onContentInputRef}>
+      <div
+        className={style.contentInputWrapper}
+        ref={onContentInputRef}>
         <Field
           component={Textarea}
           name="content"

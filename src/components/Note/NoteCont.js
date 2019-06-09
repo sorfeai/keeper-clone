@@ -65,6 +65,7 @@ let NoteCont = class extends Component {
       id,
       title,
       content,
+      tags,
       startEditingNote,
       initialize,
       focus,
@@ -72,15 +73,29 @@ let NoteCont = class extends Component {
 
     startEditingNote(id, title, content);
 
-    // wait to let redux-form register the fields
+    const titleInit = title
+      .replace('[HL_START]', '')
+      .replace('[HL_END]', '');
+
+    const contentInit = content
+      .replace('[HL_START]', '')
+      .replace('[HL_END]', '');
+
+    // wait to let redux-form register fields
     setTimeout(() => {
-      initialize('editNote', { title, content });
+      initialize('editNote', { title: titleInit, content: contentInit });
       focus('editNote', 'title');
     });
   }
 
-  editFormValidate ({ title }) {
-    return title ? {} : 'Error';
+  editFormValidate(values) {
+    const errors = {};
+
+    if (!values.title || values.title.trim() == '') {
+      errors.title = 'Required';
+    }
+
+    return errors;
   }
 
   render () {

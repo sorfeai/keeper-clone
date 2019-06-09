@@ -24,3 +24,4 @@ export { Textarea } from './Textarea';
 export { Tooltip } from './Tooltip';
 export { Trash } from './Trash';
 export { UserMenu } from './UserMenu';
+export { CreateNote } from './CreateNote';

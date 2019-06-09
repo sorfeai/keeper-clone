@@ -20,6 +20,8 @@ import {
   getAppIsMainMenuActive,
   getNotesIsSelecting,
   getNotesSelectedIds,
+  getNotesTagFilter,
+  getTagsById,
 } from '../../selectors';
 
 import {
@@ -40,10 +42,24 @@ let Header = ({
   isSelecting,
   isGrid,
   isMainMenuActive,
+  allTags,
+  activeTag,
 }) => {
   const className = classNames({
     [style.header]: true,
   });
+
+  const renderTitle = () => {
+    if (activeTag !== undefined) {
+      return allTags
+        .find((tag) => tag.get('id') === activeTag)
+        .get('title');
+    }
+
+    return (
+      <strong>{'Keeper'}</strong>
+    );
+  };
 
   return (
     <div className={className}>
@@ -53,8 +69,7 @@ let Header = ({
           basic: style.selectBarWrapper,
           mount: style.selectBarWrapperShow,
           unmount: style.selectBarWrapperHide,
-        }}
-      >
+        }}>
         <SelectBar />
       </AnimateMount>
       <div className={style.toolBarWrapper}>
@@ -66,14 +81,13 @@ let Header = ({
                   <IconButton
                     icon={isMainMenuActive ? 'times' : 'bars'}
                     tooltip={isMainMenuActive ? 'Hide menu' : 'Main menu'}
-                    onClick={toggleMainMenu}
-                  />
+                    onClick={toggleMainMenu}/>
                 </div>
               </Level.Item>
               <Level.Item className={style.logoWrapper}>
                 <a href="/">
                   <Heading subtitle size={4} className={style.logo}>
-                    <strong>{'Keeper'}</strong>
+                    {renderTitle()}
                   </Heading>
                 </a>
               </Level.Item>
@@ -91,8 +105,7 @@ let Header = ({
                     <IconButton
                       tooltip={`${isGrid ? 'List view' : 'Grid view'}`}
                       icon={`${isGrid ? 'list' : 'th-large'}`}
-                      onClick={toggleFeedView}
-                    />
+                      onClick={toggleFeedView}/>
                   </Level.Item>
                 </Level>
               </Level.Item>
@@ -112,7 +125,7 @@ let Header = ({
 };
 
 
-Header.propTypes = {
+Header.propTypes= {
   // state
   currentPage: PropTypes.string.isRequired,
   selectedNotes: ImmutablePropTypes.listOf(
@@ -121,6 +134,8 @@ Header.propTypes = {
   isGrid: PropTypes.bool,
   isMainMenuActive: PropTypes.bool,
   isSelecting: PropTypes.bool,
+  activeTag: PropTypes.string,
+  allTags: ImmutablePropTypes.map.isRequired,
 
   // actions
   clearSelection: PropTypes.func.isRequired,
@@ -138,15 +153,17 @@ const mapStateToProps = (state) => ({
   isGrid: getAppIsFeedViewGrid(state),
   isMainMenuActive: getAppIsMainMenuActive(state),
   isSelecting: getNotesIsSelecting(state),
+  activeTag: getNotesTagFilter(state),
+  allTags: getTagsById(state),
 });
 
 const mapDispatchToProps = {
-  clearSelection,
-  deleteNotes,
-  moveNotesToTrash,
-  pinNotes,
-  toggleFeedView,
-  toggleMainMenu,
+	clearSelection,
+	deleteNotes,
+	moveNotesToTrash,
+	pinNotes,
+	toggleFeedView,
+	toggleMainMenu,
 };
 
 Header = connect(mapStateToProps, mapDispatchToProps)(Header);

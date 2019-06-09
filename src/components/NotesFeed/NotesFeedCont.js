@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import { PAGE_TRASH } from '../../constants/types';
 import { NotesFeedView } from '.';
+
+import { setTagFilter, resetTagFilter } from '../../actions';
 
 import {
   getNotesFeed,
@@ -12,29 +15,57 @@ import {
   getNotesPinnedIds,
   getNotesSelectedIds,
   getNotesEditingId,
+  getNotesTagFilter,
   getAppIsFeedViewGrid,
+  getTagsById,
 } from '../../selectors';
 
 
-let NotesFeedCont = ({
-  data,
-  currentPage,
-  isGrid,
-  pinnedIds,
-  selectedIds,
-  editingId,
-}) => (
-  data && (
-    <NotesFeedView
-      notes={data}
-      isTrash={currentPage === PAGE_TRASH}
-      pinnedIds={pinnedIds}
-      selectedIds={selectedIds}
-      editingId={editingId}
-      isGrid={isGrid}
-    />
-  )
-);
+let NotesFeedCont = class extends Component {
+  componentDidUpdate({ location: { hash: prevHash  } }) {
+    const { allTags, setTagFilter, resetTagFilter } = this.props;
+    const { hash } = this.props.location;
+
+    if (hash !== prevHash) {
+      if (hash === '') {
+        // remove tag filter
+         resetTagFilter();
+      } else if (hash !== '') {
+        // either set tag filter or change one that presented
+        const tagId = allTags
+          .find((tag) => tag.get('title') === hash.slice(1))
+          .get('id');
+           
+        setTagFilter(tagId);
+      }
+    }
+  }
+
+  render() {
+    const {
+      data,
+      currentPage,
+      isGrid,
+      pinnedIds,
+      selectedIds,
+      editingId,
+      allTags,
+      tagFilter,
+    } = this.props;
+
+    return data && (
+      <NotesFeedView
+        notes={data}
+        isTrash={currentPage === PAGE_TRASH}
+        pinnedIds={pinnedIds}
+        selectedIds={selectedIds}
+        editingId={editingId}
+        isGrid={isGrid}
+        tagFilter={tagFilter}
+      />
+    );
+  }
+};
 
 
 NotesFeedCont.propTypes = {
@@ -45,6 +76,8 @@ NotesFeedCont.propTypes = {
   editingId: PropTypes.string,
   searchQuery: PropTypes.string,
   isGrid: PropTypes.bool,
+  allTags: ImmutablePropTypes.map.isRequired,
+  tagFilter: PropTypes.string,
 
   // flow
   maxColumns: PropTypes.number.isRequired,
@@ -62,9 +95,18 @@ const mapStateToProps = (state) => ({
   selectedIds: getNotesSelectedIds(state),
   editingId: getNotesEditingId(state),
   isGrid: getAppIsFeedViewGrid(state),
+  allTags: getTagsById(state),
+  tagFilter: getNotesTagFilter(state),
 });
 
-NotesFeedCont = connect(mapStateToProps)(NotesFeedCont);
+const mapDispatchToProps = {
+  setTagFilter,
+  resetTagFilter,
+};
+
+NotesFeedCont = connect(mapStateToProps, mapDispatchToProps)(NotesFeedCont);
+
+NotesFeedCont = withRouter(NotesFeedCont);
 
 
 export { NotesFeedCont };

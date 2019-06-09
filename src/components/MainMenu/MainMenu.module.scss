@@ -17,6 +17,7 @@ $menu-width: 16rem;
 .menu {
   height: 100%;
   font-size: .9rem;
+  overflow-y: scroll;
 }
 
 .menuSection:not(:last-child) {
@@ -30,6 +31,7 @@ $menu-width: 16rem;
   padding: .9rem 1.4rem;
   color: inherit;
   background: transparent;
+  cursor: pointer;
 
   &:hover {
     background: rgba(black, .06);
@@ -42,5 +44,13 @@ $menu-width: 16rem;
     * {
       font-size: .9rem;
     }
+  }
+}
+
+.activeTag {
+  background: #00D1B255;
+
+  &:hover {
+    background: #00D1B255;
   }
 }
